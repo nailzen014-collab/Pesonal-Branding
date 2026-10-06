@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        color-scheme: dark;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+    }
+
+    body {
+        @apply bg-ink font-sans text-text antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        @apply font-display tracking-tight;
+    }
+
+    ::selection {
+        @apply bg-primary text-white;
+    }
+
+    /* Scrollbar gelap agar menyatu dengan tema */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #26262e #08080a;
+    }
+
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    *::-webkit-scrollbar-track {
+        @apply bg-ink;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        @apply rounded-full bg-line;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        @apply bg-primary/40;
+    }
+
+    *:focus-visible {
+        @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-ink;
+    }
+}
+
+@layer components {
+    /* Wadah konten dengan lebar konsisten */
+    .container-page {
+        @apply mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8;
+    }
+
+    /*
+     * Kartu dasar tema gelap.
+     * Lapisan atas memakai garis 1px putih transparan supaya tepi kartu
+     * terlihat lebih tegas di layar gelap (efek "inner highlight").
+     */
+    .card {
+        @apply relative overflow-hidden rounded-2xl border border-line-soft bg-surface/80 p-6 shadow-card backdrop-blur-sm
+        transition duration-500 ease-smooth;
+    }
+
+    /* Kilau tipis yang menyapu di atas kartu saat hover */
+    .card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(120% 80% at 0% 0%, rgb(225 29 46 / 0.12), transparent 55%);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .card-hover {
+        @apply hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-card-lg;
+    }
+
+    .card-hover::before {
+        opacity: 1;
+    }
+
+    /* Kartu proyek: thumbnail 16:9 */
+    .card-media {
+        @apply relative aspect-video w-full overflow-hidden rounded-t-2xl bg-surface-2;
+    }
+
+    /* Label kategori */
+    .pill {
+        @apply inline-flex items-center gap-1 rounded-full border border-line bg-surface-2/80 px-2.5 py-1 text-2xs font-medium text-muted backdrop-blur;
+    }
+
+    /* Judul bagian */
+    .eyebrow {
+        @apply inline-flex items-center gap-2 text-2xs font-semibold uppercase tracking-[0.22em] text-primary;
+    }
+
+    /* Link bergaris bawah animasi */
+    .link-underline {
+        @apply relative text-muted transition-colors hover:text-text;
+    }
+
+    .link-underline::after {
+        content: '';
+        @apply absolute -bottom-1 left-0 h-px w-0 bg-primary transition-all duration-300;
+    }
+
+    .link-underline:hover::after {
+        @apply w-full;
+    }
+
+    /* Input form tema gelap */
+    .form-input {
+        @apply w-full rounded-xl border border-line bg-surface-2/80 px-4 py-2.5 text-sm text-text placeholder:text-muted/60
+        transition duration-300
+        focus:border-primary focus:bg-surface-2 focus:ring-1 focus:ring-primary;
+    }
+
+    .form-label {
+        @apply mb-1.5 block text-sm font-medium text-muted;
+    }
+
+    /* Tombol ikon bulat */
+    .icon-button {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface-2 text-muted
+        transition duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary hover:shadow-glow-soft;
+    }
+
+    /* Panel admin memakai warna sedikit lebih terang agar konten terbaca */
+    .panel {
+        @apply rounded-2xl border border-line-soft bg-surface/70 shadow-card backdrop-blur-sm;
+    }
+}
+
+@layer utilities {
+    /* Teks bergradien merah (untuk kata penekanan) */
+    .text-gradient {
+        @apply bg-gradient-to-r from-primary-soft via-primary to-primary-dark bg-clip-text text-transparent;
+    }
+
+    /* Judul besar dengan efek kilau */
+    .text-shine {
+        @apply bg-text-shine bg-clip-text text-transparent;
+        background-size: 200% 100%;
+    }
+
+    /* Pola grid halus untuk latar hero */
+    .bg-grid {
+        background-image:
+            linear-gradient(to right, rgb(38 38 46 / 0.55) 1px, transparent 1px),
+            linear-gradient(to bottom, rgb(38 38 46 / 0.55) 1px, transparent 1px);
+        background-size: 64px 64px;
+        mask-image: radial-gradient(70% 60% at 50% 0%, black, transparent 75%);
+    }
+
+    /* Pola titik halus */
+    .bg-dots {
+        background-image: radial-gradient(rgb(161 161 170 / 0.16) 1px, transparent 1px);
+        background-size: 22px 22px;
+    }
+
+    /* Garis batas bergradien (dipakai di kartu unggulan) */
+    .border-gradient {
+        position: relative;
+    }
+
+    .border-gradient::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: theme('backgroundImage.border-gradient');
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+
+    /* Muncul saat di-scroll (dikendalikan Alpine/IntersectionObserver) */
+    .reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+            opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Hormati pengaturan aksesibilitas pengguna (NFR-05) */
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.001ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.001ms !important;
+        }
+
+        .reveal {
+            opacity: 1;
+            transform: none;
+        }
+    }
+}
