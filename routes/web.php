@@ -50,6 +50,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('projects', AdminProjectController::class)->except(['show']);
+    Route::post('projects/{project}/featured', [AdminProjectController::class, 'toggleFeatured'])
+        ->name('projects.toggle-featured');
     Route::get('skills', [AdminSkillController::class, 'index'])->name('skills.index');
     Route::get('skills/create', [AdminSkillController::class, 'create'])->name('skills.create');
     Route::post('skills', [AdminSkillController::class, 'store'])->name('skills.store');

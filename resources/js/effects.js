@@ -113,6 +113,12 @@ function initSpotlight() {
 export function initTilt(scope = document) {
     let bound = 0;
 
+    // Pintu yang sama dengan initEffects, supaya pemanggilan ulang dari
+    // tombol "muat lebih banyak" tetap menghormati perangkat sentuh.
+    if (!supportsFinePointer() || prefersReducedMotion()) {
+        return bound;
+    }
+
     scope.querySelectorAll('[data-tilt]').forEach((element) => {
         if (tiltBound.has(element)) {
             return;

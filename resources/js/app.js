@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs';
 import { observeReveals } from './reveal';
-import { initEffects } from './effects';
+import { initEffects, initTilt } from './effects';
 import { initTypewriters } from './typewriter';
 
 /**
@@ -75,6 +75,7 @@ function initLoadMore() {
 
             // Kartu baru ikut dianimasikan saat masuk viewport.
             observeReveals(wrapper);
+            initTilt(grid ?? wrapper);
         } catch (error) {
             console.error('Gagal memuat proyek berikutnya:', error);
 
@@ -93,6 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initLoadMore();
     initEffects();
     initTypewriters();
+
+    // Penanda untuk safety net di layouts/public.blade.php: bila bundel ini
+    // gagal dieksekusi, script inline memaksa konten `.reveal` tampil
+    // sehingga halaman tidak pernah kosong.
+    document.documentElement.dataset.jsReady = '1';
 });
 
 window.Alpine = Alpine;

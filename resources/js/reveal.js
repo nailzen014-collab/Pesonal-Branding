@@ -7,6 +7,32 @@
  * kelas `.is-visible`.
  */
 
+/**
+ * Hitung jeda masuk bergiliran (stagger) berdasarkan posisi elemen di
+ * antara saudara `.reveal` lain dalam induk yang sama. Kartu dalam satu
+ * grid muncul satu per satu, bukan serentak. Elemen tunggal mendapat
+ * jeda nol.
+ *
+ * @param {HTMLElement} element elemen `.reveal`.
+ * @returns {string} nilai `transition-delay`, misalnya `150ms`.
+ */
+function staggerDelay(element) {
+    const parent = element.parentElement;
+
+    if (!parent) {
+        return '';
+    }
+
+    const peers = [...parent.children].filter((child) => child.classList.contains('reveal'));
+    const index = peers.indexOf(element);
+
+    if (index < 1) {
+        return '';
+    }
+
+    return `${Math.min(index, 8) * 75}ms`;
+}
+
 let observer = null;
 
 function getObserver() {
@@ -21,6 +47,17 @@ function getObserver() {
     observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
+                const delay = staggerDelay(entry.target);
+
+                // Jeda hanya untuk animasi masuk, dilepas kembali setelahnya
+                // supaya transisi hover kartu tidak ikut tertunda.
+                if (delay) {
+                    entry.target.style.transitionDelay = delay;
+                    entry.target.addEventListener('transitionend', () => {
+                        entry.target.style.transitionDelay = '';
+                    }, { once: true });
+                }
+
                 entry.target.classList.add('is-visible');
                 observer?.unobserve(entry.target);
             }

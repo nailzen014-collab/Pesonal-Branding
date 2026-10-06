@@ -6,54 +6,55 @@ use App\Models\Project;
 use App\Services\GithubService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
 /**
- * Unggulan di beranda diatur otomatis dari sinkron GitHub, kecuali admin
- * sudah memilih sendiri lewat form proyek.
+ * Unggulan di beranda mengikuti status admin di field is_featured.
  */
 class FeaturedProjectsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_import_marks_top_repositories_as_featured_automatically(): void
+    public function test_admin_can_mark_projects_as_featured_manually(): void
     {
-        $this->fakeGithub([
-            $this->repo(1, 'alpha', stars: 5),
-            $this->repo(2, 'beta', stars: 9),
-            $this->repo(3, 'gamma', stars: 1),
-            $this->repo(4, 'delta', stars: 7),
-        ]);
+        Project::factory()->create(['title' => 'Alpha', 'source' => 'github', 'is_featured' => true, 'is_published' => true]);
+        Project::factory()->create(['title' => 'Beta', 'source' => 'github', 'is_featured' => false, 'is_published' => true]);
 
-        Artisan::call('portfolio:import-github', ['--publish' => true, '--featured' => 2]);
-
-        $this->assertSame(
-            ['Delta', 'Beta'],
-            Project::featured()->orderByDesc('title')->pluck('title')->all(),
-        );
-        $this->assertSame(2, Project::featured()->count());
+        $this->assertSame(['Alpha'], Project::featured()->pluck('title')->all());
     }
 
-    public function test_import_follows_pinned_repositories_when_available(): void
+    public function test_home_page_only_shows_admin_featured_projects(): void
     {
-        $this->fakeGithub(
-            [
-                $this->repo(1, 'alpha', stars: 5),
-                $this->repo(2, 'beta', stars: 9),
-                $this->repo(3, 'gamma', stars: 1),
-            ],
-            pinned: ['gamma', 'alpha'],
-        );
+        Project::factory()->create([
+            'title' => 'Alpha',
+            'source' => 'github',
+            'is_featured' => true,
+            'is_published' => true,
+            'sort_order' => 2,
+        ]);
 
-        Artisan::call('portfolio:import-github', ['--publish' => true]);
+        Project::factory()->create([
+            'title' => 'Beta',
+            'source' => 'github',
+            'is_featured' => true,
+            'is_published' => true,
+            'sort_order' => 1,
+        ]);
 
-        // Bintang terbanyak seharusnya kalah oleh urutan pin.
-        $this->assertEqualsCanonicalizing(
-            ['Gamma', 'Alpha'],
-            Project::featured()->pluck('title')->all(),
-        );
-        $this->assertSame(2, Project::featured()->count());
+        Project::factory()->create([
+            'title' => 'Gamma',
+            'source' => 'github',
+            'is_featured' => false,
+            'is_published' => true,
+            'sort_order' => 3,
+        ]);
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSeeInOrder(['Beta', 'Alpha'], false)
+            ->assertDontSee('Gamma', false);
     }
 
     public function test_import_does_not_override_a_manual_featured_choice(): void
@@ -93,7 +94,7 @@ class FeaturedProjectsTest extends TestCase
     {
         $this->mock(GithubService::class, function (MockInterface $mock) use ($repositories, $pinned): void {
             $mock->shouldReceive('repositories')->andReturn($repositories);
-            $mock->shouldReceive('pinnedRepositories')->andReturn($pinned);
+            $mock->shouldReceive('pinnedRepositories')->with(true)->andReturn($pinned);
             $mock->shouldReceive('profileUrl')->andReturn('https://github.com/example');
         });
     }

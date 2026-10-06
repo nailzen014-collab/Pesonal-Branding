@@ -6,17 +6,18 @@ use App\Models\Experience;
 use App\Models\Project;
 use App\Models\Skill;
 use App\Models\Technology;
+use App\Services\GithubService;
 
 /**
  * Halaman Beranda (FR-01, ringkasan statistik, proyek unggulan, CTA).
  */
 class HomeController extends Controller
 {
-    public function index()
+    public function index(GithubService $github)
     {
-        // with('technologies') = eager loading, mencegah query berulang (NFR-01).
-        $featuredProjects = Project::published()
-            ->featured()
+        $featuredProjects = Project::where('source', 'github')
+            ->where('is_published', true)
+            ->where('is_featured', true)
             ->with('technologies')
             ->orderBy('sort_order')
             ->take(6)

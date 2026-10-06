@@ -202,19 +202,21 @@
 
             <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ($skills as $skill)
-                    <div class="reveal card card-hover">
-                        <div class="flex items-center justify-between">
-                            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-2/70 backdrop-blur text-primary">
-                                <x-icon :name="$skillIcons[$skill->category] ?? 'code'" class="h-5 w-5" />
-                            </span>
-                            <span class="font-mono text-2xs text-muted">{{ $skill->level }}%</span>
-                        </div>
-                        <p class="mt-4 font-display text-base font-semibold text-text">{{ $skill->name }}</p>
-                        <p class="mt-0.5 text-2xs uppercase tracking-wider text-muted">{{ $skill->category_label }}</p>
+                    <div class="reveal h-full">
+                        <div class="card card-hover-tilt h-full" data-tilt>
+                            <div class="flex items-center justify-between">
+                                <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-2/70 backdrop-blur text-primary">
+                                    <x-icon :name="$skillIcons[$skill->category] ?? 'code'" class="h-5 w-5" />
+                                </span>
+                                <span class="font-mono text-2xs text-muted">{{ $skill->level }}%</span>
+                            </div>
+                            <p class="mt-4 font-display text-base font-semibold text-text">{{ $skill->name }}</p>
+                            <p class="mt-0.5 text-2xs uppercase tracking-wider text-muted">{{ $skill->category_label }}</p>
 
-                        <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
-                            <div class="h-full rounded-full bg-gradient-to-r from-primary-soft to-primary-dark"
-                                style="width: {{ $skill->level }}%"></div>
+                            <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+                                <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-primary-soft to-primary-dark"
+                                    style="width: {{ $skill->level }}%"></div>
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -304,11 +306,4 @@
         </div>
     </div>
     </section>
-
-    {{-- Tanpa JavaScript, teks ketik tetap tampil utuh --}}
-    @push('head')
-        <noscript>
-            <style>[data-typewriter].tw-pending { visibility: visible; }</style>
-        </noscript>
-    @endpush
 @endsection

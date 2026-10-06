@@ -4,7 +4,7 @@
     Kartu proyek yang dipakai di beranda, daftar portofolio, dan detail.
     Satu komponen agar tampilan selalu konsisten (FR-05).
 --}}
-<article class="card card-hover group flex h-full flex-col !p-0">
+<article class="card card-hover-tilt group flex h-full flex-col !p-0" data-tilt>
     <a href="{{ route('portofolio.show', $project->slug) }}" class="card-media block" tabindex="-1" aria-hidden="true">
         @if ($project->thumbnail_url)
             <img src="{{ $project->thumbnail_url }}" alt="" loading="lazy" decoding="async"

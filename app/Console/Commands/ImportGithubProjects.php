@@ -168,7 +168,7 @@ class ImportGithubProjects extends Command
             return [];
         }
 
-        $pinned = $github->pinnedRepositories();
+        $pinned = $github->pinnedRepositories(fresh: true);
 
         if ($pinned !== []) {
             $ids = collect($pinned)

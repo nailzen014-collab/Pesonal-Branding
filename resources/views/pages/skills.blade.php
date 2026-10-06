@@ -47,7 +47,7 @@
 
                         <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach ($skills as $skill)
-                                <div class="card card-hover">
+                                <div class="card card-hover-tilt" data-tilt>
                                     <div class="flex items-center justify-between">
                                         <h3 class="font-display text-base font-semibold text-text">{{ $skill->name }}</h3>
                                         <span class="font-mono text-xs text-primary">{{ $skill->level }}%</span>
@@ -57,7 +57,7 @@
                                     <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-surface-2"
                                         role="progressbar" aria-valuenow="{{ $skill->level }}" aria-valuemin="0"
                                         aria-valuemax="100" aria-label="Level {{ $skill->name }}">
-                                        <div class="h-full rounded-full bg-gradient-to-r from-primary-soft to-primary-dark"
+                                        <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-primary-soft to-primary-dark"
                                             style="width: {{ $skill->level }}%"></div>
                                     </div>
 

@@ -4,7 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Project;
 use App\Models\Technology;
+use App\Services\GithubService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 /**
@@ -20,6 +23,41 @@ class PublicPagesTest extends TestCase
         $this->get(route('home'))
             ->assertOk()
             ->assertSee('Portofolio', false);
+    }
+
+    public function test_beranda_hanya_menampilkan_proyek_yang_dijadikan_unggulan_oleh_admin(): void
+    {
+        Project::factory()->create([
+            'title' => 'Alpha',
+            'source' => 'github',
+            'is_published' => true,
+            'is_featured' => true,
+            'sort_order' => 2,
+            'repo_url' => 'https://github.com/example/alpha',
+        ]);
+
+        Project::factory()->create([
+            'title' => 'Beta',
+            'source' => 'github',
+            'is_published' => true,
+            'is_featured' => true,
+            'sort_order' => 1,
+            'repo_url' => 'https://github.com/example/beta',
+        ]);
+
+        Project::factory()->create([
+            'title' => 'Gamma',
+            'source' => 'github',
+            'is_published' => true,
+            'is_featured' => false,
+            'repo_url' => 'https://github.com/example/gamma',
+        ]);
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Beta', false)
+            ->assertSee('Alpha', false)
+            ->assertDontSee('Gamma', false);
     }
 
     public function test_halaman_statis_dapat_diakses(): void

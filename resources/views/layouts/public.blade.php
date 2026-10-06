@@ -45,6 +45,24 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    {{-- Tanpa JavaScript, konten animasi tetap tampil utuh --}}
+    <noscript>
+        <style>
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            [data-typewriter].tw-pending {
+                visibility: visible !important;
+            }
+
+            .reveal:not(.is-visible) .skill-bar-fill {
+                transform: none !important;
+            }
+        </style>
+    </noscript>
+
     @stack('head')
 </head>
 <body class="min-h-screen bg-ink text-text">
@@ -63,5 +81,26 @@
 
     {{-- Animasi `.reveal` ditangani resources/js/reveal.js --}}
     @stack('scripts')
+
+    {{--
+        Safety net: bila bundel Vite gagal dimuat atau dieksekusi, paksa
+        konten `.reveal` (dan teks ketik) tampil supaya halaman tidak pernah
+        kosong. app.js menandai keberhasilan lewat data-js-ready di <html>.
+    --}}
+    <script>
+        window.addEventListener('load', function () {
+            if (document.documentElement.dataset.jsReady) {
+                return;
+            }
+
+            document.querySelectorAll('.reveal').forEach(function (element) {
+                element.classList.add('is-visible');
+            });
+
+            document.querySelectorAll('.tw-pending').forEach(function (element) {
+                element.classList.remove('tw-pending');
+            });
+        });
+    </script>
 </body>
 </html>

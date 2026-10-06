@@ -95,6 +95,19 @@ class ProjectController extends Controller
             ->with('success', 'Proyek berhasil dihapus.');
     }
 
+    public function toggleFeatured(Project $project): RedirectResponse
+    {
+        $project->update([
+            'is_featured' => ! $project->is_featured,
+        ]);
+
+        $label = $project->is_featured ? 'ditandai sebagai unggulan' : 'dihapus dari unggulan';
+
+        return redirect()
+            ->route('admin.projects.index')
+            ->with('success', 'Proyek "'.$project->title.'" '.$label.'.');
+    }
+
     /**
      * Hapus file lama agar folder storage tidak penuh file tidak terpakai.
      */

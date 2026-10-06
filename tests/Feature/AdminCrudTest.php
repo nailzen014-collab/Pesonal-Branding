@@ -83,6 +83,17 @@ class AdminCrudTest extends TestCase
         $this->assertDatabaseMissing('projects', ['title' => 'Proyek Baru']);
     }
 
+    public function test_admin_bisa_mengubah_status_unggulan_proyek(): void
+    {
+        $project = Project::factory()->create(['title' => 'Proyek Unggulan', 'is_featured' => false]);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.projects.toggle-featured', $project))
+            ->assertRedirect(route('admin.projects.index'));
+
+        $this->assertDatabaseHas('projects', ['title' => 'Proyek Unggulan', 'is_featured' => true]);
+    }
+
     public function test_admin_bisa_menambah_skill(): void
     {
         $this->actingAs($this->admin)

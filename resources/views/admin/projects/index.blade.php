@@ -70,6 +70,13 @@
                                         </a>
                                     @endif
 
+                                    <form method="POST" action="{{ route('admin.projects.toggle-featured', $project) }}">
+                                        @csrf
+                                        <button type="submit" class="rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition {{ $project->is_featured ? 'border-primary/40 bg-primary/10 text-primary hover:bg-primary/20' : 'border-line bg-surface-2 text-muted hover:border-primary/30 hover:text-primary' }}" aria-label="{{ $project->is_featured ? 'Hapus unggulan' : 'Jadikan unggulan' }} {{ $project->title }}">
+                                            {{ $project->is_featured ? 'Unggulan' : 'Jadikan Unggulan' }}
+                                        </button>
+                                    </form>
+
                                     <a href="{{ route('admin.projects.edit', $project) }}" class="icon-button" aria-label="Edit {{ $project->title }}">
                                         <x-icon name="edit" class="h-4 w-4" />
                                     </a>
