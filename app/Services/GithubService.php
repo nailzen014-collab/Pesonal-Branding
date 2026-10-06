@@ -81,6 +81,72 @@ class GithubService
     }
 
     /**
+     * Daftar nama repository yang dipinned di profil GitHub, sesuai urutan.
+     *
+     * API resmi tidak menyediakan daftar pinned untuk user biasa tanpa token
+     * GraphQL, jadi halaman profil dibaca langsung. Hasil disimpan 15 menit
+     * supaya tidak membebani github.com.
+     *
+     * @return array<int, string> nama repository, mis. ['schoolhub', 'json']
+     */
+    public function pinnedRepositories(bool $fresh = false): array
+    {
+        $key = 'github.pinned.'.$this->username();
+
+        if ($fresh) {
+            Cache::forget($key);
+        }
+
+        return Cache::remember($key, now()->addMinutes(15), function (): array {
+            try {
+                $response = Http::withHeaders([
+                    'User-Agent' => config('app.name'),
+                    'Accept' => 'text/html',
+                ])->timeout(10)->get($this->profileUrl());
+
+                if ($response->failed()) {
+                    Log::warning('Profil GitHub gagal dibaca', ['status' => $response->status()]);
+
+                    return [];
+                }
+
+                return $this->parsePinned($response->body());
+            } catch (Throwable $exception) {
+                Log::warning('Profil GitHub tidak bisa dihubungi: '.$exception->getMessage());
+
+                return [];
+            }
+        });
+    }
+
+    /**
+     * Ambil nama repository dari blok "Pinned" pada HTML profil GitHub.
+     *
+     * Blok itu dirender ulang oleh JavaScript bila permintaan pertama gagal,
+     * jadi parsing sengaja dibuat longgar: hasil kosong bukan error.
+     *
+     * @return array<int, string>
+     */
+    private function parsePinned(string $html): array
+    {
+        if (! preg_match('/js-pinned-items-reorder-list(.*?)<\/ol>/s', $html, $block)) {
+            return [];
+        }
+
+        preg_match_all('/<li\b.*?<\/li>/s', $block[1], $items);
+
+        $names = [];
+
+        foreach ($items[0] as $item) {
+            if (preg_match('#href="/'.preg_quote($this->username(), '/').'/([^"?#/]+)"#', $item, $match)) {
+                $names[] = urldecode($match[1]);
+            }
+        }
+
+        return array_values(array_unique($names));
+    }
+
+    /**
      * Penyederhanaan data API menjadi field yang dipakai website.
      *
      * @param  array<string, mixed>  $repo

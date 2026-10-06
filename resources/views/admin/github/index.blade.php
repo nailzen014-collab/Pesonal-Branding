@@ -20,18 +20,30 @@
             </div>
         </div>
     @else
-        <form method="POST" action="{{ route('admin.github.store') }}">
+        <form method="POST" action="{{ route('admin.github.sync') }}">
             @csrf
 
             <div class="flex flex-wrap items-center justify-between gap-4">
-                <p class="text-sm text-muted">Pilih repository yang ingin dijadikan proyek.</p>
+                <p class="text-sm text-muted">
+                    Pilih repository yang ingin dijadikan proyek. Sinkronisasi
+                    otomatis berjalan setiap jam; tombol di samping menjalankannya
+                    sekarang juga.
+                </p>
 
-                <div class="flex gap-2">
-                    <x-ui.button type="submit" name="publish" value="1" variant="secondary" icon="check">
-                        Simpan &amp; Publikasikan
-                    </x-ui.button>
-                    <x-ui.button type="submit" icon="download">Impor sebagai Draft</x-ui.button>
-                </div>
+                <x-ui.button type="submit" icon="refresh">
+                    Sinkronkan Semua
+                </x-ui.button>
+            </div>
+        </form>
+
+        <form method="POST" action="{{ route('admin.github.store') }}" class="mt-6">
+            @csrf
+
+            <div class="flex flex-wrap items-center justify-end gap-2">
+                <x-ui.button type="submit" name="publish" value="1" variant="secondary" icon="check">
+                    Simpan &amp; Publikasikan
+                </x-ui.button>
+                <x-ui.button type="submit" icon="download">Impor sebagai Draft</x-ui.button>
             </div>
 
             <div class="card mt-6 !p-0">

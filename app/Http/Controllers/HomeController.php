@@ -19,7 +19,7 @@ class HomeController extends Controller
             ->featured()
             ->with('technologies')
             ->orderBy('sort_order')
-            ->take(3)
+            ->take(6)
             ->get();
 
         $stats = [

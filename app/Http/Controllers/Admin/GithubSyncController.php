@@ -7,6 +7,7 @@ use App\Http\Requests\ImportGithubReposRequest;
 use App\Models\Project;
 use App\Services\GithubService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -69,8 +70,28 @@ class GithubSyncController extends Controller
 
     public function refresh(): RedirectResponse
     {
-        $this->github->repositories(fresh: true);
+        $this->github->repositories(fresh: true, sort: 'stars');
 
         return back()->with('success', 'Daftar repository diperbarui dari GitHub.');
+    }
+
+    /**
+     * Sinkronkan semua repository GitHub sekarang juga (termasuk yang baru).
+     *
+     * Perintah yang sama dipakai scheduler, jadi tombol ini dan sinkron
+     * otomatis selalu menghasilkan data yang sama.
+     */
+    public function sync(): RedirectResponse
+    {
+        Artisan::call('portfolio:import-github', [
+            '--publish' => true,
+            '--include-forks' => true,
+        ]);
+
+        $output = trim(Artisan::output());
+
+        return redirect()
+            ->route('admin.github.index')
+            ->with('success', 'Sinkronisasi GitHub selesai: '.$output);
     }
 }

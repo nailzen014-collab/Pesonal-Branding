@@ -81,10 +81,25 @@ fork dari `rapleeee/n1_problem`. Tanpa opsi itu, fork otomatis dilewati.
 | `--dry-run` | Tampilkan rencana tanpa menulis ke database |
 | `--user=` | Import dari username lain, tanpa mengubah `.env` |
 | `--include-forks` | Sertakan repository yang merupakan fork, misalnya `n1_problem` |
+| `--featured=` | Jumlah proyek unggulan otomatis di beranda, default 3 |
 
 Perintah ini aman dijalankan berkali-kali. Repository yang sudah ada diperbarui,
 bukan diduplikasi, karena pencocokan memakai `github_id` lalu `repo_url`. Tambahkan
 `GITHUB_TOKEN` di `.env` bila repository publik melewati batas 60 permintaan per jam.
+
+### Sinkronisasi Otomatis
+
+Perintah yang sama dijadwalkan setiap jam lewat scheduler (`routes/console.php`),
+sehingga repository yang baru dibuat otomatis ikut tampil di `/portofolio`.
+
+```bash
+php artisan schedule:work   # pengembangan: jalankan terus di terminal kedua
+php artisan schedule:list   # lihat jadwal dan waktu eksekusi berikutnya
+```
+
+Di produksi, arahkan cron hosting ke `php artisan schedule:run` setiap menit.
+Alternatifnya, tekan tombol **Sinkronkan Semua** di halaman admin
+`/admin/github` untuk menjalankan sinkronisasi langsung.
 
 ## Menjalankan di Mode Pengembangan
 

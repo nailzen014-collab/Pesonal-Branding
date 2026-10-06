@@ -54,7 +54,7 @@
                                 <dt class="text-muted">GitHub</dt>
                                 <dd>
                                     <a href="{{ $github }}" target="_blank" rel="noopener noreferrer"
-                                        class="text-text hover:text-primary">@{{ ltrim(parse_url($github, PHP_URL_PATH) ?? '', '/') }}</a>
+                                        class="text-text hover:text-primary">{{ ltrim((string) parse_url($github, PHP_URL_PATH), '/') }}</a>
                                 </dd>
                             </div>
                         </div>

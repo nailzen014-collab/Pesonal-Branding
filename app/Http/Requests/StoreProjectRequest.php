@@ -27,6 +27,7 @@ class StoreProjectRequest extends FormRequest
         $this->merge([
             'source' => $this->input('source', 'manual'),
             'is_featured' => $this->boolean('is_featured'),
+            'is_featured_manual' => true,
             'is_published' => $this->boolean('is_published'),
         ]);
     }
@@ -47,6 +48,7 @@ class StoreProjectRequest extends FormRequest
             'thumbnail' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
             'source' => ['required', Rule::in(['manual', 'github'])],
             'is_featured' => ['nullable', 'boolean'],
+            'is_featured_manual' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'technologies' => ['nullable', 'array'],

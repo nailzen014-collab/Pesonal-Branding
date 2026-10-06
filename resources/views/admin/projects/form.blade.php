@@ -121,7 +121,7 @@
                                 @checked(old('is_featured', $project->is_featured)) class="mt-0.5 rounded border-line bg-surface-2 text-primary focus:ring-primary focus:ring-offset-ink">
                             <span>
                                 <span class="block text-sm text-text">Jadikan unggulan</span>
-                                <span class="block text-2xs text-muted">Muncul di 3 kartu beranda.</span>
+                                <span class="block text-2xs text-muted">Muncul di 3 kartu beranda. Pilihan manual ini menimpa unggulan otomatis.</span>
                             </span>
                         </label>
                     </div>

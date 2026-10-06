@@ -79,6 +79,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('github', [GithubSyncController::class, 'index'])->name('github.index');
     Route::post('github', [GithubSyncController::class, 'store'])->name('github.store');
     Route::post('github/refresh', [GithubSyncController::class, 'refresh'])->name('github.refresh');
+    Route::post('github/sync', [GithubSyncController::class, 'sync'])->name('github.sync');
 
     Route::get('settings', [SettingController::class, 'edit'])->name('settings.edit');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');

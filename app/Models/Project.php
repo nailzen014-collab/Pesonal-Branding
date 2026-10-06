@@ -32,6 +32,7 @@ class Project extends Model
         'source',
         'github_id',
         'is_featured',
+        'is_featured_manual',
         'is_published',
         'sort_order',
     ];
@@ -40,6 +41,7 @@ class Project extends Model
     {
         return [
             'is_featured' => 'boolean',
+            'is_featured_manual' => 'boolean',
             'is_published' => 'boolean',
             'sort_order' => 'integer',
         ];

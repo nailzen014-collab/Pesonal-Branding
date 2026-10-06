@@ -35,10 +35,15 @@ class Setting extends Model
 
     /**
      * Ambil satu nilai pengaturan, atau nilai bawaan bila belum diatur.
+     *
+     * String kosong dianggap belum diatur, supaya link sosial yang belum
+     * diisi admin tidak menghasilkan href="" (yang menunjuk ke halaman ini).
      */
     public static function get(string $key, mixed $default = null): mixed
     {
-        return static::allSettings()[$key] ?? $default;
+        $value = static::allSettings()[$key] ?? null;
+
+        return filled($value) ? $value : $default;
     }
 
     /**

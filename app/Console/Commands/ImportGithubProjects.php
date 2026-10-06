@@ -8,6 +8,7 @@ use App\Services\GithubService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -20,7 +21,8 @@ use Illuminate\Support\Str;
     {--user= : Username GitHub, menimpa nilai GITHUB_USERNAME}
     {--dry-run : Tampilkan rencana tanpa menulis ke database}
     {--publish : Langsung terbitkan proyek hasil impor}
-    {--include-forks : Sertakan repository yang merupakan fork}')]
+    {--include-forks : Sertakan repository yang merupakan fork}
+    {--featured=6 : Jumlah proyek unggulan otomatis; mengikuti pinned GitHub bila ada}')]
 #[Description('Impor semua repository GitHub ke daftar proyek portofolio')]
 class ImportGithubProjects extends Command
 {
@@ -94,6 +96,8 @@ class ImportGithubProjects extends Command
             return self::SUCCESS;
         }
 
+        $featured = $this->syncFeatured($repositories, $github);
+
         $this->newLine();
         $this->components->info(sprintf(
             '%d proyek baru, %d diperbarui dari total %d repository.',
@@ -102,6 +106,10 @@ class ImportGithubProjects extends Command
             count($repositories),
         ));
 
+        if ($featured > 0) {
+            $this->components->info($featured.' proyek ditandai unggulan (mengikuti pinned GitHub, fallback ke bintang dan pembaruan terakhir).');
+        }
+
         if (! $this->option('publish') && $created > 0) {
             $this->components->warn(
                 'Proyek baru disimpan sebagai draft. Terbitkan lewat panel admin atau ulangi dengan --publish.'
@@ -109,6 +117,101 @@ class ImportGithubProjects extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Tandai unggulan secara otomatis untuk proyek yang belum disetel admin.
+     *
+     * Prioritasnya repository yang dipinned di profil GitHub, sesuai urutan
+     * pin. Bila profil tidak punya pinned, jatuh ke bintang terbanyak lalu
+     * pembaruan terakhir. Pilihan admin (is_featured_manual) tidak disentuh.
+     *
+     * @param  array<int, array<string, mixed>>  $repositories
+     */
+    private function syncFeatured(array $repositories, GithubService $github): int
+    {
+        $automatic = Project::where('is_featured_manual', false)->pluck('github_id', 'id');
+
+        if ($automatic->isEmpty()) {
+            return 0;
+        }
+
+        $ids = $this->featuredIds($repositories, $automatic, $github);
+
+        $touched = Project::where('is_featured_manual', false)
+            ->whereIn('id', $ids)
+            ->update(['is_featured' => true]);
+
+        Project::where('is_featured_manual', false)
+            ->whereNotIn('id', $ids)
+            ->update(['is_featured' => false]);
+
+        return $touched;
+    }
+
+    /**
+     * Pilih proyek yang layak ditandai unggulan.
+     *
+     * Prioritas pertama mengikuti repository yang dipinned di profil GitHub,
+     * sesuai urutannya. Bila profil tidak punya pinned (atau gagal dibaca),
+     * jatuh ke pilihan lama: bintang terbanyak lalu pembaruan terakhir.
+     *
+     * @param  array<int, array<string, mixed>>  $repositories
+     * @param  Collection<int, int>  $automatic  id proyek => github_id
+     * @return array<int, int>
+     */
+    private function featuredIds(array $repositories, $automatic, GithubService $github): array
+    {
+        $limit = max(0, (int) $this->option('featured'));
+
+        if ($limit === 0) {
+            return [];
+        }
+
+        $pinned = $github->pinnedRepositories();
+
+        if ($pinned !== []) {
+            $ids = collect($pinned)
+                ->map(fn (string $name) => $this->findByName($repositories, $name))
+                ->filter()
+                ->map(fn (array $repo) => $automatic->search($repo['id']))
+                ->filter()
+                ->values()
+                ->take($limit)
+                ->all();
+
+            if ($ids !== []) {
+                return $ids;
+            }
+        }
+
+        return collect($repositories)
+            ->filter(fn (array $repo) => $automatic->contains($repo['id']))
+            ->sortBy([['stars', 'desc'], ['updated_at', 'desc']])
+            ->take($limit)
+            ->map(fn (array $repo) => $automatic->search($repo['id']))
+            ->filter()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Cari data repository dari API berdasarkan nama (bukan full_name).
+     *
+     * @param  array<int, array<string, mixed>>  $repositories
+     * @return array<string, mixed>|null
+     */
+    private function findByName(array $repositories, string $name): ?array
+    {
+        $needle = strtolower($name);
+
+        foreach ($repositories as $repo) {
+            if (strtolower((string) $repo['name']) === $needle) {
+                return $repo;
+            }
+        }
+
+        return null;
     }
 
     /**
