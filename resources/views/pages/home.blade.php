@@ -10,6 +10,12 @@
         $photo = setting('profile_photo') ?: 'images/profile.jpg';
         $photoUrl = str_starts_with($photo, 'http') ? $photo : (str_starts_with($photo, 'images/') ? asset($photo) : asset('storage/'.$photo));
 
+        // Frasa animasi ketik diturunkan dari role agar bisa diedit lewat panel admin.
+        $rolePhrases = array_values(array_unique(array_filter(array_merge(
+            [$role],
+            preg_split('/\s*[&|,\/]+\s*/u', $role) ?: []
+        ))));
+
         $skillIcons = [
             'frontend' => 'code',
             'backend' => 'layers',
@@ -41,9 +47,10 @@
                 {{ $siteName }}
             </h1>
 
-            <p class="mt-5 font-display text-lg text-primary-soft sm:text-2xl" style="animation-delay: 160ms">
-                {{ $role }}
-            </p>
+            <p class="tw-pending mt-5 animate-fade-up font-display text-lg text-primary-soft sm:text-2xl"
+                style="animation-delay: 160ms"
+                data-typewriter
+                data-phrases="{{ implode('|', $rolePhrases) }}">{{ $role }}</p>
 
             <p class="mt-6 max-w-xl text-base leading-relaxed text-muted animate-fade-up" style="animation-delay: 240ms">
                 {{ $tagline }}
@@ -85,12 +92,15 @@
             <div class="relative animate-fade-up" style="animation-delay: 200ms">
                 <div class="absolute -inset-6 animate-drift rounded-[2.5rem] bg-gradient-to-br from-primary/35 via-primary-deep/10 to-transparent blur-3xl" aria-hidden="true"></div>
 
-                <div class="border-gradient relative rounded-[2rem] bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 shadow-card-lg backdrop-blur">
+                <div class="border-gradient relative rounded-[2rem] bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 shadow-card-lg backdrop-blur"
+                    data-tilt>
                     <img src="{{ $photoUrl }}" alt="Foto profil {{ $siteName }}"
                         width="512" height="512" fetchpriority="high" decoding="async"
                         class="h-64 w-64 rounded-[1.5rem] object-cover object-top sm:h-80 sm:w-80">
 
                     <div class="pointer-events-none absolute inset-2 rounded-[1.5rem] bg-gradient-to-t from-ink/80 via-transparent to-transparent" aria-hidden="true"></div>
+
+                    <span class="sheen-band" aria-hidden="true"></span>
 
                     <div class="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-2">
                         <span class="pill border-primary/30 bg-ink/70 text-text backdrop-blur">
@@ -119,7 +129,8 @@
                     <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-2/70 backdrop-blur text-primary transition duration-500 group-hover:-translate-y-1 group-hover:border-primary/40 group-hover:shadow-glow-soft">
                         <x-icon :name="$stat['icon']" class="h-5 w-5" />
                     </span>
-                    <p class="mt-4 font-display text-3xl font-bold text-text sm:text-4xl">{{ $stat['value'] }}</p>
+                    <p class="mt-4 font-display text-3xl font-bold text-text sm:text-4xl"
+                        data-count-to="{{ $stat['value'] }}">{{ $stat['value'] }}</p>
                     <p class="mt-1 text-xs uppercase tracking-wider text-muted">{{ $stat['label'] }}</p>
                 </div>
             @endforeach
@@ -292,5 +303,12 @@
             </div>
         </div>
     </div>
-</section>
+    </section>
+
+    {{-- Tanpa JavaScript, teks ketik tetap tampil utuh --}}
+    @push('head')
+        <noscript>
+            <style>[data-typewriter].tw-pending { visibility: visible; }</style>
+        </noscript>
+    @endpush
 @endsection

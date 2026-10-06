@@ -125,6 +125,10 @@ export default {
                     '0%': { transform: 'translateX(-120%)' },
                     '100%': { transform: 'translateX(220%)' },
                 },
+                'sheen-loop': {
+                    '0%': { transform: 'translateX(-130%) skewX(-12deg)' },
+                    '55%, 100%': { transform: 'translateX(230%) skewX(-12deg)' },
+                },
             },
 
             animation: {
@@ -136,6 +140,7 @@ export default {
                 marquee: 'marquee 32s linear infinite',
                 'pulse-ring': 'pulse-ring 2.6s ease-out infinite',
                 'shine-sweep': 'shine-sweep 1.6s ease-out',
+                'sheen-loop': 'sheen-loop 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
             },
 
             transitionTimingFunction: {

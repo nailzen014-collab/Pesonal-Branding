@@ -1,5 +1,7 @@
 import Alpine from 'alpinejs';
 import { observeReveals } from './reveal';
+import { initEffects } from './effects';
+import { initTypewriters } from './typewriter';
 
 /**
  * Tombol "muat lebih banyak" ala GitHub pada halaman /portofolio.
@@ -89,6 +91,8 @@ function initLoadMore() {
 document.addEventListener('DOMContentLoaded', () => {
     observeReveals();
     initLoadMore();
+    initEffects();
+    initTypewriters();
 });
 
 window.Alpine = Alpine;

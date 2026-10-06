@@ -85,6 +85,8 @@
                     <div class="mt-6">
                         <x-ui.button :href="route('portofolio')" class="w-full" icon="folder">Lihat Portofolio</x-ui.button>
                     </div>
+
+                    <span class="sheen-band" aria-hidden="true"></span>
                 </div>
             </div>
 

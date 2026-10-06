@@ -65,29 +65,126 @@
      * Kartu dasar tema gelap.
      * Lapisan atas memakai garis 1px putih transparan supaya tepi kartu
      * terlihat lebih tegas di layar gelap (efek "inner highlight").
+     * Glow merah di sudut kiri atas jadi bagian background-image supaya
+     * tidak perlu direpaint oleh pseudo-element saat kursor bergerak.
      */
     .card {
         @apply relative overflow-hidden rounded-2xl border border-line-soft bg-surface/80 p-6 shadow-card backdrop-blur-sm
         transition duration-500 ease-smooth;
+        background-image: radial-gradient(120% 80% at 0% 0%, rgb(225 29 46 / 0.1), transparent 55%);
     }
 
-    /* Kilau tipis yang menyapu di atas kartu saat hover */
+    /*
+     * Titik cahaya glossy yang mengikuti kursor.
+     * Berbentuk lingkaran berukuran tetap yang digeser lewat transform
+     * (GPU), bukan lewat posisi gradient — memindahkan `--mx` / `--my`
+     * hanya memicu komposit ulang, jadi gerakannya tetap60fps.
+     * Nilai pikselnya dikirim dari resources/js/effects.js.
+     */
     .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 360px;
+        height: 360px;
+        pointer-events: none;
+        background: radial-gradient(
+            closest-side,
+            rgb(255 255 255 / 0.1),
+            rgb(225 29 46 / 0.1) 50%,
+            transparent 75%
+        );
+        transform: translate3d(calc(var(--mx, -600px) - 50%), calc(var(--my, -600px) - 50%), 0);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .card:hover::before {
+        opacity: 1;
+        will-change: transform;
+    }
+
+    /*
+     * Kilau diagonal yang menyapu melintasi kartu saat hover.
+     * Opasinya ikut diatur: saat kursor keluar kilau langsung memudar
+     * sehingga sapuan baliknya tidak terasa seperti "mundur" pelan.
+     * `overflow-hidden` pada kartu memastikan kilau terpotong di tepinya.
+     */
+    .card::after {
         content: '';
         position: absolute;
         inset: 0;
         pointer-events: none;
-        background: radial-gradient(120% 80% at 0% 0%, rgb(225 29 46 / 0.12), transparent 55%);
+        background: linear-gradient(
+            115deg,
+            transparent 32%,
+            rgb(255 255 255 / 0.06) 45%,
+            rgb(255 255 255 / 0.16) 50%,
+            rgb(255 255 255 / 0.06) 55%,
+            transparent 68%
+        );
+        transform: translateX(-130%);
         opacity: 0;
-        transition: opacity 0.5s ease;
+        transition:
+            transform 0.9s ease-smooth,
+            opacity 0.3s ease;
+    }
+
+    .card:hover::after {
+        transform: translateX(130%);
+        opacity: 1;
     }
 
     .card-hover {
         @apply hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-card-lg;
     }
 
-    .card-hover::before {
-        opacity: 1;
+    /*
+     * Varian hover untuk kartu yang memakai tilt 3D (`data-tilt`).
+     * Angkatannya dihilangkan karena transform-nya dikelola tilt;
+     * garis bawah & bayangan tetap sama seperti `.card-hover`.
+     */
+    .card-hover-tilt {
+        @apply hover:border-primary/40 hover:shadow-card-lg;
+    }
+
+    .card-hover-tilt:hover {
+        --ty: -6px;
+    }
+
+    /*
+     * Bar level skill. Lebar tetap dari server, animasinya memakai
+     * scaleX: mulai dari nol selama kartu induknya belum `.is-visible`,
+     * lalu melebar saat kartu masuk viewport.
+     */
+    .skill-bar-fill {
+        transform-origin: left center;
+        transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 250ms;
+    }
+
+    .reveal:not(.is-visible) .skill-bar-fill {
+        transform: scaleX(0);
+    }
+
+    /*
+     * Kilau otomatis yang menyapu berulang untuk elemen yang memakai
+     * `border-gradient` (bingkai foto profil, kartu profil) karena
+     * pseudo-element `::after` elemen itu sudah dipakai garis gradien.
+     * Dipasang sebagai elemen anak: <span class="sheen-band"></span>.
+     */
+    .sheen-band {
+        @apply pointer-events-none absolute inset-0 animate-sheen-loop;
+        border-radius: inherit;
+        background: linear-gradient(
+            115deg,
+            transparent 34%,
+            rgb(255 255 255 / 0.1) 46%,
+            rgb(255 255 255 / 0.22) 50%,
+            rgb(255 255 255 / 0.1) 54%,
+            transparent 66%
+        );
+        animation-delay: 900ms;
     }
 
     /* Kartu proyek: thumbnail 16:9 */
@@ -189,6 +286,32 @@
         pointer-events: none;
     }
 
+    /*
+     * Kemiringan 3D ringan mengikuti kursor (bingkai foto profil dan
+     * kartu portofolio/skills). Nilai `--rx` / `--ry` diisi JavaScript
+     * di resources/js/effects.js; `--ty` diisi CSS saat hover kartu
+     * yang memakai `.card-hover-tilt` sebagai pengganti translate biasa.
+     */
+    [data-tilt] {
+        transform:
+            perspective(1000px) translateY(var(--ty, 0px))
+            rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+        transition:
+            transform 160ms ease-out,
+            border-color 500ms cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1),
+            background-color 500ms cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform;
+    }
+
+    /*
+     * Animasi ketik: teks asli tetap ada di HTML untuk SEO dan pengguna
+     * tanpa JavaScript. Kelas `tw-pending` menyembunyikannya sampai siap.
+     */
+    [data-typewriter].tw-pending {
+        visibility: hidden;
+    }
+
     /* Muncul saat di-scroll (dikendalikan Alpine/IntersectionObserver) */
     .reveal {
         opacity: 0;
@@ -221,5 +344,34 @@
             opacity: 1;
             transform: none;
         }
+    }
+}
+
+/*
+ * Kursor berkedip di belakang animasi ketik.
+ * Ditulis di luar @layer karena kelasnya (`tw-ready`) hanya ditambahkan
+ * dari JavaScript, sehingga ikut terhapus oleh purge Tailwind bila berada
+ * di dalam layer.
+ */
+[data-typewriter].tw-ready::after {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 0.95em;
+    margin-left: 3px;
+    vertical-align: -0.1em;
+    border-radius: 1px;
+    background: currentColor;
+    animation: caret-blink 1.1s step-end infinite;
+}
+
+@keyframes caret-blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
     }
 }
