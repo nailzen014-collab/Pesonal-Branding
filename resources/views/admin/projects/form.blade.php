@@ -120,8 +120,8 @@
                             <input type="checkbox" name="is_featured" value="1"
                                 @checked(old('is_featured', $project->is_featured)) class="mt-0.5 rounded border-line bg-surface-2 text-primary focus:ring-primary focus:ring-offset-ink">
                             <span>
-                                <span class="block text-sm text-text">Jadikan unggulan</span>
-                                <span class="block text-2xs text-muted">Muncul di 3 kartu beranda. Pilihan manual ini menimpa unggulan otomatis.</span>
+                                <span class="block text-sm text-text">Jadikan terbaru</span>
+                                <span class="block text-2xs text-muted">Muncul di 3 kartu beranda. Pilihan manual ini menimpa otomatis.</span>
                             </span>
                         </label>
                     </div>

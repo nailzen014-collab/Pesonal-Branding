@@ -27,7 +27,7 @@
 
                 <div class="lg:col-span-3">
                     <label for="category" class="sr-only">Filter kategori</label>
-                    <select id="category" name="category" class="form-input">
+                    <select id="category" name="category" class="form-select">
                         <option value="">Semua kategori</option>
                         @foreach ($categories as $item)
                             <option value="{{ $item }}" @selected($category === $item)>{{ $item }}</option>
@@ -37,7 +37,7 @@
 
                 <div class="lg:col-span-2">
                     <label for="technology" class="sr-only">Filter teknologi</label>
-                    <select id="technology" name="technology" class="form-input">
+                    <select id="technology" name="technology" class="form-select">
                         <option value="">Semua teknologi</option>
                         @foreach ($technologies as $item)
                             <option value="{{ $item }}" @selected($technology === $item)>{{ $item }}</option>

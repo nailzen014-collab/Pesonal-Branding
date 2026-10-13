@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SkillController as AdminSkillController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\GithubWebhookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProjectController;
@@ -36,10 +37,13 @@ Route::post('/kontak', [ContactController::class, 'store'])
 Route::get('/kontak', [ContactController::class, 'index'])->name('kontak');
 
 // SEO: sitemap.xml & robots.txt (NFR-04).
-Route::get('/sitemap.xml', [SitemapController::class, '__invoke'])->name('sitemap');
-Route::get('/robots.txt', [RobotsController::class, '__invoke'])->name('robots');
+    Route::get('/sitemap.xml', [SitemapController::class, '__invoke'])->name('sitemap');
+    Route::get('/robots.txt', [RobotsController::class, '__invoke'])->name('robots');
 
-/*
+    // GitHub Webhook untuk sinkronisasi otomatis saat push repo baru
+    Route::post('/github/webhook', GithubWebhookController::class)->name('github.webhook');
+
+    /*
 |--------------------------------------------------------------------------
 | Route Admin
 |--------------------------------------------------------------------------

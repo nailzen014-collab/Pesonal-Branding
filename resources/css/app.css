@@ -223,6 +223,39 @@
         focus:border-primary focus:bg-surface-2 focus:ring-1 focus:ring-primary;
     }
 
+    /* Select dropdown styling */
+    .form-select {
+        @apply w-full rounded-xl border border-line bg-surface-2/80 px-4 py-2.5 text-sm text-text
+        transition duration-300
+        focus:border-primary focus:bg-surface-2 focus:ring-1 focus:ring-primary
+        appearance-none
+        cursor-pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        padding-right: 2.5rem;
+    }
+
+    .form-select:hover {
+        @apply border-primary/50;
+    }
+
+    .form-select:focus {
+        @apply border-primary bg-surface-2;
+    }
+
+    /* Firefox select styling */
+    @-moz-document url-prefix() {
+        .form-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        }
+    }
+
+    /* Hide default arrow in IE/Edge */
+    .form-select::-ms-expand {
+        display: none;
+    }
+
     .form-label {
         @apply mb-1.5 block text-sm font-medium text-muted;
     }

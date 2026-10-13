@@ -50,6 +50,7 @@ return [
         'username' => env('GITHUB_USERNAME', 'nailzen014-collab'),
         'token' => env('GITHUB_TOKEN'),
         'cache_minutes' => (int) env('GITHUB_CACHE_MINUTES', 60),
+        'webhook_secret' => env('GITHUB_WEBHOOK_SECRET'),
     ],
 
 ];

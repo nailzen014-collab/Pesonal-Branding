@@ -15,9 +15,8 @@ class HomeController extends Controller
 {
     public function index(GithubService $github)
     {
-        $featuredProjects = Project::where('source', 'github')
+        $latestProjects = Project::where('source', 'github')
             ->where('is_published', true)
-            ->where('is_featured', true)
             ->with('technologies')
             ->orderBy('sort_order')
             ->take(6)
@@ -33,6 +32,6 @@ class HomeController extends Controller
         $skills = Skill::ordered()->take(8)->get();
         $experiences = Experience::ordered()->take(4)->get();
 
-        return view('pages.home', compact('featuredProjects', 'stats', 'skills', 'experiences'));
+        return view('pages.home', compact('latestProjects', 'stats', 'skills', 'experiences'));
     }
 }

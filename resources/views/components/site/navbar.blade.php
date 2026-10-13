@@ -14,7 +14,7 @@
 <header x-data="{ open: false, scrolled: false }"
     x-init="scrolled = window.scrollY > 20"
     @scroll.window="scrolled = window.scrollY > 20"
-    class="fixed inset-x-0 top-0 z-50 px-3 pt-3 transition-all duration-500 ease-smooth sm:px-5 sm:pt-4"
+    class="fixed inset-x-0 top-0 z-50 px-4 pt-3 transition-all duration-500 ease-smooth sm:px-6 sm:pt-4"
     :class="scrolled ? 'opacity-100' : 'opacity-100'">
 
     <nav class="container-page !max-w-6xl"
@@ -24,11 +24,14 @@
         aria-label="Navigasi utama">
 
         <div class="flex h-full items-center justify-between gap-4 px-3 sm:px-5">
-            <a href="{{ route('home') }}" class="group flex items-center gap-2.5">
+            <a href="{{ route('home') }}" class="group flex items-center gap-2.5 flex-shrink-0">
                 <span class="relative inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-glow-soft transition duration-500 group-hover:scale-105">
                     <x-icon name="code" class="h-5 w-5 text-white" />
                 </span>
-                <span class="font-display text-lg font-bold tracking-tight text-text">
+                <span class="font-display text-lg font-bold tracking-tight text-text hidden sm:block">
+                    {{ $name }}<span class="text-primary">.</span>
+                </span>
+                <span class="font-display text-lg font-bold tracking-tight text-text sm:hidden">
                     {{ $name }}<span class="text-primary">.</span>
                 </span>
             </a>
@@ -64,7 +67,7 @@
             </div>
 
             {{-- Tombol hamburger (mobile) --}}
-            <button type="button" @click="open = !open" class="icon-button !h-10 !w-10 md:hidden"
+            <button type="button" @click="open = !open" class="icon-button !h-10 !w-10 md:hidden flex-shrink-0"
                 :aria-expanded="open" aria-controls="mobile-menu" aria-label="Buka menu navigasi">
                 <x-icon name="menu" x-show="!open" />
                 <x-icon name="close" x-show="open" x-cloak />
@@ -73,7 +76,7 @@
 
         {{-- Menu mobile --}}
         <div id="mobile-menu" x-show="open" x-cloak x-transition.duration.300ms
-            class="mx-3 mt-2 overflow-hidden rounded-2xl border border-line-soft bg-ink/95 p-3 shadow-card-lg backdrop-blur-2xl md:hidden">
+            class="mx-3 mt-2 overflow-hidden rounded-2xl border border-line-soft bg-ink/95 p-4 shadow-card-lg backdrop-blur-2xl md:hidden">
             <ul class="space-y-1">
                 @foreach ($navItems as $item)
                     @php $active = request()->routeIs($item['route']); @endphp
@@ -93,6 +96,15 @@
                     <x-ui.button :href="$wa" icon="whatsapp" class="w-full" target="_blank" rel="noopener noreferrer">
                         Hubungi via WhatsApp
                     </x-ui.button>
+                </li>
+
+                <li class="pt-2 flex items-center gap-2">
+                    <a href="{{ $github }}" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="GitHub">
+                        <x-icon name="github" />
+                    </a>
+                    <a href="{{ $ig }}" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="Instagram">
+                        <x-icon name="instagram" />
+                    </a>
                 </li>
             </ul>
         </div>

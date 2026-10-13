@@ -24,96 +24,96 @@
         ];
     @endphp
 
-    {{-- Hero: foto, nama, role, tagline, dan dua CTA utama (FR-01) --}}
-<section class="relative overflow-hidden pb-24 pt-32 sm:pt-40">
-    <div class="pointer-events-none absolute inset-0 bg-aurora" aria-hidden="true"></div>
-    <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+{{-- Hero: foto, nama, role, tagline, dan dua CTA utama (FR-01) --}}
+    <section class="relative overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-40">
+        <div class="pointer-events-none absolute inset-0 bg-aurora" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
 
-    <div class="pointer-events-none absolute -left-32 top-24 h-72 w-72 animate-drift rounded-full bg-primary/20 blur-[100px]" aria-hidden="true"></div>
-    <div class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 animate-drift rounded-full bg-primary-deep/30 blur-[110px]" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -left-32 top-24 h-72 w-72 animate-drift rounded-full bg-primary/20 blur-[100px]" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 animate-drift rounded-full bg-primary-deep/30 blur-[110px]" aria-hidden="true"></div>
 
-    <div class="container-page relative grid items-center gap-14 lg:grid-cols-2">
-        <div class="order-2 lg:order-1">
-            <span class="eyebrow animate-fade-up">
-                <span class="relative inline-flex h-2 w-2">
-                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
-                    <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+        <div class="container-page relative grid min-w-0 gap-8 sm:gap-10 lg:grid-cols-2">
+            <div class="order-2 min-w-0 lg:order-1">
+                <span class="eyebrow animate-fade-up">
+                    <span class="relative inline-flex h-2 w-2">
+                        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+                        <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+                    </span>
+                    Tersedia untuk proyek & kolaborasi
                 </span>
-                Tersedia untuk proyek & kolaborasi
-            </span>
 
-            <h1 class="mt-7 text-shine font-display text-4xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl animate-fade-up"
-                style="animation-delay: 80ms">
-                {{ $siteName }}
-            </h1>
+                <h1 class="mt-7 min-w-0 break-words text-shine font-display text-3xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl animate-fade-up"
+                    style="animation-delay: 80ms">
+                    {{ $siteName }}
+                </h1>
 
-            <p class="tw-pending mt-5 animate-fade-up font-display text-lg text-primary-soft sm:text-2xl"
-                style="animation-delay: 160ms"
-                data-typewriter
-                data-phrases="{{ implode('|', $rolePhrases) }}">{{ $role }}</p>
+                <p class="tw-pending mt-5 min-w-0 break-words animate-fade-up font-display text-lg text-primary-soft sm:text-2xl"
+                    style="animation-delay: 160ms"
+                    data-typewriter
+                    data-phrases="{{ implode('|', $rolePhrases) }}">{{ $role }}</p>
 
-            <p class="mt-6 max-w-xl text-base leading-relaxed text-muted animate-fade-up" style="animation-delay: 240ms">
-                {{ $tagline }}
-                @if ($education)
-                    Saya sedang menempuh pendidikan di tingkat {{ $education }}.
-                @endif
-            </p>
+                <p class="mt-6 max-w-xl text-base leading-relaxed text-muted animate-fade-up" style="animation-delay: 240ms">
+                    {{ $tagline }}
+                    @if ($education)
+                        Saya sedang menempuh pendidikan di tingkat {{ $education }}.
+                    @endif
+                </p>
 
-            <div class="mt-10 flex flex-col gap-3 sm:flex-row animate-fade-up" style="animation-delay: 320ms">
-                <x-ui.button :href="route('portofolio')" icon="folder" class="!px-7 !py-3">Lihat Portofolio</x-ui.button>
-                <x-ui.button :href="route('kontak')" variant="secondary" icon="mail" class="!px-7 !py-3">Hubungi Saya</x-ui.button>
+                <div class="mt-10 flex flex-col gap-3 sm:flex-row animate-fade-up" style="animation-delay: 320ms">
+                    <x-ui.button :href="route('portofolio')" icon="folder" class="!px-7 !py-3">Lihat Portofolio</x-ui.button>
+                    <x-ui.button :href="route('kontak')" variant="secondary" icon="mail" class="!px-7 !py-3">Hubungi Saya</x-ui.button>
 
-                @if ($cv = setting('cv_file'))
-                    <a href="{{ asset('storage/'.$cv) }}" download
-                        class="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-muted transition duration-300 hover:-translate-y-0.5 hover:text-primary">
-                        <x-icon name="download" class="h-4 w-4" />
-                        Unduh CV
-                    </a>
-                @endif
-            </div>
+                    @if ($cv = setting('cv_file'))
+                        <a href="{{ asset('storage/'.$cv) }}" download
+                            class="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-muted transition duration-300 hover:-translate-y-0.5 hover:text-primary">
+                            <x-icon name="download" class="h-4 w-4" />
+                            Unduh CV
+                        </a>
+                    @endif
+                </div>
 
-            {{-- Marquee teknologi: penanda bahwa stack-nya teknis --}}
-            <div class="mt-14 overflow-hidden border-y border-line-soft py-4 animate-fade-up" style="animation-delay: 400ms">
-                <div class="flex w-max animate-marquee gap-10 pr-10">
-                    @for ($copy = 0; $copy < 2; $copy++)
-                        @foreach (['Laravel', 'PHP', 'Blade', 'Tailwind CSS', 'JavaScript', 'Alpine.js', 'MySQL', 'Git'] as $tech)
-                            <span class="flex shrink-0 items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted/80">
-                                <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
-                                {{ $tech }}
-                            </span>
-                        @endforeach
-                    @endfor
+                {{-- Marquee teknologi: penanda bahwa stack-nya teknis --}}
+                <div class="mt-14 overflow-hidden border-y border-line-soft py-4 animate-fade-up" style="animation-delay: 400ms">
+                    <div class="flex w-max animate-marquee gap-10 pr-10">
+                        @for ($copy = 0; $copy < 2; $copy++)
+                            @foreach (['Laravel', 'PHP', 'Blade', 'Tailwind CSS', 'JavaScript', 'Alpine.js', 'MySQL', 'Git'] as $tech)
+                                <span class="flex shrink-0 items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted/80">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+                                    {{ $tech }}
+                                </span>
+                            @endforeach
+                        @endfor
+                    </div>
                 </div>
             </div>
-        </div>
 
-        {{-- Foto dengan bingkai gradien merah-hitam supaya menyatu dengan tema --}}
-        <div class="order-1 flex justify-center lg:order-2">
-            <div class="relative animate-fade-up" style="animation-delay: 200ms">
-                <div class="absolute -inset-6 animate-drift rounded-[2.5rem] bg-gradient-to-br from-primary/35 via-primary-deep/10 to-transparent blur-3xl" aria-hidden="true"></div>
+            {{-- Foto dengan bingkai gradien merah-hitam supaya menyatu dengan tema --}}
+            <div class="order-1 flex min-w-0 justify-center lg:order-2">
+                <div class="relative mx-auto w-full max-w-xs min-w-0 animate-fade-up sm:max-w-md" style="animation-delay: 200ms">
+                    <div class="absolute -inset-6 animate-drift rounded-[2.5rem] bg-gradient-to-br from-primary/35 via-primary-deep/10 to-transparent blur-3xl" aria-hidden="true"></div>
 
-                <div class="border-gradient relative rounded-[2rem] bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 shadow-card-lg backdrop-blur"
-                    data-tilt>
-                    <img src="{{ $photoUrl }}" alt="Foto profil {{ $siteName }}"
-                        width="512" height="512" fetchpriority="high" decoding="async"
-                        class="h-64 w-64 rounded-[1.5rem] object-cover object-top sm:h-80 sm:w-80">
+                    <div class="border-gradient relative mx-auto w-fit max-w-full rounded-[2rem] bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 shadow-card-lg backdrop-blur"
+                        data-tilt>
+                        <img src="{{ $photoUrl }}" alt="Foto profil {{ $siteName }}"
+                            width="512" height="512" fetchpriority="high" decoding="async"
+                            class="aspect-square h-auto w-56 max-w-full rounded-[1.5rem] object-cover object-top sm:w-72 lg:w-80">
 
-                    <div class="pointer-events-none absolute inset-2 rounded-[1.5rem] bg-gradient-to-t from-ink/80 via-transparent to-transparent" aria-hidden="true"></div>
+                        <div class="pointer-events-none absolute inset-2 rounded-[1.5rem] bg-gradient-to-t from-ink/80 via-transparent to-transparent" aria-hidden="true"></div>
 
-                    <span class="sheen-band" aria-hidden="true"></span>
+                        <span class="sheen-band" aria-hidden="true"></span>
 
-                    <div class="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-2">
-                        <span class="pill border-primary/30 bg-ink/70 text-text backdrop-blur">
-                            <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
-                            Web Developer
-                        </span>
-                        <span class="pill border-primary/30 bg-ink/70 text-text backdrop-blur">Fullstack Engineer</span>
+                        <div class="absolute bottom-4 left-4 right-4 flex flex-wrap items-center gap-2">
+                            <span class="pill border-primary/30 bg-ink/70 text-text backdrop-blur text-xs">
+                                <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+                                Web Developer
+                            </span>
+                            <span class="pill border-primary/30 bg-ink/70 text-text backdrop-blur text-xs">Fullstack Engineer</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 {{-- Statistik singkat (bagian 3 Beranda) --}}
 <section class="border-y border-line-soft bg-ink-soft/60">
@@ -225,28 +225,28 @@
     </section>
 @endif
 
-{{-- Proyek unggulan --}}
-<section class="container-page py-28">
-    <div class="reveal flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <x-section-title eyebrow="Portofolio" title="Proyek Unggulan" />
-        <x-ui.button :href="route('portofolio')" variant="ghost" icon="arrow-right">Lihat semua proyek</x-ui.button>
-    </div>
+{{-- Proyek terbaru --}}
+    <section class="container-page py-28">
+        <div class="reveal flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <x-section-title eyebrow="Portofolio" title="Proyek Terbaru" />
+            <x-ui.button :href="route('portofolio')" variant="ghost" icon="arrow-right">Lihat semua proyek</x-ui.button>
+        </div>
 
-    @if ($featuredProjects->isEmpty())
-        <div class="mt-12 rounded-2xl border border-dashed border-line bg-surface/60 backdrop-blur px-6 py-16 text-center">
-            <x-icon name="folder" class="mx-auto h-8 w-8 text-muted" />
-            <p class="mt-4 text-sm text-muted">Belum ada proyek unggulan. Tambahkan lewat panel admin.</p>
-        </div>
-    @else
-        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            @foreach ($featuredProjects as $project)
-                <div class="reveal">
-                    <x-project-card :project="$project" />
-                </div>
-            @endforeach
-        </div>
-    @endif
-</section>
+        @if ($latestProjects->isEmpty())
+            <div class="mt-12 rounded-2xl border border-dashed border-line bg-surface/60 backdrop-blur px-6 py-16 text-center">
+                <x-icon name="folder" class="mx-auto h-8 w-8 text-muted" />
+                <p class="mt-4 text-sm text-muted">Belum ada proyek terbaru. Tambahkan lewat panel admin.</p>
+            </div>
+        @else
+            <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($latestProjects as $project)
+                    <div class="reveal">
+                        <x-project-card :project="$project" />
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </section>
 
 {{-- Timeline singkat --}}
 @if ($experiences->isNotEmpty())

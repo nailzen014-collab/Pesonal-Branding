@@ -26,7 +26,7 @@
 
         @if ($project->is_featured)
             <span class="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-2xs font-semibold uppercase tracking-wider text-white shadow-glow-soft">
-                Unggulan
+                Terbaru
             </span>
         @endif
     </a>
