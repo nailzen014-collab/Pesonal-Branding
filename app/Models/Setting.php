@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Once;
 
 /**
  * Pengaturan situs disimpan sebagai pasangan key-value (FR-20).
@@ -27,10 +28,18 @@ class Setting extends Model
 
     /**
      * Semua pengaturan dalam bentuk array ['key' => 'value'].
+     *
+     * Hasilnya diingat sekali per request memakai `once()`. Tanpa ini,
+     * setiap pemanggilan `setting()` di Blade tetap menembak cache store
+     * (satu query database bila CACHE_STORE=database), sehingga halaman
+     * dengan puluhan `setting()` menghasilkan puluhan query duplikat.
      */
     public static function allSettings(): array
     {
-        return Cache::rememberForever('settings.all', fn () => static::query()->pluck('value', 'key')->all());
+        return once(fn (): array => Cache::rememberForever(
+            'settings.all',
+            fn (): array => static::query()->pluck('value', 'key')->all(),
+        ));
     }
 
     /**
@@ -60,6 +69,10 @@ class Setting extends Model
 
     public static function flushCache(): void
     {
+        // Buang juga hasil memoization `once()` di request yang sama agar
+        // perubahan pengaturan langsung terlihat (mis. setelah form disimpan).
+        Once::flush();
+
         Cache::forget('settings.all');
     }
 }
