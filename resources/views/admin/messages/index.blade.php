@@ -48,13 +48,13 @@
                         </div>
 
                         <p class="mt-2 truncate text-sm text-muted">{{ Str::limit($message->body, 120) }}</p>
-                        <p class="mt-2 text-2xs text-muted">
+                        <p class="mt-2 text-2xs ms-4 text-muted">
                             Dari {{ $message->name }} &middot;
                             <a href="mailto:{{ $message->email }}" class="hover:text-primary">{{ $message->email }}</a>
                         </p>
                     </div>
 
-                    <div class="flex shrink-0 items-center gap-3">
+                    <div class="flex shrink-0 items-center gap-3 sm:flex-col sm:items-end ms-2">
                         <span class="font-mono text-2xs text-muted">{{ $message->created_at->format('d M Y, H:i') }}</span>
 
                         <form method="POST" action="{{ route('admin.messages.destroy', $message) }}"
