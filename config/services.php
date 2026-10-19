@@ -53,4 +53,24 @@ return [
         'webhook_secret' => env('GITHUB_WEBHOOK_SECRET'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Google OAuth
+    |--------------------------------------------------------------------------
+    |
+    | Dipakai pengunjung untuk masuk sebelum mengirim pesan dari halaman
+    | kontak. Buat kredensial di Google Cloud Console (OAuth 2.0 Client ID)
+    | lalu daftarkan redirect URI: /auth/google/callback.
+    |
+    */
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env(
+            'GOOGLE_REDIRECT_URI',
+            env('APP_URL', 'http://localhost').'/auth/google/callback',
+        ),
+    ],
+
 ];

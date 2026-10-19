@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Visitor;
 
 return [
 
@@ -42,6 +43,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Pengunjung yang masuk lewat Google untuk mengirim pesan kontak.
+        // Dipisahkan dari guard "web" agar tidak bisa mengakses /admin.
+        'visitor' => [
+            'driver' => 'session',
+            'provider' => 'visitors',
+        ],
     ],
 
     /*
@@ -65,6 +73,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
+        ],
+
+        'visitors' => [
+            'driver' => 'eloquent',
+            'model' => Visitor::class,
         ],
 
         // 'users' => [

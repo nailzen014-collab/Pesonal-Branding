@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Message;
 use App\Models\User;
+use App\Models\Visitor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,22 +15,43 @@ class ContactMessageTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_tamu_bisa_mengirim_pesan(): void
+    public function test_pengunjung_terautentikasi_bisa_mengirim_pesan(): void
+    {
+        $visitor = Visitor::factory()->create();
+
+        $this->actingAs($visitor, 'visitor')
+            ->post(route('kontak.store'), [
+                'subject' => 'Halo',
+                'body' => 'Ini pesan uji coba.',
+            ])
+            ->assertRedirect(route('kontak'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('messages', [
+            'name' => $visitor->name,
+            'email' => $visitor->email,
+        ]);
+    }
+
+    public function test_tamu_tidak_bisa_mengirim_pesan(): void
     {
         $this->post(route('kontak.store'), [
-            'name' => 'Pengunjung',
-            'email' => 'pengunjung@example.com',
             'subject' => 'Halo',
             'body' => 'Ini pesan uji coba.',
-        ])->assertRedirect(route('kontak'))->assertSessionHas('success');
+        ])
+            ->assertRedirect(route('kontak'))
+            ->assertSessionHas('error');
 
-        $this->assertDatabaseHas('messages', ['email' => 'pengunjung@example.com']);
+        $this->assertDatabaseCount('messages', 0);
     }
 
     public function test_pesan_tidak_valid_ditolak(): void
     {
-        $this->post(route('kontak.store'), [])
-            ->assertSessionHasErrors(['name', 'email', 'body']);
+        $visitor = Visitor::factory()->create();
+
+        $this->actingAs($visitor, 'visitor')
+            ->post(route('kontak.store'), [])
+            ->assertSessionHasErrors(['subject', 'body']);
 
         $this->assertDatabaseCount('messages', 0);
     }

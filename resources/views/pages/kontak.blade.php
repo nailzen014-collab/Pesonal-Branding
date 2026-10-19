@@ -110,7 +110,6 @@
             {{-- Form pesan --}}
             <div class="reveal card !p-7">
                 <h2 class="font-display text-lg font-semibold text-text">Kirim Pesan</h2>
-                <p class="mt-2 text-sm text-muted">Isi form berikut. Semua kolom wajib diisi.</p>
 
                 @if (session('success'))
                     <div class="mt-6 flex items-start gap-3 rounded-xl border border-success/40 bg-success/10 px-4 py-3 text-sm text-success">
@@ -119,41 +118,103 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('kontak.store') }}" class="mt-6 space-y-5">
-                    @csrf
+                @if (session('error'))
+                    <div class="mt-6 flex items-start gap-3 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                        <x-icon name="shield" class="mt-0.5 h-4 w-4 shrink-0" />
+                        <p>{{ session('error') }}</p>
+                    </div>
+                @endif
 
-                    <div class="grid gap-5 sm:grid-cols-2">
-                        <x-ui.field label="Nama" name="name" :required="true" autocomplete="name" />
-                        <x-ui.field label="Email" name="email" type="email" :required="true" autocomplete="email" />
+                @if ($visitor)
+                    <p class="mt-2 text-sm text-muted">Isi subjek dan pesan Anda. Nama dan email diambil dari akun Google.</p>
+
+                    {{-- Identitas pengirim: read-only, berasal dari akun Google --}}
+                    <div class="mt-6 flex flex-col gap-3 rounded-xl border border-line bg-surface-2/60 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="flex min-w-0 items-center gap-3">
+                            @if ($visitor->avatar)
+                                <img src="{{ $visitor->avatar }}" alt=""
+                                    class="h-10 w-10 shrink-0 rounded-full border border-line object-cover"
+                                    referrerpolicy="no-referrer">
+                            @else
+                                <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-semibold text-primary">
+                                    {{ mb_substr($visitor->name, 0, 1) }}
+                                </span>
+                            @endif
+
+                            <span class="min-w-0">
+                                <span class="block truncate text-sm font-medium text-text">{{ $visitor->name }}</span>
+                                <span class="flex items-center gap-1.5 text-xs text-muted">
+                                    <x-icon name="check" class="h-3.5 w-3.5 shrink-0 text-success" />
+                                    <span class="truncate">{{ $visitor->email }}</span>
+                                </span>
+                            </span>
+                        </div>
+
+                        <form method="POST" action="{{ route('visitor.google.logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="text-xs font-medium text-muted underline-offset-4 transition hover:text-primary hover:underline">
+                                Keluar
+                            </button>
+                        </form>
                     </div>
 
-                    <x-ui.field label="Subjek" name="subject" :required="true" placeholder="Contoh: Kolaborasi proyek website" />
+                    <form method="POST" action="{{ route('kontak.store') }}" class="mt-6 space-y-5">
+                        @csrf
 
-                    <div>
-                        <label for="body" class="form-label">
-                            Pesan <span class="text-primary" aria-hidden="true">*</span>
-                        </label>
-                        <textarea id="body" name="body" rows="6" required minlength="10" maxlength="2000"
-                            placeholder="Ceritakan kebutuhan Anda, minimal 10 karakter."
-                            class="form-input @error('body') border-red-500 @enderror">{{ old('body') }}</textarea>
-                        <x-input-error :messages="$errors->get('body')" class="mt-1.5" />
-                        <p class="mt-1.5 text-2xs text-muted">Minimal 10 karakter, maksimal 2000 karakter.</p>
+                        <x-ui.field label="Subjek" name="subject" :required="true" placeholder="Contoh: Kolaborasi proyek website" />
+
+                        <div>
+                            <label for="body" class="form-label">
+                                Pesan <span class="text-primary" aria-hidden="true">*</span>
+                            </label>
+                            <textarea id="body" name="body" rows="6" required minlength="10" maxlength="2000"
+                                placeholder="Ceritakan kebutuhan Anda, minimal 10 karakter."
+                                class="form-input @error('body') border-red-500 @enderror">{{ old('body') }}</textarea>
+                            <x-input-error :messages="$errors->get('body')" class="mt-1.5" />
+                        </div>
+
+                        {{--
+                            Honeypot: input tersembunyi dari manusia, tapi bot akan mengisinya.
+                            Aturan validasi "size:0" memastikan field ini tetap kosong.
+                        --}}
+                        <div class="hidden" aria-hidden="true">
+                            <label for="website">Website</label>
+                            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+                        </div>
+
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <p class="text-2xs text-muted">"Punya <b>ide kolaborasi</b> atau <b>pertanyaan</b> terkait layanan saya? <br>Silakan tinggalkan pesan Anda di sini."</p>
+                            <x-ui.button type="submit" icon="mail">Kirim Pesan</x-ui.button>
+                        </div>
+                    </form>
+                @else
+                    <p class="mt-2 text-sm text-muted">
+                        Untuk mencegah spam dan memastikan pesan bisa dibalas, silakan masuk terlebih dahulu.
+                    </p>
+
+                    <div class="mt-6 rounded-xl border border-line bg-surface-2/60 p-5">
+                        <div class="flex items-start gap-3">
+                            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
+                                <x-icon name="shield" class="h-5 w-5 text-primary" />
+                            </span>
+                            <div>
+                                <p class="text-sm font-medium text-text">Masuk dengan akun Google</p>
+                                <p class="mt-1 text-xs leading-relaxed text-muted">
+                                    Nama dan email terverifikasi dipakai untuk membalas pesan Anda.
+                                    Tidak ada password baru yang perlu dibuat.
+                                </p>
+                            </div>
+                        </div>
+
+                        <x-ui.google-button :href="route('visitor.google.redirect')" class="mt-5 w-full" />
                     </div>
 
-                    {{--
-                        Honeypot: input tersembunyi dari manusia, tapi bot akan mengisinya.
-                        Aturan validasi "size:0" memastikan field ini tetap kosong.
-                    --}}
-                    <div class="hidden" aria-hidden="true">
-                        <label for="website">Website</label>
-                        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
-                    </div>
-
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <p class="text-2xs text-muted">Maksimal 5 pesan per menit untuk mencegah spam.</p>
-                        <x-ui.button type="submit" icon="mail">Kirim Pesan</x-ui.button>
-                    </div>
-                </form>
+                    <p class="mt-4 flex items-center gap-2 text-2xs text-muted">
+                        <x-icon name="shield" class="h-3.5 w-3.5 shrink-0" />
+                        Identitas Anda hanya digunakan untuk keperluan pesan ini.
+                    </p>
+                @endif
             </div>
         </div>
     </section>

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MessageController as AdminMessageController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SkillController as AdminSkillController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GithubWebhookController;
 use App\Http\Controllers\HomeController;
@@ -30,9 +31,19 @@ Route::get('/portofolio', [ProjectController::class, 'index'])->name('portofolio
 Route::get('/portofolio/{slug}', [ProjectController::class, 'show'])->name('portofolio.show');
 Route::get('/sertifikat', [PageController::class, 'sertifikat'])->name('sertifikat');
 
-// Proteksi spam: maksimal 5 pesan per menit dari satu alamat IP.
+// Login pengunjung dengan Google. Guard "visitor" terpisah dari admin,
+// jadi akun ini hanya bisa dipakai untuk mengirim pesan kontak.
+Route::prefix('auth/google')->name('visitor.google.')->group(function () {
+    Route::get('redirect', [GoogleController::class, 'redirect'])->name('redirect');
+    Route::get('callback', [GoogleController::class, 'callback'])->name('callback');
+    Route::post('logout', [GoogleController::class, 'destroy'])
+        ->middleware('auth.visitor')
+        ->name('logout');
+});
+
+// Wajib masuk dengan Google + proteksi spam: maksimal 5 pesan per menit.
 Route::post('/kontak', [ContactController::class, 'store'])
-    ->middleware('throttle:5,1')
+    ->middleware(['auth.visitor', 'throttle:5,1'])
     ->name('kontak.store');
 Route::get('/kontak', [ContactController::class, 'index'])->name('kontak');
 
