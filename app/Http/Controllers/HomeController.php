@@ -17,6 +17,7 @@ class HomeController extends Controller
     {
         $latestProjects = Project::where('source', 'github')
             ->where('is_published', true)
+            ->where('is_featured', true)
             ->with('technologies')
             ->orderBy('sort_order')
             ->take(6)

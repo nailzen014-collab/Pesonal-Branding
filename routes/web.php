@@ -37,20 +37,20 @@ Route::post('/kontak', [ContactController::class, 'store'])
 Route::get('/kontak', [ContactController::class, 'index'])->name('kontak');
 
 // SEO: sitemap.xml & robots.txt (NFR-04).
-    Route::get('/sitemap.xml', [SitemapController::class, '__invoke'])->name('sitemap');
-    Route::get('/robots.txt', [RobotsController::class, '__invoke'])->name('robots');
+Route::get('/sitemap.xml', [SitemapController::class, '__invoke'])->name('sitemap');
+Route::get('/robots.txt', [RobotsController::class, '__invoke'])->name('robots');
 
-    // GitHub Webhook untuk sinkronisasi otomatis saat push repo baru
-    Route::post('/github/webhook', GithubWebhookController::class)->name('github.webhook');
+// GitHub Webhook untuk sinkronisasi otomatis saat push repo baru
+Route::post('/github/webhook', GithubWebhookController::class)->name('github.webhook');
 
-    /*
+/*
 |--------------------------------------------------------------------------
 | Route Admin
 |--------------------------------------------------------------------------
 | Middleware "auth" memastikan hanya pengguna login yang bisa mengakses.
 | Registrasi publik dinonaktifkan; akun admin dibuat lewat seeder.
 */
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'throttle:60,1'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('projects', AdminProjectController::class)->except(['show']);

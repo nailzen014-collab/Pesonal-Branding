@@ -25,7 +25,7 @@
                 </a>
             </div>
 
-            <div class="mt-6 whitespace-pre-line leading-relaxed text-muted">{{ $message->body }}</div>
+            <div class="mt-6 whitespace-pre-line leading-relaxed text-muted">{{ nl2br(e($message->body)) }}</div>
         </article>
 
         <aside class="space-y-6">
