@@ -1,6 +1,7 @@
 import Alpine from 'alpinejs';
 import { observeReveals } from './reveal';
 import { initEffects, initTilt } from './effects';
+import { initTheme } from './theme';
 import { initTypewriters } from './typewriter';
 
 /**
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     observeReveals();
     initLoadMore();
     initEffects();
+    initTheme();
     initTypewriters();
 
     // Penanda untuk safety net di layouts/public.blade.php: bila bundel ini

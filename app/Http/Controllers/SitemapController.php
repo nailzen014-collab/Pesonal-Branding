@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\Project;
 use Illuminate\Http\Response;
 
@@ -20,6 +21,7 @@ class SitemapController extends Controller
             ['loc' => route('tentang'), 'priority' => '0.8', 'freq' => 'monthly'],
             ['loc' => route('skills'), 'priority' => '0.8', 'freq' => 'monthly'],
             ['loc' => route('portofolio'), 'priority' => '0.9', 'freq' => 'weekly'],
+            ['loc' => route('blog'), 'priority' => '0.8', 'freq' => 'weekly'],
             ['loc' => route('sertifikat'), 'priority' => '0.6', 'freq' => 'monthly'],
             ['loc' => route('kontak'), 'priority' => '0.7', 'freq' => 'yearly'],
         ];
@@ -35,7 +37,18 @@ class SitemapController extends Controller
             ])
             ->all();
 
-        $urls = array_merge($staticUrls, $projectUrls);
+        $postUrls = Post::published()
+            ->orderByDesc('published_at')
+            ->get()
+            ->map(fn (Post $post) => [
+                'loc' => route('blog.show', $post->slug),
+                'priority' => '0.7',
+                'freq' => 'monthly',
+                'lastmod' => $post->updated_at?->toAtomString(),
+            ])
+            ->all();
+
+        $urls = array_merge($staticUrls, $projectUrls, $postUrls);
 
         $xml = view('seo.sitemap', compact('urls'))->render();
 

@@ -8,7 +8,7 @@
     <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         @foreach ([
             ['label' => 'Proyek Dirilis', 'value' => $stats['published_projects'], 'icon' => 'folder', 'hint' => $stats['projects'].' total, '.$stats['featured_projects'].' unggulan'],
-            ['label' => 'Teknologi', 'value' => $stats['technologies'], 'icon' => 'layers', 'hint' => 'Dipakai pada proyek'],
+            ['label' => 'Artikel Blog', 'value' => $stats['published_posts'], 'icon' => 'document', 'hint' => $stats['posts'].' total artikel'],
             ['label' => 'Skill', 'value' => $stats['skills'], 'icon' => 'sparkles', 'hint' => 'Terdaftar di halaman skills'],
             ['label' => 'Pesan Belum Dibaca', 'value' => $stats['unread_messages'], 'icon' => 'inbox', 'hint' => 'Total pesan masuk'],
         ] as $card)
@@ -28,12 +28,13 @@
     {{-- Aksi cepat --}}
     <div class="mt-8 flex flex-wrap gap-3">
         <x-ui.button :href="route('admin.projects.create')" icon="plus">Tambah Proyek</x-ui.button>
+        <x-ui.button :href="route('admin.posts.create')" icon="document">Tambah Artikel</x-ui.button>
         <x-ui.button :href="route('admin.github.index')" variant="secondary" icon="github">Sinkron GitHub</x-ui.button>
         <x-ui.button :href="route('admin.messages.index')" variant="outline" icon="inbox">Kotak Masuk</x-ui.button>
         <x-ui.button :href="route('admin.settings.edit')" variant="outline" icon="cog">Pengaturan</x-ui.button>
     </div>
 
-    <div class="mt-8 grid gap-6 xl:grid-cols-2">
+    <div class="mt-8 grid gap-6 xl:grid-cols-3">
         {{-- Pesan terbaru --}}
         <section class="card">
             <div class="flex items-center justify-between">
@@ -102,6 +103,44 @@
                                     class="icon-button" aria-label="Lihat di website">
                                     <x-icon name="eye" class="h-4 w-4" />
                                 </a>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </section>
+
+        {{-- Artikel terbaru --}}
+        <section class="card">
+            <div class="flex items-center justify-between">
+                <h2 class="font-display text-lg font-semibold text-text">Artikel Terbaru</h2>
+                <a href="{{ route('admin.posts.index') }}" class="text-xs text-primary hover:underline">Kelola</a>
+            </div>
+
+            @if ($recentPosts->isEmpty())
+                <p class="mt-6 text-sm text-muted">Belum ada artikel.</p>
+            @else
+                <ul class="mt-6 divide-y divide-line">
+                    @foreach ($recentPosts as $post)
+                        <li class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+                            <div class="min-w-0">
+                                <p class="truncate text-sm font-medium text-text">{{ $post->title }}</p>
+                                <p class="mt-0.5 text-2xs text-muted">
+                                    {{ $post->is_published ? 'Dipublikasikan' : 'Draft' }}
+                                    @if ($post->category) &middot; {{ $post->category }} @endif
+                                </p>
+                            </div>
+
+                            <div class="flex shrink-0 items-center gap-2">
+                                <a href="{{ route('admin.posts.edit', $post) }}" class="icon-button" aria-label="Edit {{ $post->title }}">
+                                    <x-icon name="edit" class="h-4 w-4" />
+                                </a>
+                                @if ($post->is_published)
+                                    <a href="{{ route('blog.show', $post->slug) }}" target="_blank" rel="noopener noreferrer"
+                                        class="icon-button" aria-label="Lihat di website">
+                                        <x-icon name="eye" class="h-4 w-4" />
+                                    </a>
+                                @endif
                             </div>
                         </li>
                     @endforeach

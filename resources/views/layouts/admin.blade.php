@@ -4,6 +4,7 @@
     $adminMenu = [
         ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'icon' => 'sparkles'],
         ['label' => 'Proyek', 'route' => 'admin.projects.index', 'icon' => 'folder'],
+        ['label' => 'Blog', 'route' => 'admin.posts.index', 'icon' => 'document'],
         ['label' => 'Sinkron GitHub', 'route' => 'admin.github.index', 'icon' => 'github'],
         ['label' => 'Skills', 'route' => 'admin.skills.index', 'icon' => 'code'],
         ['label' => 'Timeline', 'route' => 'admin.experiences.index', 'icon' => 'clock'],
@@ -13,7 +14,7 @@
     ];
 @endphp
 <!DOCTYPE html>
-<html lang="id" class="h-full">
+<html lang="id" class="h-full" data-theme-scope="admin">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +25,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
+
+    @include('layouts.partial.theme-init')
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -130,6 +136,7 @@
             </div>
 
             <div class="ml-auto flex items-center gap-3">
+                <x-ui.theme-toggle />
                 <a href="{{ route('home') }}" target="_blank" class="icon-button" aria-label="Lihat website">
                     <x-icon name="external" class="h-5 w-5" />
                 </a>
@@ -140,7 +147,7 @@
             </div>
         </header>
 
-        <main class="flex-1 px-5 py-8 sm:px-8">
+        <main class="page-enter flex-1 px-5 py-8 sm:px-8">
             <x-ui.alert />
             <x-ui.alert type="error" />
 

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ProjectSeeder::class,
             ExperienceSeeder::class,
             CertificateSeeder::class,
+            PostSeeder::class,
             MessageSeeder::class,
         ]);
     }

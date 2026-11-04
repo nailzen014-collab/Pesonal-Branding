@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Sinkron GitHub')
-@section('subtitle', 'Impor repository GitHub menjadi proyek')
+@section('subtitle', 'Impor repository GitHub menjadi proyek dan artikel blog')
 
 @section('content')
     <x-ui.alert />
@@ -26,8 +26,9 @@
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <p class="text-sm text-muted">
                     Pilih repository yang ingin dijadikan proyek. Sinkronisasi
-                    otomatis berjalan setiap jam; tombol di samping menjalankannya
-                    sekarang juga.
+                    otomatis berjalan setiap jam dan sekaligus mengambil artikel
+                    dari file <code class="font-mono text-primary">blog/*.md</code>
+                    di repository; tombol di samping menjalankannya sekarang juga.
                 </p>
 
                 <x-ui.button type="submit" icon="refresh">

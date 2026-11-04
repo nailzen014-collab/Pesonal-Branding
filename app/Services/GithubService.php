@@ -147,6 +147,88 @@ class GithubService
     }
 
     /**
+     * Daftar file Markdown yang berada di folder `blog` sebuah repository.
+     *
+     * Konvensi folder sengaja longgar: `blog/`, `content/blog/`, dan
+     * `resources/content/blog/` sama-sama dikenali. File tanpa front matter
+     * akan ditolak oleh importer, jadi README atau catatan biasa aman.
+     *
+     * @param  array<string, mixed>  $repo
+     * @return array<int, string> path relatif dari akar repository
+     */
+    public function blogMarkdownFiles(array $repo, bool $fresh = false): array
+    {
+        $fullName = (string) $repo['full_name'];
+        $branch = (string) ($repo['default_branch'] ?? 'main');
+        $minutes = (int) config('services.github.cache_minutes', 60);
+        $key = 'github.blog.'.str_replace('/', '.', $fullName).'.'.$branch;
+
+        if ($fresh) {
+            Cache::forget($key);
+        }
+
+        return Cache::remember($key, now()->addMinutes($minutes), function () use ($fullName, $branch): array {
+            try {
+                $response = Http::withHeaders($this->headers())
+                    ->timeout(10)
+                    ->get("https://api.github.com/repos/{$fullName}/git/trees/{$branch}?recursive=1");
+
+                if ($response->failed()) {
+                    Log::warning('GitHub tree gagal', ['repo' => $fullName, 'status' => $response->status()]);
+
+                    return [];
+                }
+
+                if ((bool) $response->json('truncated')) {
+                    Log::warning('GitHub tree terpotong, sebagian file blog mungkin terlewat', ['repo' => $fullName]);
+                }
+
+                return collect($response->json('tree') ?? [])
+                    ->filter(fn (array $item) => ($item['type'] ?? null) === 'blob'
+                        && preg_match('#(^|/)blog/.+\.md$#i', (string) ($item['path'] ?? '')) === 1)
+                    ->pluck('path')
+                    ->values()
+                    ->all();
+            } catch (Throwable $exception) {
+                Log::warning('GitHub tree tidak bisa dihubungi: '.$exception->getMessage());
+
+                return [];
+            }
+        });
+    }
+
+    /**
+     * Isi mentah sebuah file dari repository.
+     *
+     * `raw.githubusercontent.com` dipakai agar tidak memakan kuota GitHub API
+     * dan tidak memerlukan token untuk repository publik.
+     *
+     * @param  array<string, mixed>  $repo
+     */
+    public function rawFile(array $repo, string $path): ?string
+    {
+        $branch = (string) ($repo['default_branch'] ?? 'main');
+        $encodedPath = implode('/', array_map('rawurlencode', explode('/', $path)));
+        $url = "https://raw.githubusercontent.com/{$repo['full_name']}/{$branch}/{$encodedPath}";
+
+        try {
+            $response = Http::timeout(10)->get($url);
+
+            if ($response->failed()) {
+                Log::warning('File blog GitHub gagal diambil', ['url' => $url, 'status' => $response->status()]);
+
+                return null;
+            }
+
+            return $response->body();
+        } catch (Throwable $exception) {
+            Log::warning('File blog GitHub tidak bisa dihubungi: '.$exception->getMessage());
+
+            return null;
+        }
+    }
+
+    /**
      * Penyederhanaan data API menjadi field yang dipakai website.
      *
      * @param  array<string, mixed>  $repo
@@ -158,6 +240,7 @@ class GithubService
             'id' => (int) $repo['id'],
             'name' => $repo['name'],
             'full_name' => $repo['full_name'],
+            'default_branch' => $repo['default_branch'] ?? 'main',
             'description' => $repo['description'] ?: 'Belum ada deskripsi di repository ini.',
             'language' => $repo['language'] ?: null,
             'url' => $repo['html_url'],

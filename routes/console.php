@@ -16,3 +16,11 @@ Schedule::command('portfolio:import-github --publish --include-forks')
     ->withoutOverlapping()
     ->onOneServer()
     ->name('portfolio:sync-github');
+
+// Artikel blog juga bisa ditulis sebagai Markdown di folder `blog` pada
+// repository GitHub. Dijalankan bergeser 5 menit agar tidak menumpuk request.
+Schedule::command('blog:import-github')
+    ->hourlyAt(5)
+    ->withoutOverlapping()
+    ->onOneServer()
+    ->name('blog:sync-github');

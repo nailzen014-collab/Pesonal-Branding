@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Controllers\Admin\GithubSyncController;
 use App\Http\Controllers\Admin\MessageController as AdminMessageController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SkillController as AdminSkillController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GithubWebhookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
@@ -30,6 +32,10 @@ Route::get('/skills', [PageController::class, 'skills'])->name('skills');
 Route::get('/portofolio', [ProjectController::class, 'index'])->name('portofolio');
 Route::get('/portofolio/{slug}', [ProjectController::class, 'show'])->name('portofolio.show');
 Route::get('/sertifikat', [PageController::class, 'sertifikat'])->name('sertifikat');
+
+// Blog: daftar artikel dan detail per slug.
+Route::get('/blog', [PostController::class, 'index'])->name('blog');
+Route::get('/blog/{slug}', [PostController::class, 'show'])->name('blog.show');
 
 // Login pengunjung dengan Google. Guard "visitor" terpisah dari admin,
 // jadi akun ini hanya bisa dipakai untuk mengirim pesan kontak.
@@ -65,6 +71,8 @@ Route::middleware(['auth', 'throttle:60,1'])->prefix('admin')->name('admin.')->g
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('projects', AdminProjectController::class)->except(['show']);
+
+    Route::resource('posts', AdminPostController::class)->except(['show']);
     Route::post('projects/{project}/featured', [AdminProjectController::class, 'toggleFeatured'])
         ->name('projects.toggle-featured');
     Route::get('skills', [AdminSkillController::class, 'index'])->name('skills.index');

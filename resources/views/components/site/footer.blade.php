@@ -80,7 +80,24 @@
 
     <div class="relative border-t border-line-soft">
         <div class="container-page flex flex-col items-center justify-between gap-3 py-6 text-2xs text-muted sm:flex-row text-center">
-            <p>&copy; {{ date('Y') }} {{ $name }}. {{ $role }}.</p>
+            {{--
+                Tombol login tersembunyi untuk admin: teks copyright dijadikan link
+                halus ke /login. Tampilannya identik dengan teks biasa (tidak ada
+                underline, warna tetap muted) sehingga pengunjung tidak menyadarinya.
+                Saat admin sudah login, link otomatis mengarah ke dashboard.
+            --}}
+            @php
+                $adminUrl = auth()->check() ? route('admin.dashboard') : route('login');
+                $adminAria = auth()->check() ? 'Buka dashboard admin' : 'Login admin';
+            @endphp
+            <p>
+                <a href="{{ $adminUrl }}"
+                   rel="nofollow"
+                   aria-label="{{ $adminAria }}"
+                   class="text-muted transition-colors duration-300 hover:text-text">
+                    &copy; {{ date('Y') }} {{ $name }}. {{ $role }}.
+                </a>
+            </p>
             <p>Dibangun dengan Laravel, Tailwind CSS, dan Alpine.js.</p>
         </div>
     </div>

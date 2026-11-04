@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
             ['label' => 'Tentang', 'route' => 'tentang'],
             ['label' => 'Skills', 'route' => 'skills'],
             ['label' => 'Portofolio', 'route' => 'portofolio'],
+            ['label' => 'Blog', 'route' => 'blog'],
             ['label' => 'Sertifikat', 'route' => 'sertifikat'],
             ['label' => 'Kontak', 'route' => 'kontak'],
         ]);

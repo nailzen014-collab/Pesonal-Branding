@@ -88,10 +88,14 @@ class GithubSyncController extends Controller
             '--include-forks' => true,
         ]);
 
-        $output = trim(Artisan::output());
+        $projects = trim(Artisan::output());
+
+        Artisan::call('blog:import-github');
+
+        $blog = trim(Artisan::output());
 
         return redirect()
             ->route('admin.github.index')
-            ->with('success', 'Sinkronisasi GitHub selesai: '.$output);
+            ->with('success', 'Sinkronisasi GitHub selesai. Proyek: '.$projects.' Blog: '.$blog);
     }
 }

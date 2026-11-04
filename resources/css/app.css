@@ -3,8 +3,54 @@
 @tailwind utilities;
 
 @layer base {
+    /*
+     * Design token warna sebagai CSS variable.
+     * Mode gelap adalah bawaan; kelas `light` di <html> menimpa nilainya.
+     * Semua utility Tailwind memakai token ini, jadi satu perubahan di sini
+     * ikut mengubah seluruh halaman.
+     */
     :root {
         color-scheme: dark;
+
+        --ink: 8 8 10;
+        --ink-soft: 13 13 16;
+        --surface: 18 18 21;
+        --surface-2: 26 26 31;
+        --surface-3: 35 35 42;
+        --line: 38 38 46;
+        --line-soft: 28 28 34;
+        --text: 247 247 248;
+        --muted: 161 161 170;
+
+        --grid: 38 38 46;
+        --dots: 161 161 170;
+
+        --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 18px 40px -24px rgb(0 0 0 / 0.9);
+        --shadow-card-lg: 0 1px 0 0 rgb(255 255 255 / 0.05) inset, 0 32px 60px -28px rgb(0 0 0 / 0.95);
+
+        --text-shine: linear-gradient(100deg, #ffffff 0%, #ffffff 40%, #ff8a94 60%, #ffffff 100%);
+    }
+
+    html.light {
+        color-scheme: light;
+
+        --ink: 244 244 245;
+        --ink-soft: 250 250 250;
+        --surface: 255 255 255;
+        --surface-2: 244 244 245;
+        --surface-3: 228 228 231;
+        --line: 212 212 216;
+        --line-soft: 228 228 231;
+        --text: 24 24 27;
+        --muted: 82 82 91;
+
+        --grid: 212 212 216;
+        --dots: 113 113 122;
+
+        --shadow-card: 0 1px 2px 0 rgb(24 24 27 / 0.06), 0 14px 30px -22px rgb(24 24 27 / 0.35);
+        --shadow-card-lg: 0 1px 2px 0 rgb(24 24 27 / 0.08), 0 24px 48px -24px rgb(24 24 27 / 0.4);
+
+        --text-shine: linear-gradient(100deg, #18181b 0%, #18181b 40%, #b3121f 60%, #18181b 100%);
     }
 
     html {
@@ -13,7 +59,7 @@
     }
 
     body {
-        @apply bg-ink font-sans text-text antialiased;
+        @apply bg-ink font-sans text-text antialiased transition-colors duration-300;
     }
 
     h1,
@@ -263,12 +309,78 @@
     /* Tombol ikon bulat */
     .icon-button {
         @apply inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface-2 text-muted
-        transition duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary hover:shadow-glow-soft;
+        transition duration-300 hover:-translate-y-0.5 hover:scale-105 hover:border-primary/40 hover:text-primary hover:shadow-glow-soft
+        active:scale-95;
     }
 
     /* Panel admin memakai warna sedikit lebih terang agar konten terbaca */
     .panel {
         @apply rounded-2xl border border-line-soft bg-surface/70 shadow-card backdrop-blur-sm;
+    }
+
+    /* Isi artikel hasil render Markdown */
+    .article-body {
+        @apply space-y-4 leading-relaxed text-muted;
+    }
+
+    .article-body h2 {
+        @apply mt-10 font-display text-xl font-semibold text-text;
+    }
+
+    .article-body h3 {
+        @apply mt-8 font-display text-lg font-semibold text-text;
+    }
+
+    .article-body ul {
+        @apply list-disc space-y-1.5 pl-5;
+    }
+
+    .article-body ol {
+        @apply list-decimal space-y-1.5 pl-5;
+    }
+
+    .article-body a {
+        @apply text-primary underline underline-offset-4 hover:text-primary-soft;
+    }
+
+    .article-body strong {
+        @apply font-semibold text-text;
+    }
+
+    .article-body code {
+        @apply rounded bg-surface-2 px-1.5 py-0.5 font-mono text-xs text-primary;
+    }
+
+    .article-body pre {
+        @apply overflow-x-auto rounded-xl border border-line bg-surface-2 p-4;
+    }
+
+    .article-body pre code {
+        @apply bg-transparent p-0 text-xs text-text;
+    }
+
+    .article-body blockquote {
+        @apply border-l-2 border-primary/50 pl-4 italic;
+    }
+
+    .article-body hr {
+        @apply border-line;
+    }
+
+    .article-body table {
+        @apply w-full border-collapse text-sm;
+    }
+
+    .article-body thead {
+        @apply border-b border-line;
+    }
+
+    .article-body th {
+        @apply px-3 py-2 text-left font-semibold text-text;
+    }
+
+    .article-body td {
+        @apply border-t border-line/60 px-3 py-2 align-top;
     }
 }
 
@@ -287,15 +399,15 @@
     /* Pola grid halus untuk latar hero */
     .bg-grid {
         background-image:
-            linear-gradient(to right, rgb(38 38 46 / 0.55) 1px, transparent 1px),
-            linear-gradient(to bottom, rgb(38 38 46 / 0.55) 1px, transparent 1px);
+            linear-gradient(to right, rgb(var(--grid) / 0.55) 1px, transparent 1px),
+            linear-gradient(to bottom, rgb(var(--grid) / 0.55) 1px, transparent 1px);
         background-size: 64px 64px;
         mask-image: radial-gradient(70% 60% at 50% 0%, black, transparent 75%);
     }
 
     /* Pola titik halus */
     .bg-dots {
-        background-image: radial-gradient(rgb(161 161 170 / 0.16) 1px, transparent 1px);
+        background-image: radial-gradient(rgb(var(--dots) / 0.16) 1px, transparent 1px);
         background-size: 22px 22px;
     }
 
@@ -407,4 +519,55 @@
     50% {
         opacity: 0;
     }
+}
+
+/*
+ * Tombol ganti tema: tampilkan matahari saat mode gelap (aksi menuju terang)
+ * dan bulan saat mode terang. Ditulis di luar @layer agar tidak terhapus
+ * purge karena hanya dipakai lewat kelas yang ditambahkan komponen.
+ */
+.theme-icon-moon {
+    display: none;
+}
+
+html.light .theme-icon-sun {
+    display: none;
+}
+
+html.light .theme-icon-moon {
+    display: inline;
+}
+
+/* Animasi masuk halaman saat pertama kali dibuka */
+@keyframes page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-enter {
+    animation: page-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Animasi navbar turun perlahan saat halaman dibuka */
+@keyframes nav-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-enter {
+    animation: nav-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }

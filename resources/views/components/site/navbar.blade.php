@@ -14,7 +14,7 @@
 <header x-data="{ open: false, scrolled: false }"
     x-init="scrolled = window.scrollY > 20"
     @scroll.window="scrolled = window.scrollY > 20"
-    class="fixed inset-x-0 top-0 z-50 px-4 pt-3 transition-all duration-500 ease-smooth sm:px-6 sm:pt-4"
+    class="nav-enter fixed inset-x-0 top-0 z-50 px-4 pt-3 transition-all duration-500 ease-smooth sm:px-6 sm:pt-4"
     :class="scrolled ? 'opacity-100' : 'opacity-100'">
 
     <nav class="container-page !max-w-6xl"
@@ -43,7 +43,7 @@
                     <li>
                         <a href="{{ route($item['route']) }}"
                             @class([
-                                'block rounded-full px-4 py-1.5 text-sm font-medium transition duration-300',
+                                'block rounded-full px-4 py-1.5 text-sm font-medium transition duration-300 hover:-translate-y-0.5 active:scale-95',
                                 'bg-primary text-white shadow-glow-soft' => $active,
                                 'text-muted hover:bg-surface-2 hover:text-text' => ! $active,
                             ])
@@ -54,16 +54,14 @@
                 @endforeach
             </ul>
 
-            <div class="hidden items-center gap-2 md:flex">
-                <a href="{{ $github }}" target="_blank" rel="noopener noreferrer" class="icon-button !h-9 !w-9" aria-label="GitHub">
-                    <x-icon name="github" class="h-4 w-4" />
+            <div class="hidden shrink-0 items-center gap-2 md:flex">
+                <x-ui.theme-toggle class="!h-9 !w-9" />
+                <a href="{{ $github }}" target="_blank" rel="noopener noreferrer" class="icon-button group !h-9 !w-9" aria-label="GitHub">
+                    <x-icon name="github" class="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                 </a>
-                <a href="{{ $ig }}" target="_blank" rel="noopener noreferrer" class="icon-button !h-9 !w-9" aria-label="Instagram">
-                    <x-icon name="instagram" class="h-4 w-4" />
+                <a href="{{ $ig }}" target="_blank" rel="noopener noreferrer" class="icon-button group !h-9 !w-9" aria-label="Instagram">
+                    <x-icon name="instagram" class="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                 </a>
-                <x-ui.button :href="$wa" icon="whatsapp" class="!px-4 !py-2 text-xs" target="_blank" rel="noopener noreferrer">
-                    Hubungi Saya
-                </x-ui.button>
             </div>
 
             {{-- Tombol hamburger (mobile) --}}
@@ -83,7 +81,7 @@
                     <li>
                         <a href="{{ route($item['route']) }}"
                             @class([
-                                'block rounded-xl px-4 py-3 text-sm font-medium transition',
+                                'block rounded-xl px-4 py-3 text-sm font-medium transition duration-300 active:scale-[0.99]',
                                 'bg-primary/10 text-primary' => $active,
                                 'text-muted hover:bg-surface-2 hover:text-text' => ! $active,
                             ])>
@@ -99,11 +97,12 @@
                 </li>
 
                 <li class="pt-2 flex items-center gap-2">
-                    <a href="{{ $github }}" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="GitHub">
-                        <x-icon name="github" />
+                    <x-ui.theme-toggle class="!h-9 !w-9" />
+                    <a href="{{ $github }}" target="_blank" rel="noopener noreferrer" class="icon-button group" aria-label="GitHub">
+                        <x-icon name="github" class="transition-transform duration-300 group-hover:scale-110" />
                     </a>
-                    <a href="{{ $ig }}" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="Instagram">
-                        <x-icon name="instagram" />
+                    <a href="{{ $ig }}" target="_blank" rel="noopener noreferrer" class="icon-button group" aria-label="Instagram">
+                        <x-icon name="instagram" class="transition-transform duration-300 group-hover:scale-110" />
                     </a>
                 </li>
             </ul>

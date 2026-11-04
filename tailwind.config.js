@@ -28,20 +28,20 @@ export default {
                     soft: '#FF4D5E',
                 },
                 ink: {
-                    DEFAULT: '#08080A',
-                    soft: '#0D0D10',
+                    DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+                    soft: 'rgb(var(--ink-soft) / <alpha-value>)',
                 },
                 surface: {
-                    DEFAULT: '#121215',
-                    2: '#1A1A1F',
-                    3: '#23232A',
+                    DEFAULT: 'rgb(var(--surface) / <alpha-value>)',
+                    2: 'rgb(var(--surface-2) / <alpha-value>)',
+                    3: 'rgb(var(--surface-3) / <alpha-value>)',
                 },
                 line: {
-                    DEFAULT: '#26262E',
-                    soft: '#1C1C22',
+                    DEFAULT: 'rgb(var(--line) / <alpha-value>)',
+                    soft: 'rgb(var(--line-soft) / <alpha-value>)',
                 },
-                text: '#F7F7F8',
-                muted: '#A1A1AA',
+                text: 'rgb(var(--text) / <alpha-value>)',
+                muted: 'rgb(var(--muted) / <alpha-value>)',
                 success: '#22C55E',
                 warning: '#F59E0B',
             },
@@ -62,8 +62,8 @@ export default {
             },
 
             boxShadow: {
-                card: '0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 18px 40px -24px rgb(0 0 0 / 0.9)',
-                'card-lg': '0 1px 0 0 rgb(255 255 255 / 0.05) inset, 0 32px 60px -28px rgb(0 0 0 / 0.95)',
+                card: 'var(--shadow-card)',
+                'card-lg': 'var(--shadow-card-lg)',
                 'glow-primary': '0 0 0 1px rgb(225 29 46 / 0.4), 0 22px 50px -20px rgb(225 29 46 / 0.6)',
                 'glow-soft': '0 0 30px -8px rgb(225 29 46 / 0.5)',
             },
@@ -75,10 +75,9 @@ export default {
                     'radial-gradient(55% 55% at 50% 0%, rgb(225 29 46 / 0.25), transparent 70%)',
                 'aurora':
                     'radial-gradient(45% 45% at 15% 10%, rgb(225 29 46 / 0.22), transparent 60%), radial-gradient(40% 40% at 85% 20%, rgb(122 12 22 / 0.35), transparent 60%), radial-gradient(50% 50% at 50% 90%, rgb(225 29 46 / 0.12), transparent 65%)',
-                'text-shine':
-                    'linear-gradient(100deg, #FFFFFF 0%, #FFFFFF 40%, #FF8A94 60%, #FFFFFF 100%)',
+                'text-shine': 'var(--text-shine)',
                 'border-gradient':
-                    'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(255 255 255 / 0.06) 45%, rgb(225 29 46 / 0.15))',
+                    'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(var(--text) / 0.08) 45%, rgb(225 29 46 / 0.15))',
             },
 
             spacing: {
