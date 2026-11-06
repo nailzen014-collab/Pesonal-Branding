@@ -8,7 +8,7 @@
         $education = setting('education_level');
 
         $photo = setting('profile_photo') ?: 'images/profile.jpg';
-        $photoUrl = str_starts_with($photo, 'http') ? $photo : (str_starts_with($photo, 'images/') ? asset($photo) : asset('storage/'.$photo));
+        $photoUrl = public_storage_url($photo);
 
         // Frasa animasi ketik diturunkan dari role agar bisa diedit lewat panel admin.
         $rolePhrases = array_values(array_unique(array_filter(array_merge(
@@ -64,7 +64,7 @@
                     <x-ui.button :href="route('kontak')" variant="secondary" icon="mail" class="!px-7 !py-3">Hubungi Saya</x-ui.button>
 
                     @if ($cv = setting('cv_file'))
-                        <a href="{{ asset('storage/'.$cv) }}" download
+                        <a href="{{ public_storage_url($cv) }}" download
                             class="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-muted transition duration-300 hover:-translate-y-0.5 hover:text-primary">
                             <x-icon name="download" class="h-4 w-4" />
                             Unduh CV

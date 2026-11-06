@@ -71,7 +71,7 @@
                     <h2 class="font-display text-lg font-semibold text-text">Foto Profil</h2>
 
                     @if (! empty($settings['profile_photo']))
-                        <img src="{{ asset('storage/'.$settings['profile_photo']) }}" alt="Foto profil saat ini"
+                        <img src="{{ public_storage_url($settings['profile_photo']) }}" alt="Foto profil saat ini"
                             class="mt-5 h-40 w-40 rounded-2xl object-cover object-top">
                         <label class="mt-4 flex cursor-pointer items-center gap-3 text-sm text-muted">
                             <input type="checkbox" name="remove_profile_photo" value="1" class="rounded border-line bg-surface-2 text-primary focus:ring-primary focus:ring-offset-ink">
@@ -94,7 +94,7 @@
                         <p class="mt-5 flex items-center gap-2 text-sm text-muted">
                             <x-icon name="check" class="h-4 w-4 text-success" />
                             CV tersimpan:
-                            <a href="{{ asset('storage/'.$settings['cv_file']) }}" target="_blank" rel="noopener noreferrer"
+                            <a href="{{ public_storage_url($settings['cv_file']) }}" target="_blank" rel="noopener noreferrer"
                                 class="text-primary hover:underline">lihat file</a>
                         </p>
                         <label class="mt-4 flex cursor-pointer items-center gap-3 text-sm text-muted">

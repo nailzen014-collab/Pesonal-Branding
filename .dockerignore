@@ -1,0 +1,17 @@
+.git
+.vercel
+.env
+.env.*
+!.env.example
+database/database.sqlite
+node_modules
+public/build
+public/hot
+public/storage
+storage/logs
+storage/pail
+tests
+vendor
+.agents
+.claude
+.cursor

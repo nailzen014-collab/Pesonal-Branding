@@ -6,7 +6,7 @@
         $role = setting('role', 'Web Developer & Fullstack Engineer');
 
         $photo = setting('profile_photo') ?: 'images/profile.jpg';
-        $photoUrl = str_starts_with($photo, 'http') ? $photo : (str_starts_with($photo, 'images/') ? asset($photo) : asset('storage/'.$photo));
+        $photoUrl = public_storage_url($photo);
 
         $github = setting('github_url', 'https://github.com/nailzen014-collab');
         $wa = setting('whatsapp_url', 'https://wa.me/6285694595270');

@@ -57,6 +57,16 @@ Route::get('/kontak', [ContactController::class, 'index'])->name('kontak');
 Route::get('/sitemap.xml', [SitemapController::class, '__invoke'])->name('sitemap');
 Route::get('/robots.txt', [RobotsController::class, '__invoke'])->name('robots');
 
+// Aset Vite dan gambar publik dilayani lewat PHP karena Vercel meneruskan
+// semua request ke satu fungsi serverless.
+Route::get('/build/{path}', fn (string $path) => public_file_response('build', $path, 'public, max-age=31536000, immutable'))
+    ->where('path', '.*')
+    ->name('assets.build');
+Route::get('/images/{path}', fn (string $path) => public_file_response('images', $path))
+    ->where('path', '.*')
+    ->name('assets.images');
+Route::get('/favicon.ico', fn () => public_file_response('.', 'favicon.ico'));
+
 // GitHub Webhook untuk sinkronisasi otomatis saat push repo baru
 Route::post('/github/webhook', GithubWebhookController::class)->name('github.webhook');
 

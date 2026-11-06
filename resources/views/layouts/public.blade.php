@@ -10,7 +10,7 @@
 
     $canonical = url()->current();
     $profilePhoto = setting('profile_photo') ?: 'images/profile.jpg';
-    $ogImage = str_starts_with($profilePhoto, 'http') ? $profilePhoto : asset('storage/'.$profilePhoto);
+    $ogImage = public_storage_url($profilePhoto);
 @endphp
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth" data-theme-scope="public">
