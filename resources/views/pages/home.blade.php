@@ -92,7 +92,7 @@
                 <div class="relative mx-auto w-full max-w-xs min-w-0 animate-fade-up sm:max-w-md" style="animation-delay: 200ms">
                     <div class="absolute -inset-6 animate-drift rounded-[2.5rem] bg-gradient-to-br from-primary/35 via-primary-deep/10 to-transparent blur-3xl" aria-hidden="true"></div>
 
-                    <div class="border-gradient relative mx-auto w-fit max-w-full rounded-[2rem] bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 shadow-card-lg backdrop-blur"
+                    <div class="border-gradient relative mx-auto w-fit max-w-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 shadow-card-lg backdrop-blur"
                         data-tilt>
                         <img src="{{ $photoUrl }}" alt="Foto profil {{ $siteName }}"
                             width="512" height="512" fetchpriority="high" decoding="async"

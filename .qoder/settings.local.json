@@ -24,7 +24,13 @@
       "Bash(grep -rn \"storage.local\\\\|serve.*=>\" config/filesystems.php | head; echo \"=== PUBLIC_DISK_DRIVER usage ===\"; grep -rn \"PUBLIC_DISK_DRIVER\" --include=*.php --include=*.md . 2>/dev/null | grep -v vendor | head)",
       "Bash(php artisan blog:sync 2>&1 | tail -5)",
       "Bash(ls -la api/ 2>&1; echo \"=== find php in api ===\"; find api -type f 2>/dev/null | head -20)",
-      "Bash(grep -rn \"api/index\\\\|/api/\" --include=*.md --include=*.json --include=*.php . 2>/dev/null | grep -v vendor | grep -v node_modules | head -10)"
+      "Bash(grep -rn \"api/index\\\\|/api/\" --include=*.md --include=*.json --include=*.php . 2>/dev/null | grep -v vendor | grep -v node_modules | head -10)",
+      "Bash(php artisan:*)",
+      "Bash(ls resources/views/pages/; echo \"=== sheen-band usage ===\"; grep -rn \"sheen-band\\\\|border-gradient\" resources/views/ | head -20)",
+      "Bash(grep -n \"sheen-band\\\\|data-tilt\\\\|overflow-hidden\" resources/views/pages/skills.blade.php resources/views/pages/home.blade.php | head -20)",
+      "Bash(grep -rn \"body\\\\s*{\" -A 6 resources/css/app.css | head -20; echo \"=== overflow-x ===\"; grep -rn \"overflow-x\" resources/css/ resources/views/layouts/ | head)",
+      "Bash(npm run build 2>&1 | tail -8)",
+      "Bash(php artisan test --compact 2>&1 | tail -6)"
     ]
   }
 }

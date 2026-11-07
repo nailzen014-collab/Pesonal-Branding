@@ -28,7 +28,7 @@
     <section class="container-page py-20">
         <div class="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
             <div class="reveal">
-                <div class="sticky top-28 rounded-3xl border-gradient relative bg-surface/70 p-6 backdrop-blur">
+                <div class="sticky top-28 overflow-hidden rounded-3xl border-gradient relative bg-surface/70 p-6 backdrop-blur">
                     <div class="rounded-2xl border-gradient bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 backdrop-blur">
                         <img src="{{ $photoUrl }}" alt="Foto profil {{ $siteName }}" loading="lazy" decoding="async"
                             class="h-64 w-full rounded-xl object-cover object-top">
