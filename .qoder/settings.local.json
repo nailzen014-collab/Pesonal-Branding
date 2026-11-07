@@ -22,7 +22,9 @@
       "Bash(grep -n \"pgsql\" -A 20 config/database.php | head -40; echo \"=== SESSION/CACHE default ===\"; grep -n \"SESSION_DRIVER\\\\|CACHE_STORE\\\\|QUEUE_CONNECTION\\\\|FILESYSTEM_DISK\" .env 2>/dev/null)",
       "Bash(php artisan route:list --path=storage 2>&1 | head -5; echo \"=== posts migration thumbnails? ===\"; grep -rn \"storage\\\\|thumb\" app/Observers app/Models/Post.php 2>/dev/null | head -10; echo \"=== filesystem disks ===\"; grep -n \"'public' =>\" -A 8 config/filesystems.php | head -14)",
       "Bash(grep -rn \"storage.local\\\\|serve.*=>\" config/filesystems.php | head; echo \"=== PUBLIC_DISK_DRIVER usage ===\"; grep -rn \"PUBLIC_DISK_DRIVER\" --include=*.php --include=*.md . 2>/dev/null | grep -v vendor | head)",
-      "Bash(php artisan blog:sync 2>&1 | tail -5)"
+      "Bash(php artisan blog:sync 2>&1 | tail -5)",
+      "Bash(ls -la api/ 2>&1; echo \"=== find php in api ===\"; find api -type f 2>/dev/null | head -20)",
+      "Bash(grep -rn \"api/index\\\\|/api/\" --include=*.md --include=*.json --include=*.php . 2>/dev/null | grep -v vendor | grep -v node_modules | head -10)"
     ]
   }
 }
