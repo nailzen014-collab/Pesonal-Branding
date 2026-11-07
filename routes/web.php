@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExperienceController;
@@ -118,6 +119,11 @@ Route::middleware(['auth', 'throttle:60,1'])->prefix('admin')->name('admin.')->g
 
     Route::get('settings', [SettingController::class, 'edit'])->name('settings.edit');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+
+    // Akun admin: hanya bisa diubah oleh pengguna yang sedang login.
+    Route::get('account', [AccountController::class, 'edit'])->name('account.edit');
+    Route::put('account/email', [AccountController::class, 'updateEmail'])->name('account.email.update');
+    Route::put('account/password', [AccountController::class, 'updatePassword'])->name('account.password.update');
 });
 
 require __DIR__.'/auth.php';

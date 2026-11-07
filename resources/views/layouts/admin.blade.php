@@ -11,6 +11,7 @@
         ['label' => 'Sertifikat', 'route' => 'admin.certificates.index', 'icon' => 'award'],
         ['label' => 'Pesan', 'route' => 'admin.messages.index', 'icon' => 'inbox'],
         ['label' => 'Pengaturan', 'route' => 'admin.settings.edit', 'icon' => 'cog'],
+        ['label' => 'Akun', 'route' => 'admin.account.edit', 'icon' => 'users'],
     ];
 @endphp
 <!DOCTYPE html>

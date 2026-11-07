@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la && echo \"---routes---\" && ls routes && echo \"---app---\" && find app -type f | head -100)",
+      "Bash(cd \"C:\\\\laragon\\\\www\\\\Personal-Branding\" && php artisan make:controller Admin/AccountController --no-interaction && php artisan make:request UpdateEmailRequest --no-interaction && php artisan make:request UpdateAdminPasswordRequest --no-interaction)",
+      "Bash(cd \"C:\\\\laragon\\\\www\\\\Personal-Branding\" && cat app/Http/Controllers/Auth/NewPasswordController.php | head -40; cat app/Http/Middleware/SecurityHeaders.php)",
+      "Bash(cd \"C:\\\\laragon\\\\www\\\\Personal-Branding\" && php artisan make:test --phpunit AdminAccountTest --no-interaction && php artisan route:list --name=admin.account)",
+      "Bash(cd \"C:\\\\laragon\\\\www\\\\Personal-Branding\" && php artisan test --compact tests/Feature/AdminAccountTest.php 2>&1 | tail -30)",
+      "Bash(cd \"C:\\\\laragon\\\\www\\\\Personal-Branding\" && vendor/bin/pint --dirty --format agent && php artisan test --compact tests/Feature/AdminAccountTest.php 2>&1 | tail -15)",
+      "Bash(cd \"C:\\\\laragon\\\\www\\\\Personal-Branding\" && git status --short)",
+      "Bash(ls .ai/rules 2>/dev/null && echo \"--- index\" && cat .ai/rules/index.md 2>/dev/null | head -50)",
+      "Bash(php artisan test --compact tests/Feature/AdminAccountTest.php 2>&1 | tail -30)",
+      "Bash(grep -rn \"'users'\\\\|case 'cog'\\\\|'shield'\\\\|\\\\\"users\\\\\"\\\\|\\\\\"cog\\\\\"\" resources/views/components/ app/ 2>/dev/null | head -20)",
+      "Bash(grep -n \"icon=\\\\|x-ui.button\" resources/views/components/ui/button.blade.php | head -20)",
+      "Bash(php artisan view:clear >/dev/null 2>&1; php artisan test --compact tests/Feature/AdminAccountTest.php 2>&1 | tail -15)",
+      "Bash(php artisan route:list --path=admin/account 2>&1)",
+      "Bash(vendor/bin/pint --dirty --format agent 2>&1 | tail -10)",
+      "Bash(php artisan test --compact 2>&1 | tail -12)",
+      "Bash(ls -R resources/content 2>&1 | head -40; echo \"=== artisan blog ===\"; php artisan list blog 2>&1 | head -20)",
+      "Bash(cat resources/content/blog/2026-10-05-mengelola-konten-blog-dengan-markdown.md 2>/dev/null | head -20; echo \"=== OTHER SAMPLE ===\"; head -15 resources/content/blog/2026-11-04-personal-branding-portfolio.md)",
+      "Bash(ls app/Console/Commands/ && echo \"=== SYNC ===\" && cat app/Console/Commands/SyncBlogPosts.php 2>/dev/null | head -80)",
+      "Bash(grep -n \"pgsql\" -A 20 config/database.php | head -40; echo \"=== SESSION/CACHE default ===\"; grep -n \"SESSION_DRIVER\\\\|CACHE_STORE\\\\|QUEUE_CONNECTION\\\\|FILESYSTEM_DISK\" .env 2>/dev/null)",
+      "Bash(php artisan route:list --path=storage 2>&1 | head -5; echo \"=== posts migration thumbnails? ===\"; grep -rn \"storage\\\\|thumb\" app/Observers app/Models/Post.php 2>/dev/null | head -10; echo \"=== filesystem disks ===\"; grep -n \"'public' =>\" -A 8 config/filesystems.php | head -14)",
+      "Bash(grep -rn \"storage.local\\\\|serve.*=>\" config/filesystems.php | head; echo \"=== PUBLIC_DISK_DRIVER usage ===\"; grep -rn \"PUBLIC_DISK_DRIVER\" --include=*.php --include=*.md . 2>/dev/null | grep -v vendor | head)",
+      "Bash(php artisan blog:sync 2>&1 | tail -5)"
+    ]
+  }
+}

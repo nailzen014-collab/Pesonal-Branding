@@ -25,7 +25,7 @@
         id="{{ $name }}"
         name="{{ $name }}"
         type="{{ $type }}"
-        value="{{ old($name, $value) }}"
+        value="{{ $name ? old($name, $value) : $value }}"
         @if ($required) required @endif
         {{ $attributes->except('class')->merge(['class' => 'form-input']) }}
     >
