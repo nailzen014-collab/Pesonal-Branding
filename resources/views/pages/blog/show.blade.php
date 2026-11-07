@@ -9,7 +9,7 @@
         eyebrow="Artikel"
         :subtitle="$post->excerpt" />
 
-    <section class="container-page py-20">
+    <section class="scroll-stage container-page py-20">
         <nav aria-label="Breadcrumb" class="mb-8 text-xs text-muted">
             <a href="{{ route('home') }}" class="hover:text-primary">Beranda</a>
             <span class="mx-2" aria-hidden="true">/</span>

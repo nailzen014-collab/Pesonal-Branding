@@ -25,7 +25,7 @@
     @endphp
 
 {{-- Hero: foto, nama, role, tagline, dan dua CTA utama (FR-01) --}}
-    <section class="relative overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-40">
+    <section class="scroll-stage relative overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-40">
         <div class="pointer-events-none absolute inset-0 bg-aurora" aria-hidden="true"></div>
         <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
 
@@ -118,7 +118,7 @@
     </section>
 
 {{-- Statistik singkat (bagian 3 Beranda) --}}
-<section class="border-y border-line-soft bg-ink-soft/60">
+<section class="scroll-stage border-y border-line-soft bg-ink-soft/60">
     <div class="container-page">
         <div class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line-soft bg-line-soft lg:grid-cols-4">
             @foreach ([
@@ -141,7 +141,7 @@
 </section>
 
 {{-- Tentang singkat --}}
-<section class="container-page py-28">
+<section class="scroll-stage container-page py-28">
     <div class="grid gap-14 lg:grid-cols-2 lg:items-center">
         <div class="reveal">
             <x-section-title eyebrow="Tentang Saya"
@@ -195,7 +195,7 @@
 
 {{-- Skills ringkas --}}
 @if ($skills->isNotEmpty())
-    <section class="relative border-y border-line-soft bg-ink-soft/60 py-24">
+    <section class="scroll-stage relative border-y border-line-soft bg-ink-soft/60 py-24">
         <div class="container-page">
             <div class="reveal flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                 <x-section-title eyebrow="Skill" title="Teknologi yang Saya Kuasai" />
@@ -228,7 +228,7 @@
 @endif
 
 {{-- Proyek terbaru --}}
-    <section class="container-page py-28">
+    <section class="scroll-stage container-page py-28">
         <div class="reveal flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <x-section-title eyebrow="Portofolio" title="Proyek Terbaru" />
             <x-ui.button :href="route('portofolio')" variant="ghost" icon="arrow-right">Lihat semua proyek</x-ui.button>
@@ -252,7 +252,7 @@
 
 {{-- Timeline singkat --}}
 @if ($experiences->isNotEmpty())
-    <section class="relative border-y border-line-soft bg-ink-soft/60 py-24">
+    <section class="scroll-stage relative border-y border-line-soft bg-ink-soft/60 py-24">
         <div class="container-page grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             <div class="reveal">
                 <x-section-title eyebrow="Perjalanan" title="Pendidikan & Pengalaman" />
@@ -286,7 +286,7 @@
 @endif
 
 {{-- CTA kontak (bagian 8 Beranda) --}}
-<section class="container-page py-28">
+<section class="scroll-stage container-page py-28">
     <div class="reveal relative overflow-hidden rounded-3xl border-gradient bg-surface/70 px-6 py-16 text-center sm:px-12">
         <div class="pointer-events-none absolute inset-0 bg-hero-glow opacity-70" aria-hidden="true"></div>
 

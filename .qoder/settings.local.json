@@ -56,7 +56,16 @@
       "Bash(cd /c/laragon/www/Personal-Branding && grep -rn \"navbar\\\\|<x-site\" tests/ --include=*.php | head -20)",
       "Bash(cd /c/laragon/www/Personal-Branding && ls tests/Feature/ && php artisan test --compact tests/Feature/HomePageTest.php 2>&1 | tail -15)",
       "Bash(cd /c/laragon/www/Personal-Branding && php artisan test --compact tests/Feature/PublicPagesTest.php 2>&1 | tail -15)",
-      "Bash(cd /c/laragon/www/Personal-Branding && git diff --stat && git status --short)"
+      "Bash(cd /c/laragon/www/Personal-Branding && git diff --stat && git status --short)",
+      "Bash(cd /c/laragon/www/Personal-Branding && grep -n \"<section\" resources/views/pages/home.blade.php resources/views/pages/blog/index.blade.php resources/views/pages/tentang.blade.php resources/views/pages/skills.blade.php resources/views/pages/kontak.blade.php resources/views/pages/sertifikat.blade.php resources/views/pages/portofolio/index.blade.php resources/views/pages/blog/show.blade.php resources/views/pages/portofolio/show.blade.php)",
+      "Bash(cd /c/laragon/www/Personal-Branding && for f in resources/views/pages/home.blade.php resources/views/pages/blog/index.blade.php resources/views/pages/tentang.blade.php resources/views/pages/skills.blade.php resources/views/pages/kontak.blade.php resources/views/pages/sertifikat.blade.php resources/views/pages/portofolio/index.blade.php resources/views/pages/blog/show.blade.php resources/views/pages/portofolio/show.blade.php; do perl -pi -e 's/<section class=\"/<section class=\"scroll-stage /' \"$f\"; done; grep -rn \"<section\" resources/views/pages/ | grep -v \"scroll-stage\" )",
+      "Bash(cd /c/laragon/www/Personal-Branding && node --check resources/js/reveal.js && npm run build 2>&1 | grep -E \"built|error\" && grep -o '\\\\.scroll-stage[^{]*{[^}]*}' public/build/assets/*.css | head -8)",
+      "Bash(cd /c/laragon/www/Personal-Branding && php artisan test --compact tests/Feature/PublicPagesTest.php 2>&1 | tail -6)",
+      "Bash(cd /c/laragon/www/Personal-Branding && git status --short && git diff --stat)",
+      "Bash(cd /c/laragon/www/Personal-Branding && grep -rn \"sticky\" resources/views/ resources/js/ resources/css/ )",
+      "Bash(cd /c/laragon/www/Personal-Branding && npm run build 2>&1 | grep -E \"built|error\" && grep -o '\\\\.scroll-stage[^{]*{[^}]*}' public/build/assets/*.css)",
+      "Bash(cd /c/laragon/www/Personal-Branding && grep -o '.\\\\{0,40\\\\}\\\\.scroll-stage:has\\(.sticky\\)[^{]*{[^}]*}' public/build/assets/*.css | head -5; echo \"---\"; grep -o '@media \\(prefers-reduced-motion:reduce\\){.\\\\{0,300\\\\}' public/build/assets/*.css)",
+      "Bash(cd /c/laragon/www/Personal-Branding && php artisan test --compact tests/Feature/PublicPagesTest.php 2>&1 | tail -4)"
     ]
   }
 }

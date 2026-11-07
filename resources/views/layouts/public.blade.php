@@ -56,6 +56,12 @@
                 transform: none !important;
             }
 
+            .scroll-stage {
+                opacity: 1 !important;
+                mask-image: none !important;
+                -webkit-mask-image: none !important;
+            }
+
             [data-typewriter].tw-pending {
                 visibility: visible !important;
             }

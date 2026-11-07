@@ -25,7 +25,7 @@
         subtitle="Sedikit cerita tentang saya, cara saya belajar, dan apa yang saya kerjakan." />
 
     {{-- Profil singkat --}}
-    <section class="container-page py-20">
+    <section class="scroll-stage container-page py-20">
         <div class="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
             <div class="reveal">
                 <div class="sticky top-28 overflow-hidden rounded-3xl border-gradient relative bg-surface/70 p-6">
@@ -154,7 +154,7 @@
     </section>
 
     {{-- CTA --}}
-    <section class="container-page pb-24">
+    <section class="scroll-stage container-page pb-24">
         <div class="reveal relative flex flex-col items-center justify-between gap-6 rounded-3xl border-gradient bg-surface/70 px-8 py-10 sm:flex-row">
             <div>
                 <h2 class="font-display text-2xl font-bold text-text">Tertarik bekerja sama?</h2>

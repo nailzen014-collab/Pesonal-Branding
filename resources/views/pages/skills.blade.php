@@ -18,7 +18,7 @@
         eyebrow="Kemampuan"
         subtitle="Teknologi yang saya pakai sehari-hari, dikelompokkan supaya mudah dipindai." />
 
-    <section class="container-page py-20">
+    <section class="scroll-stage container-page py-20">
         @if ($total === 0)
             <div class="rounded-2xl border border-dashed border-line bg-surface/60 px-6 py-16 text-center">
                 <x-icon name="code" class="mx-auto h-8 w-8 text-muted" />
@@ -71,7 +71,7 @@
         @endif
     </section>
 
-    <section class="container-page pb-24">
+    <section class="scroll-stage container-page pb-24">
         <div class="reveal relative flex flex-col items-center justify-between gap-6 rounded-3xl border-gradient bg-surface/70 px-8 py-10 sm:flex-row">
             <div>
                 <h2 class="font-display text-2xl font-bold text-text">Ingin lihat karyanya?</h2>

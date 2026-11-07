@@ -14,7 +14,7 @@
         eyebrow="Hubungi Saya"
         subtitle="Punya proyek, tawaran kerja sama, atau sekadar ingin berdiskusi? Silakan kirim pesan." />
 
-    <section class="container-page py-20">
+    <section class="scroll-stage container-page py-20">
         <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             {{-- Kontak cepat --}}
             <aside class="space-y-6">

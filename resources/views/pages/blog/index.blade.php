@@ -12,7 +12,7 @@
         eyebrow="Artikel"
         subtitle="Tulisan seputar web development, Laravel, dan perjalanan belajar." />
 
-    <section class="container-page py-20">
+    <section class="scroll-stage container-page py-20">
         {{-- Filter & pencarian --}}
         <form method="GET" action="{{ route('blog') }}"
             class="reveal relative overflow-hidden rounded-3xl border-gradient bg-surface/70 p-6 ">

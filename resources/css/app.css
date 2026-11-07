@@ -471,26 +471,99 @@
         visibility: hidden;
     }
 
-    /* Muncul saat di-scroll (dikendalikan Alpine/IntersectionObserver) */
-    .reveal {
+    /*
+     * Wadah bagian layar ("panggung"): anaknya muncul dari bawah saat
+     * masuk viewport, dan tenggelam ke balik kabut di tepi atas/bawah
+     * saat digulir keluar. `opacity` + mask murni komposit sehingga
+     * tidak menambah pekerjaan layout di setiap frame scroll.
+     */
+    .scroll-stage {
+        position: relative;
+        will-change: opacity;
+        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .scroll-stage.is-out {
+        opacity: 0.25;
+    }
+
+    /*
+     * Section yang memuat elemen sticky (kartu profil, sidebar artikel)
+     * tidak boleh punya transform/mask/opacity sendiri: semuanya membuat
+     * containing block baru sehingga posisi sticky jadi salah dan kabut
+     * tepi section menutupi kartu. Section seperti ini tetap menganimasikan
+     * anak `.reveal`-nya seperti biasa.
+     */
+    .scroll-stage:has(.sticky) {
+        opacity: 1 !important;
+        transition: none;
+        mask-image: none !important;
+        -webkit-mask-image: none !important;
+    }
+
+    .scroll-stage:has(.sticky)::before,
+    .scroll-stage:has(.sticky)::after {
+        display: none;
+    }
+
+    /*
+     * Kabut tepi: bayangan gelap yang menutupi konten saat elemen keluar
+     * dari viewport, membuatnya seolah tenggelam ke balik layar. Kabut
+     * bergradasi penuh ke warna latar, jadi konten tidak "terpotong" tegas
+     * seperti mask — itulah yang sebelumnya terlihat menimpa konten.
+     */
+    .scroll-stage::before,
+    .scroll-stage::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 7rem;
+        pointer-events: none;
+        z-index: 2;
         opacity: 0;
-        transform: translateY(24px);
+        transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .scroll-stage::before {
+        top: -1px;
+        background: linear-gradient(to bottom, rgb(var(--ink)), rgb(var(--ink) / 0));
+    }
+
+    .scroll-stage::after {
+        bottom: -1px;
+        background: linear-gradient(to top, rgb(var(--ink)), rgb(var(--ink) / 0));
+    }
+
+    .scroll-stage.is-leaving-top::before,
+    .scroll-stage.is-leaving-bottom::after {
+        opacity: 1;
+    }
+
+    /*
+     * Baris yang muncul saat di-scroll (dikendalikan resources/js/reveal.js).
+     * Elemen dari bawah naik pelan; elemen yang keluar lewat atas turun
+     * sedikit dan memudar ke balik kabut, lalu muncul kembali bila digulir
+     * balik ke bawah.
+     */
+    .reveal {
+        --reveal-shift: 32px;
+
+        opacity: 0;
+        transform: translate3d(0, var(--reveal-shift), 0);
         transition:
-            opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-            transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .reveal.is-visible {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0);
+    }
 
-        /*
-         * Setelah muncul, opacity/transform dilepas dari daftar transisi
-         * supaya elemen tidak lagi dipromosikan ke layer GPU terpisah.
-         * Transisi kelas kartu (`transition`, mis. hover) tetap berlaku.
-         */
-        transition: inherit;
-        transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+    /* Sudah lewat ke atas layar: meluncur turun balik ke balik kabut */
+    .reveal.is-passed {
+        --reveal-shift: -16px;
     }
 
     /* Hormati pengaturan aksesibilitas pengguna (NFR-05) */
@@ -507,9 +580,15 @@
             transition-duration: 0.001ms !important;
         }
 
-        .reveal {
-            opacity: 1;
-            transform: none;
+        .reveal,
+        .scroll-stage {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        .scroll-stage {
+            mask-image: none;
+            -webkit-mask-image: none;
         }
     }
 }

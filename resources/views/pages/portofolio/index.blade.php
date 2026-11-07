@@ -9,7 +9,7 @@
         eyebrow="Karya"
         subtitle="Kumpulan proyek beserta tautan repository GitHub. Semua kode bisa dibuka dan ditinjau." />
 
-    <section class="container-page py-20">
+    <section class="scroll-stage container-page py-20">
         {{-- Filter & pencarian (FR-07): diproses di server agar tetap ringan --}}
         <form method="GET" action="{{ route('portofolio') }}"
             class="reveal relative overflow-hidden rounded-3xl border-gradient bg-surface/70 p-6 ">
