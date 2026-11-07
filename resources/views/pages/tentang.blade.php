@@ -28,8 +28,8 @@
     <section class="container-page py-20">
         <div class="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
             <div class="reveal">
-                <div class="sticky top-28 overflow-hidden rounded-3xl border-gradient relative bg-surface/70 p-6 backdrop-blur">
-                    <div class="rounded-2xl border-gradient bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 backdrop-blur">
+                <div class="sticky top-28 overflow-hidden rounded-3xl border-gradient relative bg-surface/70 p-6">
+                    <div class="rounded-2xl border-gradient bg-gradient-to-b from-surface-2/80 to-surface/60 p-2">
                         <img src="{{ $photoUrl }}" alt="Foto profil {{ $siteName }}" loading="lazy" decoding="async"
                             class="h-64 w-full rounded-xl object-cover object-top">
                     </div>
@@ -142,7 +142,7 @@
                         @endforeach
 
                         @if (collect([$educations, $works, $organizations])->every(fn ($items) => $items->isEmpty()))
-                            <div class="rounded-2xl border border-dashed border-line bg-surface/60 backdrop-blur px-6 py-12 text-center">
+                            <div class="rounded-2xl border border-dashed border-line bg-surface/60 px-6 py-12 text-center">
                                 <x-icon name="clock" class="mx-auto h-7 w-7 text-muted" />
                                 <p class="mt-4 text-sm text-muted">Timeline belum diisi. Tambahkan lewat panel admin.</p>
                             </div>
@@ -155,7 +155,7 @@
 
     {{-- CTA --}}
     <section class="container-page pb-24">
-        <div class="reveal relative flex flex-col items-center justify-between gap-6 rounded-3xl border-gradient bg-surface/70 px-8 py-10 backdrop-blur sm:flex-row">
+        <div class="reveal relative flex flex-col items-center justify-between gap-6 rounded-3xl border-gradient bg-surface/70 px-8 py-10 sm:flex-row">
             <div>
                 <h2 class="font-display text-2xl font-bold text-text">Tertarik bekerja sama?</h2>
                 <p class="mt-2 text-sm text-muted">Kirim pesan, saya akan membalas lewat email atau WhatsApp.</p>

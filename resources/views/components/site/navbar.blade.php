@@ -10,17 +10,21 @@
     - melayang (floating) dengan latar glass, makin solid saat di-scroll
     - penanda halaman aktif berupa pill merah
     - menu hamburger di layar kecil (Alpine.js)
+
+    Status "scrolled" hanya diubah saat nilainya berpindah (di bawah 20px),
+    bukan setiap event scroll, supaya Alpine tidak memicu render ulang
+    navbar di setiap frame gulir. Debounce 50ms cukup halus untuk transisi
+    latar, dan statusnya tetap berpindah tepat saat melewati batas 20px.
 --}}
 <header x-data="{ open: false, scrolled: false }"
-    x-init="scrolled = window.scrollY > 20"
-    @scroll.window="scrolled = window.scrollY > 20"
-    class="nav-enter fixed inset-x-0 top-0 z-50 px-4 pt-3 transition-all duration-500 ease-smooth sm:px-6 sm:pt-4"
-    :class="scrolled ? 'opacity-100' : 'opacity-100'">
+    x-init="$nextTick(() => scrolled = window.scrollY > 20)"
+    @scroll.window.debounce.50ms="scrolled = window.scrollY > 20"
+    class="nav-enter fixed inset-x-0 top-0 z-50 px-4 pt-3 sm:px-6 sm:pt-4">
 
-    <nav class="container-page !max-w-6xl"
+    <nav class="container-page !max-w-6xl h-16 transition-[background-color,border-color,box-shadow,border-radius] duration-500 ease-smooth"
         :class="scrolled
-            ? 'h-16 rounded-2xl border border-line-soft bg-ink/70 shadow-card-lg backdrop-blur-2xl'
-            : 'h-16 rounded-full border border-transparent bg-transparent'"
+            ? 'rounded-2xl border border-line-soft bg-ink/70 shadow-card-lg backdrop-blur-2xl'
+            : 'rounded-full border border-transparent bg-transparent'"
         aria-label="Navigasi utama">
 
         <div class="flex h-full items-center justify-between gap-4 px-3 sm:px-5">
@@ -37,7 +41,7 @@
             </a>
 
             {{-- Menu desktop --}}
-            <ul class="hidden items-center gap-1 rounded-full border border-line-soft bg-surface/60 p-1 backdrop-blur md:flex">
+            <ul class="hidden items-center gap-1 rounded-full border border-line-soft bg-surface/60 p-1 md:flex">
                 @foreach ($navItems as $item)
                     @php $active = request()->routeIs($item['route']); @endphp
                     <li>

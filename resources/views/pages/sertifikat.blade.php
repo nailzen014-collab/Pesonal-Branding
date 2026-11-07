@@ -7,7 +7,7 @@
 
     <section class="container-page py-20">
         @if ($certificates->isEmpty())
-            <div class="relative overflow-hidden rounded-3xl border border-dashed border-line bg-surface/60 px-6 py-24 text-center backdrop-blur">
+            <div class="relative overflow-hidden rounded-3xl border border-dashed border-line bg-surface/60 px-6 py-24 text-center ">
                 <div class="pointer-events-none absolute inset-0 bg-grid opacity-40" aria-hidden="true"></div>
 
                 <div class="relative">

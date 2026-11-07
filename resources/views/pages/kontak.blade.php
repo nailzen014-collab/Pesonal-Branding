@@ -25,7 +25,7 @@
                     <ul class="mt-6 space-y-3">
                         <li>
                             <a href="{{ $wa }}" target="_blank" rel="noopener noreferrer"
-                                class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 backdrop-blur transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2 hover:shadow-glow-soft">
+                                class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2 hover:shadow-glow-soft">
                                 <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 transition duration-400 group-hover:border-primary/50">
                                     <x-icon name="whatsapp" class="h-5 w-5 text-primary" />
                                 </span>
@@ -38,7 +38,7 @@
 
                         <li>
                             <a href="{{ $ig }}" target="_blank" rel="noopener noreferrer"
-                                class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 backdrop-blur transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2 hover:shadow-glow-soft">
+                                class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2 hover:shadow-glow-soft">
                                 <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 transition duration-400 group-hover:border-primary/50">
                                     <x-icon name="instagram" class="h-5 w-5 text-primary" />
                                 </span>
@@ -51,7 +51,7 @@
 
                         <li>
                             <a href="{{ $github }}" target="_blank" rel="noopener noreferrer"
-                                class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 backdrop-blur transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2 hover:shadow-glow-soft">
+                                class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2 hover:shadow-glow-soft">
                                 <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 transition duration-400 group-hover:border-primary/50">
                                     <x-icon name="github" class="h-5 w-5 text-primary" />
                                 </span>
@@ -65,7 +65,7 @@
                         @if ($linkedin)
                             <li>
                                 <a href="{{ $linkedin }}" target="_blank" rel="noopener noreferrer"
-                                    class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 backdrop-blur transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2">
+                                    class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2">
                                     <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 transition duration-400 group-hover:border-primary/50">
                                         <x-icon name="linkedin" class="h-5 w-5 text-primary" />
                                     </span>
@@ -77,7 +77,7 @@
                         @if ($email)
                             <li>
                                 <a href="mailto:{{ $email }}"
-                                    class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 backdrop-blur transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2">
+                                    class="group flex items-center gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3 transition duration-400 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2">
                                     <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 transition duration-400 group-hover:border-primary/50">
                                         <x-icon name="mail" class="h-5 w-5 text-primary" />
                                     </span>

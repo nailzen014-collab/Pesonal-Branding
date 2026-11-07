@@ -12,7 +12,7 @@
     <section class="container-page py-20">
         {{-- Filter & pencarian (FR-07): diproses di server agar tetap ringan --}}
         <form method="GET" action="{{ route('portofolio') }}"
-            class="reveal relative overflow-hidden rounded-3xl border-gradient bg-surface/70 p-6 backdrop-blur">
+            class="reveal relative overflow-hidden rounded-3xl border-gradient bg-surface/70 p-6 ">
             <div class="pointer-events-none absolute inset-0 bg-dots opacity-30" aria-hidden="true"></div>
 
             <div class="relative grid gap-4 lg:grid-cols-12">
@@ -67,7 +67,7 @@
 
         {{-- State kosong yang ramah (prinsip UX 11.3) --}}
         @if ($projects->isEmpty())
-            <div class="relative mt-12 overflow-hidden rounded-3xl border border-dashed border-line bg-surface/60 px-6 py-24 text-center backdrop-blur">
+            <div class="relative mt-12 overflow-hidden rounded-3xl border border-dashed border-line bg-surface/60 px-6 py-24 text-center ">
                 <div class="pointer-events-none absolute inset-0 bg-grid opacity-40" aria-hidden="true"></div>
 
                 <div class="relative">

@@ -3,6 +3,7 @@ import { observeReveals } from './reveal';
 import { initEffects, initTilt } from './effects';
 import { initTheme } from './theme';
 import { initTypewriters } from './typewriter';
+import { initSmoothScroll } from './smooth-scroll';
 
 /**
  * Tombol "muat lebih banyak" ala GitHub pada halaman /portofolio.
@@ -91,6 +92,7 @@ function initLoadMore() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    initSmoothScroll();
     observeReveals();
     initLoadMore();
     initEffects();

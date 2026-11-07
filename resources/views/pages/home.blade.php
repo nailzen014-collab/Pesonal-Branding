@@ -29,8 +29,9 @@
         <div class="pointer-events-none absolute inset-0 bg-aurora" aria-hidden="true"></div>
         <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
 
-        <div class="pointer-events-none absolute -left-32 top-24 h-72 w-72 animate-drift rounded-full bg-primary/20 blur-[100px]" aria-hidden="true"></div>
-        <div class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 animate-drift rounded-full bg-primary-deep/30 blur-[110px]" aria-hidden="true"></div>
+        {{-- Cahaya latar: gradient lembut, bukan `filter: blur()` yang mahal untuk direpaint tiap frame --}}
+        <div class="pointer-events-none absolute -left-32 top-24 h-72 w-72 animate-float rounded-full bg-[radial-gradient(closest-side,rgb(225_29_46_/_0.28),transparent)]" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 animate-float rounded-full bg-[radial-gradient(closest-side,rgb(122_12_22_/_0.45),transparent)] [animation-delay:-3s]" aria-hidden="true"></div>
 
         <div class="container-page relative grid min-w-0 gap-8 sm:gap-10 lg:grid-cols-2">
             <div class="order-2 min-w-0 lg:order-1">
@@ -73,8 +74,9 @@
                 </div>
 
                 {{-- Marquee teknologi: penanda bahwa stack-nya teknis --}}
+                {{-- Marquee: animasi transform murni, dipromosikan ke layer sendiri supaya tidak memicu repaint saat scroll --}}
                 <div class="mt-14 overflow-hidden border-y border-line-soft py-4 animate-fade-up" style="animation-delay: 400ms">
-                    <div class="flex w-max animate-marquee gap-10 pr-10">
+                    <div class="flex w-max animate-marquee gap-10 pr-10 [will-change:transform]">
                         @for ($copy = 0; $copy < 2; $copy++)
                             @foreach (['Laravel', 'PHP', 'Blade', 'Tailwind CSS', 'JavaScript', 'Alpine.js', 'MySQL', 'Git'] as $tech)
                                 <span class="flex shrink-0 items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted/80">
@@ -92,7 +94,7 @@
                 <div class="relative mx-auto w-full max-w-xs min-w-0 animate-fade-up sm:max-w-md" style="animation-delay: 200ms">
                     <div class="absolute -inset-6 animate-drift rounded-[2.5rem] bg-gradient-to-br from-primary/35 via-primary-deep/10 to-transparent blur-3xl" aria-hidden="true"></div>
 
-                    <div class="border-gradient relative mx-auto w-fit max-w-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 shadow-card-lg backdrop-blur"
+                    <div class="border-gradient relative mx-auto w-fit max-w-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-surface-2/80 to-surface/60 p-2 shadow-card-lg "
                         data-tilt>
                         <img src="{{ $photoUrl }}" alt="Foto profil {{ $siteName }}"
                             width="512" height="512" fetchpriority="high" decoding="async"
@@ -103,11 +105,11 @@
                         <span class="sheen-band" aria-hidden="true"></span>
 
                         <div class="absolute bottom-4 left-4 right-4 flex flex-wrap items-center gap-2">
-                            <span class="pill border-primary/30 bg-ink/70 text-text backdrop-blur text-xs">
+                            <span class="pill border-primary/30 bg-ink/70 text-text text-xs">
                                 <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
                                 Web Developer
                             </span>
-                            <span class="pill border-primary/30 bg-ink/70 text-text backdrop-blur text-xs">Fullstack Engineer</span>
+                            <span class="pill border-primary/30 bg-ink/70 text-text text-xs">Fullstack Engineer</span>
                         </div>
                     </div>
                 </div>
@@ -126,7 +128,7 @@
                 ['value' => $stats['skills'], 'label' => 'Skill Terdaftar', 'icon' => 'sparkles'],
             ] as $stat)
                 <div class="group relative bg-surface/80 px-6 py-10 text-center transition duration-500 hover:bg-surface-2/80">
-                    <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-2/70 backdrop-blur text-primary transition duration-500 group-hover:-translate-y-1 group-hover:border-primary/40 group-hover:shadow-glow-soft">
+                    <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-2/70 text-primary transition duration-500 group-hover:-translate-y-1 group-hover:border-primary/40 group-hover:shadow-glow-soft">
                         <x-icon :name="$stat['icon']" class="h-5 w-5" />
                     </span>
                     <p class="mt-4 font-display text-3xl font-bold text-text sm:text-4xl"
@@ -205,7 +207,7 @@
                     <div class="reveal h-full">
                         <div class="card card-hover-tilt h-full" data-tilt>
                             <div class="flex items-center justify-between">
-                                <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-2/70 backdrop-blur text-primary">
+                                <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-2/70 text-primary">
                                     <x-icon :name="$skillIcons[$skill->category] ?? 'code'" class="h-5 w-5" />
                                 </span>
                                 <span class="font-mono text-2xs text-muted">{{ $skill->level }}%</span>
@@ -233,7 +235,7 @@
         </div>
 
         @if ($latestProjects->isEmpty())
-            <div class="mt-12 rounded-2xl border border-dashed border-line bg-surface/60 backdrop-blur px-6 py-16 text-center">
+            <div class="mt-12 rounded-2xl border border-dashed border-line bg-surface/60 px-6 py-16 text-center">
                 <x-icon name="folder" class="mx-auto h-8 w-8 text-muted" />
                 <p class="mt-4 text-sm text-muted">Belum ada proyek terbaru. Tambahkan lewat panel admin.</p>
             </div>
@@ -285,7 +287,7 @@
 
 {{-- CTA kontak (bagian 8 Beranda) --}}
 <section class="container-page py-28">
-    <div class="reveal relative overflow-hidden rounded-3xl border-gradient bg-surface/70 backdrop-blur px-6 py-16 text-center sm:px-12">
+    <div class="reveal relative overflow-hidden rounded-3xl border-gradient bg-surface/70 px-6 py-16 text-center sm:px-12">
         <div class="pointer-events-none absolute inset-0 bg-hero-glow opacity-70" aria-hidden="true"></div>
 
         <div class="relative">

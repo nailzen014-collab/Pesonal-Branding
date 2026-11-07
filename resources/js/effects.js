@@ -18,6 +18,12 @@ let activeRect = null;
 /** Cache rectangle elemen tilt, dibuang saat scroll/resize. */
 let tiltRects = new WeakMap();
 
+/** True selama halaman baru saja digulir (lihat initSpotlight). */
+let isScrolling = false;
+
+/** Waktu (ms) sampai kapan efek pointer ditahan karena scroll. */
+let scrollUntil = 0;
+
 /** Elemen `[data-tilt]` yang sudah dipasangi listener. */
 const tiltBound = new WeakSet();
 
@@ -86,6 +92,14 @@ function applySpotlight() {
 function initSpotlight() {
     document.addEventListener('pointermove', (event) => {
         lastPointerEvent = event;
+
+        // Saat halaman sedang digulir, membaca/menulis style kartu hanya
+        // menambah kerja di frame yang sama dengan scroll. Posisi kursor
+        // disimpan dan diterapkan begitu scroll berhenti (lihat `refresh`).
+        if (isScrolling) {
+            return;
+        }
+
         scheduleFrame(applySpotlight);
     }, { passive: true });
 
@@ -97,7 +111,23 @@ function initSpotlight() {
         }
     };
 
-    window.addEventListener('scroll', refresh, { passive: true, capture: true });
+    // Selama halaman digulir, spotlight dan tilt ditahan agar frame scroll
+    // tidak berebut kerja dengan transisi pointer. Rect lama dibuang saat
+    // scroll; posisi dihitung ulang sekali setelah scroll berhenti.
+    let idleTimer = null;
+
+    window.addEventListener('scroll', () => {
+        isScrolling = true;
+        scrollUntil = performance.now() + 120;
+        invalidateRects();
+
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            isScrolling = false;
+            refresh();
+        }, 120);
+    }, { passive: true, capture: true });
+
     window.addEventListener('resize', refresh, { passive: true });
 }
 
@@ -128,6 +158,10 @@ export function initTilt(scope = document) {
         bound += 1;
 
         element.addEventListener('pointermove', (event) => {
+            if (isScrolling || performance.now() < scrollUntil) {
+                return;
+            }
+
             let rect = tiltRects.get(element);
 
             if (!rect) {
@@ -181,6 +215,15 @@ export function initCounters(scope = document) {
 
         const tick = (now) => {
             const progress = Math.min((now - start) / duration, 1);
+
+            // Elemen ter-scroll keluar layar: langsung tampilkan angka akhir
+            // agar tidak ada penulisan teks/layout tersembunyi tiap frame.
+            if (!element.isConnected || (progress < 1 && element.getBoundingClientRect().bottom < 0)) {
+                element.textContent = original;
+
+                return;
+            }
+
             const eased = 1 - Math.pow(1 - progress, 3);
 
             element.textContent = progress === 1

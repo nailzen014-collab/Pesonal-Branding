@@ -49,20 +49,21 @@ function getObserver() {
             if (entry.isIntersecting) {
                 const delay = staggerDelay(entry.target);
 
-                // Jeda hanya untuk animasi masuk, dilepas kembali setelahnya
-                // supaya transisi hover kartu tidak ikut tertunda.
+                // Jeda hanya untuk animasi masuk, dilepas setelahnya lewat
+                // timer (bukan transitionend, yang bisa tidak pernah terpicu
+                // bila transisi terpotong) supaya hover kartu tidak tertunda.
                 if (delay) {
                     entry.target.style.transitionDelay = delay;
-                    entry.target.addEventListener('transitionend', () => {
+                    setTimeout(() => {
                         entry.target.style.transitionDelay = '';
-                    }, { once: true });
+                    }, Number.parseInt(delay, 10) + 750);
                 }
 
                 entry.target.classList.add('is-visible');
                 observer?.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px' });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
 
     return observer;
 }
