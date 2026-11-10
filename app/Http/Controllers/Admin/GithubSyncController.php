@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportGithubReposRequest;
 use App\Models\Project;
+use App\Services\GithubBlogImporter;
 use App\Services\GithubService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Artisan;
@@ -81,7 +82,7 @@ class GithubSyncController extends Controller
      * Perintah yang sama dipakai scheduler, jadi tombol ini dan sinkron
      * otomatis selalu menghasilkan data yang sama.
      */
-    public function sync(): RedirectResponse
+    public function sync(GithubBlogImporter $blog): RedirectResponse
     {
         Artisan::call('portfolio:import-github', [
             '--publish' => true,
@@ -90,12 +91,20 @@ class GithubSyncController extends Controller
 
         $projects = trim(Artisan::output());
 
-        Artisan::call('blog:import-github');
-
-        $blog = trim(Artisan::output());
+        // Artikel ditangani langsung supaya rincian per repo bisa ditampilkan
+        // di halaman admin, bukan hanya di log.
+        $summary = $blog->sync(fresh: true);
 
         return redirect()
             ->route('admin.github.index')
-            ->with('success', 'Sinkronisasi GitHub selesai. Proyek: '.$projects.' Blog: '.$blog);
+            ->with('success', sprintf(
+                'Sinkronisasi selesai: %d artikel baru, %d diperbarui, %d dilewati, %d konflik.',
+                $summary['created'],
+                $summary['updated'],
+                $summary['skipped'],
+                $summary['conflicts'],
+            ))
+            ->with('blog_sync', $summary)
+            ->with('project_sync', $projects);
     }
 }

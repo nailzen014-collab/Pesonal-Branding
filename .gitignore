@@ -8,9 +8,13 @@
 .phpactor.json
 .phpunit.result.cache
 /.codex
+/coder
+/.agent/
+/.claude/
 /.cursor/
 /.idea
 /.nova
+CLAUDE.md 
 /.phpunit.cache
 /.vscode
 /.zed

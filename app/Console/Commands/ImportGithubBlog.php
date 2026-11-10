@@ -12,6 +12,7 @@ use Illuminate\Console\Command;
  *
  * Hanya file .md di folder `blog` yang dibaca. File harus punya front matter
  * dengan `title` agar tidak sembarang catatan ikut masuk sebagai artikel.
+ * Meliputi semua repo publik GITHUB_USERNAME serta repo di GITHUB_BLOG_REPOS.
  */
 #[Signature('blog:import-github
     {--user= : Username GitHub, menimpa nilai GITHUB_USERNAME}
@@ -27,14 +28,34 @@ class ImportGithubBlog extends Command
 
         $summary = $importer->sync(fresh: (bool) $this->option('fresh'));
 
+        foreach ($summary['details'] as $detail) {
+            $this->components->twoColumnDetail(
+                $detail['repo'] ?: '(tanpa nama)',
+                $detail['error'] ?? sprintf(
+                    '%d file, %d baru, %d diperbarui, %d dilewati, %d konflik',
+                    $detail['files'],
+                    $detail['created'],
+                    $detail['updated'],
+                    $detail['skipped'],
+                    $detail['conflicts'],
+                ),
+            );
+        }
+
+        $this->newLine();
         $this->components->info(sprintf(
-            '%d artikel baru, %d diperbarui, %d dilewati dari %d file di %d repository.',
+            '%d artikel baru, %d diperbarui, %d dilewati, %d konflik dari %d file di %d repository.',
             $summary['created'],
             $summary['updated'],
             $summary['skipped'],
+            $summary['conflicts'],
             $summary['files'],
             $summary['repositories'],
         ));
+
+        if ($summary['conflicts'] > 0) {
+            $this->components->warn('Ada slug yang dipakai lebih dari satu repo; yang pertama dipakai dan sisanya dilewati. Ganti slug-nya lalu sinkronkan ulang.');
+        }
 
         return self::SUCCESS;
     }

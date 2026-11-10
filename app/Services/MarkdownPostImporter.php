@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
@@ -41,7 +42,15 @@ class MarkdownPostImporter
         $skipped = 0;
 
         foreach ($files as $file) {
-            match ($this->upsert($file->getContents())) {
+            $result = $this->upsert($file->getContents());
+
+            if ($result === 'skipped') {
+                Log::warning('Artikel blog dilewati karena front matter tidak valid', [
+                    'file' => $file->getFilename(),
+                ]);
+            }
+
+            match ($result) {
                 'created' => $created++,
                 'updated' => $updated++,
                 default => $skipped++,
@@ -75,9 +84,12 @@ class MarkdownPostImporter
     }
 
     /**
+     * Baca satu artikel tanpa menyimpan. Dipakai importer GitHub untuk
+     * memeriksa slug sebelum menulis.
+     *
      * @return array<string, mixed>|null
      */
-    private function parse(string $contents): ?array
+    public function parse(string $contents): ?array
     {
         $contents = str_replace(["\r\n", "\r"], "\n", $contents);
 

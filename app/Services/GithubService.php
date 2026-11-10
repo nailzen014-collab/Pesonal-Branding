@@ -147,6 +147,63 @@ class GithubService
     }
 
     /**
+     * Repository tambahan dari GITHUB_BLOG_REPOS (format `owner/repo`).
+     *
+     * @return array<int, string> daftar full_name unik
+     */
+    public function blogRepositoryNames(): array
+    {
+        $raw = (string) config('services.github.blog_repos', '');
+
+        return collect(explode(',', $raw))
+            ->map(fn (string $name) => trim($name))
+            ->filter(fn (string $name) => preg_match('#^[\w.-]+/[\w.-]+$#', $name) === 1)
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Metadata satu repository berdasarkan `owner/repo`, null bila tidak ada
+     * atau private. Hasil di-cache agar daftar blog di banyak repo tidak
+     * memakan kuota API setiap sinkronisasi.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function repository(string $fullName, bool $fresh = false): ?array
+    {
+        $key = 'github.repo.'.str_replace('/', '.', $fullName);
+
+        if ($fresh) {
+            Cache::forget($key);
+        }
+
+        return Cache::remember($key, now()->addMinutes((int) config('services.github.cache_minutes', 60)), function () use ($fullName): ?array {
+            try {
+                $response = Http::withHeaders($this->headers())
+                    ->timeout(10)
+                    ->get("https://api.github.com/repos/{$fullName}");
+
+                if ($response->failed()) {
+                    Log::warning('GitHub repo gagal diambil', ['repo' => $fullName, 'status' => $response->status()]);
+
+                    return null;
+                }
+
+                if ((bool) $response->json('private')) {
+                    return null;
+                }
+
+                return $this->normalize($response->json());
+            } catch (Throwable $exception) {
+                Log::warning('GitHub repo tidak bisa dihubungi: '.$exception->getMessage());
+
+                return null;
+            }
+        });
+    }
+
+    /**
      * Daftar file Markdown yang berada di folder `blog` sebuah repository.
      *
      * Konvensi folder sengaja longgar: `blog/`, `content/blog/`, dan

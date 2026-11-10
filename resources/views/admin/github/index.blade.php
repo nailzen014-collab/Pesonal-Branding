@@ -28,7 +28,9 @@
                     Pilih repository yang ingin dijadikan proyek. Sinkronisasi
                     otomatis berjalan setiap jam dan sekaligus mengambil artikel
                     dari file <code class="font-mono text-primary">blog/*.md</code>
-                    di repository; tombol di samping menjalankannya sekarang juga.
+                    di repository milik akun ini dan di repo tambahan pada
+                    <code class="font-mono text-primary">GITHUB_BLOG_REPOS</code>;
+                    tombol di samping menjalankannya sekarang juga.
                 </p>
 
                 <x-ui.button type="submit" icon="refresh">
@@ -36,6 +38,77 @@
                 </x-ui.button>
             </div>
         </form>
+
+        @if ($report = session('blog_sync'))
+            <div class="card mt-6">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <h2 class="font-display text-lg font-semibold text-text">Hasil analisis artikel</h2>
+                    <div class="flex flex-wrap gap-2 text-2xs">
+                        <span class="pill border-success/40 text-success">{{ $report['created'] }} baru</span>
+                        <span class="pill">{{ $report['updated'] }} diperbarui</span>
+                        <span class="pill">{{ $report['skipped'] }} dilewati</span>
+                        @if ($report['conflicts'] > 0)
+                            <span class="pill border-warning/40 text-warning">{{ $report['conflicts'] }} konflik slug</span>
+                        @endif
+                        @if ($report['errors'] > 0)
+                            <span class="pill border-primary/40 text-primary">{{ $report['errors'] }} gagal dibaca</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="mt-4 overflow-x-auto">
+                    <table class="min-w-full divide-y divide-line text-sm">
+                        <thead class="text-left text-2xs uppercase tracking-wider text-muted">
+                            <tr>
+                                <th class="py-3 pr-5 font-semibold">Repository</th>
+                                <th class="px-5 py-3 text-right font-semibold">File</th>
+                                <th class="px-5 py-3 text-right font-semibold">Baru</th>
+                                <th class="px-5 py-3 text-right font-semibold">Update</th>
+                                <th class="px-5 py-3 text-right font-semibold">Dilewati</th>
+                                <th class="px-5 py-3 text-right font-semibold">Konflik</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-line">
+                            @forelse ($report['details'] as $row)
+                                <tr>
+                                    <td class="py-3 pr-5">
+                                        <span class="font-mono text-xs text-text">{{ $row['repo'] ?: '(tanpa nama)' }}</span>
+                                        @if ($row['error'])
+                                            <p class="mt-1 text-2xs text-primary">{{ $row['error'] }}</p>
+                                        @elseif ($row['conflict_slugs'] !== [] || $row['skipped_files'] !== [])
+                                            <p class="mt-1 text-2xs text-muted">
+                                                @foreach ($row['conflict_slugs'] as $file)
+                                                    <span class="text-warning">Konflik: {{ $file }}</span><br>
+                                                @endforeach
+                                                @foreach ($row['skipped_files'] as $file)
+                                                    Dilewati: {{ $file }}<br>
+                                                @endforeach
+                                            </p>
+                                        @endif
+                                    </td>
+                                    <td class="px-5 py-3 text-right font-mono text-xs text-muted">{{ $row['files'] }}</td>
+                                    <td class="px-5 py-3 text-right font-mono text-xs text-success">{{ $row['created'] }}</td>
+                                    <td class="px-5 py-3 text-right font-mono text-xs text-muted">{{ $row['updated'] }}</td>
+                                    <td class="px-5 py-3 text-right font-mono text-xs text-muted">{{ $row['skipped'] }}</td>
+                                    <td class="px-5 py-3 text-right font-mono text-xs {{ $row['conflicts'] > 0 ? 'text-warning' : 'text-muted' }}">{{ $row['conflicts'] }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="py-6 text-center text-sm text-muted">
+                                        Belum ada repository yang dibaca.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="mt-4 text-2xs text-muted">
+                    Slug yang dipakai lebih dari satu repo memakai versi repo pertama,
+                    sisanya dilewati. Ganti slug artikelnya lalu sinkronkan ulang.
+                </p>
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('admin.github.store') }}" class="mt-6">
             @csrf

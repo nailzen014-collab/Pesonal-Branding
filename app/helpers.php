@@ -43,6 +43,11 @@ if (! function_exists('public_storage_url')) {
 if (! function_exists('public_file_response')) {
     /**
      * Sajikan file dari folder public tanpa membuka celah path traversal.
+     *
+     * `Vercel-CDN-Cache-Control` dan `CDN-Cache-Control` wajib dikirim karena
+     * Vercel hanya memakai `max-age` dari Cache-Control dan membuang `s-maxage`
+     * bila kedua header CDN tidak ada. Tanpa ini, aset ber-hash ikut
+     * di-revalidate ke fungsi PHP di setiap kunjungan.
      */
     function public_file_response(string $directory, string $path, string $cacheControl = 'public, max-age=604800'): BinaryFileResponse
     {
@@ -54,6 +59,10 @@ if (! function_exists('public_file_response')) {
             404,
         );
 
-        return response()->file($file, ['Cache-Control' => $cacheControl]);
+        return response()->file($file, [
+            'Cache-Control' => $cacheControl,
+            'CDN-Cache-Control' => $cacheControl,
+            'Vercel-CDN-Cache-Control' => $cacheControl,
+        ]);
     }
 }

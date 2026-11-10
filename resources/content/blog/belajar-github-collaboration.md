@@ -1,3 +1,12 @@
+---
+title: "Panduan Belajar GitHub Collaboration untuk Tim Kecil"
+slug: belajar-github-collaboration
+excerpt: "Catatan kerja kolaborasi satu repository untuk tim SMK: identitas Git, branch per fitur, pull request, review, dan menyelesaikan konflik."
+category: Tips
+published_at: 2026-11-10 12:00
+sort_order: 8
+meta_description: "Alur kolaborasi GitHub untuk tim kecil: setup identity Git, branch per fitur, pull request, review, rebase, dan resolusi konflik."
+---
 # Panduan Belajar GitHub Collaboration
 
 Dokumen ini adalah catatan belajar kolaborasi untuk proyek **Sistem CV Builder —

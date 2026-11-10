@@ -51,6 +51,9 @@ return [
         'token' => env('GITHUB_TOKEN'),
         'cache_minutes' => (int) env('GITHUB_CACHE_MINUTES', 60),
         'webhook_secret' => env('GITHUB_WEBHOOK_SECRET'),
+        // Repo tambahan yang ikut dibaca artikel blog-nya, format `owner/repo`
+        // dipisah koma. Dipakai untuk kolaborasi lintas akun.
+        'blog_repos' => env('GITHUB_BLOG_REPOS', ''),
     ],
 
     /*
