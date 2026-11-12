@@ -45,7 +45,7 @@
             @if ($recentMessages->isEmpty())
                 <p class="mt-6 text-sm text-muted">Belum ada pesan masuk.</p>
             @else
-                <ul class="mt-6 divide-y divide-line">
+                <ul class="mt-6 divide-y divide-line" data-admin-stagger>
                     @foreach ($recentMessages as $message)
                         <li class="py-3 first:pt-0 last:pb-0">
                             <a href="{{ route('admin.messages.show', $message) }}" class="group flex items-start gap-3">
@@ -84,7 +84,7 @@
             @if ($recentProjects->isEmpty())
                 <p class="mt-6 text-sm text-muted">Belum ada proyek. Tambahkan lewat tombol di atas.</p>
             @else
-                <ul class="mt-6 divide-y divide-line">
+                <ul class="mt-6 divide-y divide-line" data-admin-stagger>
                     @foreach ($recentProjects as $project)
                         <li class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
                             <div class="min-w-0">
@@ -120,7 +120,7 @@
             @if ($recentPosts->isEmpty())
                 <p class="mt-6 text-sm text-muted">Belum ada artikel.</p>
             @else
-                <ul class="mt-6 divide-y divide-line">
+                <ul class="mt-6 divide-y divide-line" data-admin-stagger>
                     @foreach ($recentPosts as $post)
                         <li class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
                             <div class="min-w-0">

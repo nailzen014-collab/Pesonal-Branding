@@ -477,9 +477,13 @@
      * saat digulir keluar. `opacity` + mask murni komposit sehingga
      * tidak menambah pekerjaan layout di setiap frame scroll.
      */
+    /*
+     * `will-change` sengaja tidak dipakai permanen: setiap stage akan punya
+     * layer GPU sendiri terus-menerus, memakan memori saat scroll. Transisi
+     * opacity tetap berjalan halus tanpa promosi layer permanen.
+     */
     .scroll-stage {
         position: relative;
-        will-change: opacity;
         transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -575,6 +579,7 @@
         *,
         *::before,
         *::after {
+            animation-delay: 0ms !important;
             animation-duration: 0.001ms !important;
             animation-iteration-count: 1 !important;
             transition-duration: 0.001ms !important;
@@ -672,3 +677,65 @@ html.light .theme-icon-moon {
 .nav-enter {
     animation: nav-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
+
+/*
+ * Animasi masuk panel admin.
+ * Konten admin dirender ulang oleh server pada setiap navigasi, jadi fade
+ * singkat pada baris tabel, kartu, dan daftar cukup memberi kesan halus
+ * tanpa animasi keluar-masuk yang mengganggu pembacaan data.
+ */
+@keyframes admin-in {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 8px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.admin-shell tbody tr,
+.admin-shell main .card,
+.admin-shell main [data-admin-stagger] > * {
+    animation: admin-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Baris tabel muncul bergiliran, maksimal 15 baris per halaman. */
+.admin-shell tbody tr:nth-child(2) { animation-delay: 35ms; }
+.admin-shell tbody tr:nth-child(3) { animation-delay: 70ms; }
+.admin-shell tbody tr:nth-child(4) { animation-delay: 105ms; }
+.admin-shell tbody tr:nth-child(5) { animation-delay: 140ms; }
+.admin-shell tbody tr:nth-child(6) { animation-delay: 175ms; }
+.admin-shell tbody tr:nth-child(7) { animation-delay: 210ms; }
+.admin-shell tbody tr:nth-child(8) { animation-delay: 245ms; }
+.admin-shell tbody tr:nth-child(9) { animation-delay: 280ms; }
+.admin-shell tbody tr:nth-child(10) { animation-delay: 315ms; }
+.admin-shell tbody tr:nth-child(11) { animation-delay: 350ms; }
+.admin-shell tbody tr:nth-child(12) { animation-delay: 385ms; }
+.admin-shell tbody tr:nth-child(13) { animation-delay: 420ms; }
+.admin-shell tbody tr:nth-child(14) { animation-delay: 455ms; }
+.admin-shell tbody tr:nth-child(15) { animation-delay: 490ms; }
+
+/* Kartu dan isi daftar ber-stagger muncul satu per satu. */
+.admin-shell main .card:nth-child(2),
+.admin-shell main [data-admin-stagger] > :nth-child(2) { animation-delay: 45ms; }
+
+.admin-shell main .card:nth-child(3),
+.admin-shell main [data-admin-stagger] > :nth-child(3) { animation-delay: 90ms; }
+
+.admin-shell main .card:nth-child(4),
+.admin-shell main [data-admin-stagger] > :nth-child(4) { animation-delay: 135ms; }
+
+.admin-shell main .card:nth-child(5),
+.admin-shell main [data-admin-stagger] > :nth-child(5) { animation-delay: 180ms; }
+
+.admin-shell main .card:nth-child(6),
+.admin-shell main [data-admin-stagger] > :nth-child(6) { animation-delay: 225ms; }
+
+.admin-shell main .card:nth-child(7),
+.admin-shell main [data-admin-stagger] > :nth-child(7) { animation-delay: 270ms; }
+
+.admin-shell main .card:nth-child(8),
+.admin-shell main [data-admin-stagger] > :nth-child(8) { animation-delay: 315ms; }

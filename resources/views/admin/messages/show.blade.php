@@ -12,20 +12,20 @@
 
     <div class="grid gap-6 xl:grid-cols-3">
         <article class="card xl:col-span-2">
-            <h2 class="font-display text-xl font-semibold text-text">{{ $message->subject }}</h2>
+            <h2 class="break-words font-display text-xl font-semibold text-text">{{ $message->subject }}</h2>
 
             <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
                 <span class="inline-flex items-center gap-2">
                     <x-icon name="users" class="h-4 w-4 text-primary" />
                     {{ $message->name }}
                 </span>
-                <a href="mailto:{{ $message->email }}" class="inline-flex items-center gap-2 hover:text-primary">
-                    <x-icon name="mail" class="h-4 w-4 text-primary" />
-                    {{ $message->email }}
+                <a href="mailto:{{ $message->email }}" class="inline-flex min-w-0 items-center gap-2 hover:text-primary">
+                    <x-icon name="mail" class="h-4 w-4 shrink-0 text-primary" />
+                    <span class="break-all">{{ $message->email }}</span>
                 </a>
             </div>
 
-            <div class="mt-6 whitespace-pre-line leading-relaxed text-muted">{{ nl2br(e($message->body)) }}</div>
+            <div class="mt-6 whitespace-pre-line break-words leading-relaxed text-muted">{{ $message->body }}</div>
         </article>
 
         <aside class="space-y-6">

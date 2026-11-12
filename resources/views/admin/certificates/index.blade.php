@@ -26,7 +26,7 @@
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
                                     @if ($certificate->image_url)
-                                        <img src="{{ $certificate->image_url }}" alt=""
+                                        <img src="{{ $certificate->image_url }}" alt="" loading="lazy" decoding="async"
                                             class="h-10 w-16 rounded-lg object-cover">
                                     @else
                                         <span class="inline-flex h-10 w-16 items-center justify-center rounded-lg border border-line bg-surface-2">

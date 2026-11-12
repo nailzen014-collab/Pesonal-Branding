@@ -132,7 +132,7 @@
                     <div class="mt-6 flex flex-col gap-3 rounded-xl border border-line bg-surface-2/60 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                         <div class="flex min-w-0 items-center gap-3">
                             @if ($visitor->avatar)
-                                <img src="{{ $visitor->avatar }}" alt=""
+                                <img src="{{ $visitor->avatar }}" alt="" loading="lazy" decoding="async"
                                     class="h-10 w-10 shrink-0 rounded-full border border-line object-cover"
                                     referrerpolicy="no-referrer">
                             @else

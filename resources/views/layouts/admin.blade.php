@@ -35,7 +35,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-full bg-ink font-sans text-text antialiased">
-<div x-data="{ sidebar: false }" class="min-h-screen lg:flex">
+<div x-data="{ sidebar: false }" class="admin-shell min-h-screen lg:flex">
 
     {{-- Sidebar (desktop) --}}
     <aside class="hidden w-72 shrink-0 flex-col border-r border-line bg-surface lg:flex">
