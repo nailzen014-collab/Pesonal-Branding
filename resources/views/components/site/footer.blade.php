@@ -17,7 +17,7 @@
         <div class="lg:col-span-2 text-center md:text-left">
             <a href="{{ route('home') }}" class="group inline-flex items-center gap-3 mx-auto md:mx-0">
                 <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-glow-soft transition duration-500 group-hover:scale-105">
-                    <x-icon name="code" class="h-5 w-5 text-white" />
+                    <x-icon name="code" class="h-5 w-5 text-gold-soft" />
                 </span>
                 <span class="font-display text-2xl font-bold tracking-tight text-text">
                     {{ $name }}<span class="text-primary">.</span>
@@ -105,7 +105,7 @@
 
 {{-- Tombol WhatsApp mengambang: kontak selalu terjangkau dari halaman mana pun --}}
 <a href="{{ $wa }}" target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
-    class="group fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-white shadow-glow-primary transition duration-500 ease-smooth hover:-translate-y-1 hover:bg-primary-dark">
+    class="group fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-gold-soft shadow-glow-primary transition duration-500 ease-smooth hover:-translate-y-1 hover:bg-primary-dark">
     <x-icon name="whatsapp" class="h-5 w-5" />
     <span class="hidden text-sm font-semibold sm:inline">Chat WA</span>
 </a>

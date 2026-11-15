@@ -27,6 +27,12 @@ export default {
                     deep: '#7A0C16',
                     soft: '#FF4D5E',
                 },
+                gold: {
+                    DEFAULT: '#D4AF37',
+                    soft: '#F5D77A',
+                    dark: '#B8912A',
+                    deep: '#7A5F14',
+                },
                 ink: {
                     DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
                     soft: 'rgb(var(--ink-soft) / <alpha-value>)',
@@ -77,7 +83,7 @@ export default {
                     'radial-gradient(45% 45% at 15% 10%, rgb(225 29 46 / 0.22), transparent 60%), radial-gradient(40% 40% at 85% 20%, rgb(122 12 22 / 0.35), transparent 60%), radial-gradient(50% 50% at 50% 90%, rgb(225 29 46 / 0.12), transparent 65%)',
                 'text-shine': 'var(--text-shine)',
                 'border-gradient':
-                    'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(var(--text) / 0.08) 45%, rgb(225 29 46 / 0.15))',
+                    'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(212 175 55 / 0.35) 45%, rgb(225 29 46 / 0.15))',
             },
 
             spacing: {

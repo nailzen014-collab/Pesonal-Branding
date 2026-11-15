@@ -76,7 +76,7 @@
 </head>
 <body class="min-h-screen bg-ink text-text">
     <a href="#konten"
-        class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-white">
+        class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-gold-soft">
         Lewati ke konten utama
     </a>
 

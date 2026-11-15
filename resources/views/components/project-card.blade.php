@@ -25,7 +25,7 @@
         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 transition duration-500 group-hover:opacity-100"></div>
 
         @if ($project->is_featured)
-            <span class="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-2xs font-semibold uppercase tracking-wider text-white shadow-glow-soft">
+            <span class="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-2xs font-semibold uppercase tracking-wider text-gold-soft shadow-glow-soft">
                 Terbaru
             </span>
         @endif

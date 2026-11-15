@@ -30,7 +30,7 @@
         <div class="flex h-full items-center justify-between gap-4 px-3 sm:px-5">
             <a href="{{ route('home') }}" class="group flex items-center gap-2.5 flex-shrink-0">
                 <span class="relative inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-glow-soft transition duration-500 group-hover:scale-105">
-                    <x-icon name="code" class="h-5 w-5 text-white" />
+                    <x-icon name="code" class="h-5 w-5 text-gold-soft" />
                 </span>
                 <span class="font-display text-lg font-bold tracking-tight text-text hidden sm:block">
                     {{ $name }}<span class="text-primary">.</span>
@@ -48,7 +48,7 @@
                         <a href="{{ route($item['route']) }}"
                             @class([
                                 'block rounded-full px-4 py-1.5 text-sm font-medium transition duration-300 hover:-translate-y-0.5 active:scale-95',
-                                'bg-primary text-white shadow-glow-soft' => $active,
+                                'bg-primary text-gold-soft shadow-glow-soft' => $active,
                                 'text-muted hover:bg-surface-2 hover:text-text' => ! $active,
                             ])
                             @if ($active) aria-current="page" @endif>

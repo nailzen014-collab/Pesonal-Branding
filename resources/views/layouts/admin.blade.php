@@ -59,7 +59,7 @@
                     {{ $item['label'] }}
 
                     @if ($item['route'] === 'admin.messages.index' && ($unreadCount ?? 0) > 0)
-                        <span class="ml-auto rounded-full bg-primary px-2 py-0.5 text-2xs font-semibold text-white">
+                        <span class="ml-auto rounded-full bg-primary px-2 py-0.5 text-2xs font-semibold text-gold-soft">
                             {{ $unreadCount }}
                         </span>
                     @endif

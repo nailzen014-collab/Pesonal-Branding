@@ -11,12 +11,12 @@
         transition duration-400 ease-smooth disabled:cursor-not-allowed disabled:opacity-50';
 
     $styles = match ($variant) {
-        'primary' => 'bg-primary text-white shadow-glow-soft hover:-translate-y-0.5 hover:bg-primary-dark hover:shadow-glow-primary',
+        'primary' => 'bg-primary text-gold-soft shadow-glow-soft hover:-translate-y-0.5 hover:bg-primary-dark hover:shadow-glow-primary',
         'secondary' => 'border border-primary/60 bg-primary/5 text-primary hover:-translate-y-0.5 hover:border-primary hover:bg-primary/15 hover:shadow-glow-soft',
         'outline' => 'border border-line bg-surface-2/60 text-text hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary',
         'ghost' => 'text-muted hover:-translate-y-0.5 hover:text-text',
         'danger' => 'border border-red-500/60 text-red-400 hover:-translate-y-0.5 hover:bg-red-500/10',
-        default => 'bg-primary text-white hover:-translate-y-0.5 hover:bg-primary-dark',
+        default => 'bg-primary text-gold-soft hover:-translate-y-0.5 hover:bg-primary-dark',
     };
 
     $tag = $href ? 'a' : 'button';
@@ -30,7 +30,7 @@
 >
     {{-- Kilau yang menyapu saat hover (hanya tombol dengan latar) --}}
     @if (in_array($variant, ['primary', 'secondary'], true))
-        <span class="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover/btn:translate-x-full"
+        <span class="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-gold/30 to-transparent transition-transform duration-700 group-hover/btn:translate-x-full"
             aria-hidden="true"></span>
     @endif
 

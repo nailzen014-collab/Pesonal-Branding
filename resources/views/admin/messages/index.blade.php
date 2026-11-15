@@ -22,7 +22,7 @@
                 Belum dibaca
                 <span @class([
                     'ms-1 rounded-full px-1.5 py-0.5 text-2xs font-semibold',
-                    'bg-primary text-white' => $unreadCount > 0,
+                    'bg-primary text-gold-soft' => $unreadCount > 0,
                     'bg-surface-2 text-muted' => $unreadCount === 0,
                 ])>{{ $unreadCount }}</span>
             </a>
