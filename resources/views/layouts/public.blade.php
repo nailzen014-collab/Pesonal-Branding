@@ -75,6 +75,8 @@
     @stack('head')
 </head>
 <body class="min-h-screen bg-ink text-text">
+    <x-site.scroll-progress />
+
     <a href="#konten"
         class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-gold-soft">
         Lewati ke konten utama
@@ -87,6 +89,8 @@
     </main>
 
     <x-site.footer />
+
+    <x-site.back-to-top />
 
     {{-- Animasi `.reveal` ditangani resources/js/reveal.js --}}
     @stack('scripts')

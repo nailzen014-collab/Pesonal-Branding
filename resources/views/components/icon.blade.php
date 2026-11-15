@@ -23,6 +23,8 @@
         'external' => '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/>',
         'download' => '<path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/>',
         'arrow-right' => '<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',
+        'arrow-left' => '<path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/>',
+        'arrow-up' => '<path d="M12 19V5"/><path d="M6 11l6-6 6 6"/>',
         'check' => '<path d="M4 12.5l5 5L20 6.5"/>',
         'clock' => '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
         'award' => '<circle cx="12" cy="9" r="5"/><path d="M8.5 13.5L7 22l5-2.5L17 22l-1.5-8.5"/>',

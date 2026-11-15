@@ -4,6 +4,7 @@ import { initEffects, initTilt } from './effects';
 import { initTheme } from './theme';
 import { initTypewriters } from './typewriter';
 import { initSmoothScroll } from './smooth-scroll';
+import { initScrollUI } from './scroll-ui';
 
 /**
  * Tombol "muat lebih banyak" ala GitHub pada halaman /portofolio.
@@ -98,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initEffects();
     initTheme();
     initTypewriters();
+    initScrollUI();
 
     // Penanda untuk safety net di layouts/public.blade.php: bila bundel ini
     // gagal dieksekusi, script inline memaksa konten `.reveal` tampil
