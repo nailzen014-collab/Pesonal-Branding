@@ -66,7 +66,20 @@
       "Bash(cd /c/laragon/www/Personal-Branding && npm run build 2>&1 | grep -E \"built|error\" && grep -o '\\\\.scroll-stage[^{]*{[^}]*}' public/build/assets/*.css)",
       "Bash(cd /c/laragon/www/Personal-Branding && grep -o '.\\\\{0,40\\\\}\\\\.scroll-stage:has\\(.sticky\\)[^{]*{[^}]*}' public/build/assets/*.css | head -5; echo \"---\"; grep -o '@media \\(prefers-reduced-motion:reduce\\){.\\\\{0,300\\\\}' public/build/assets/*.css)",
       "Bash(cd /c/laragon/www/Personal-Branding && php artisan test --compact tests/Feature/PublicPagesTest.php 2>&1 | tail -4)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(curl -s -o /tmp/projects.html -w \"HTTP %{http_code}\\\\n\" https://personal-branding-neon.vercel.app/projects ; grep -o \"Personal-Branding\\\\|WORKSHOP-TIX\\\\|Pesonal-Branding\\\\|schoolhub\\\\|Repo\" /tmp/projects.html | sort | uniq -c | head)",
+      "Bash(php artisan route:list --except-vendor 2>/dev/null | grep -i -E \"github|project|home|/\" | head -40)",
+      "Bash(curl -s -L -o /tmp/home.html -w \"HTTP %{http_code} size=%{size_download}\\\\n\" https://personal-branding-neon.vercel.app/ ; grep -o \"WORKSHOP-TIX\\\\|Tiket-KebunRaya\\\\|schoolhub\\\\|github.com/nailzen014-collab/[A-Za-z0-9_.-]*\" /tmp/home.html | sort | uniq -c | head -20)",
+      "Bash(sed -n '1,20p' \"C:/laragon/www/WORKSHOP-TIX/blog/2026-11-16-panduan-alur-deployment-vs-code-firebase-vercel.md\"; echo \"---\"; ls C:/laragon/www/WORKSHOP-TIX/blog | head)",
+      "Read(//c/laragon/www/WORKSHOP-TIX/blog/**)",
+      "Bash(curl -s https://api.github.com/rate_limit | grep -A3 '\"core\"' | head -6)",
+      "Bash(php artisan tinker --execute 'config\\([\"services.github.token\" => null]\\); $s = app\\(App\\\\Services\\\\GithubService::class\\); $r = $s->repositories\\(fresh: true\\); echo \"repos=\".count\\($r\\).PHP_EOL;' 2>&1 | tail -5)",
+      "Bash(git log -1 --format=\"HEAD deployed at: %ci\" && echo \"---\" && git show 3d7490c --stat | head -20 && echo \"---\" && git show 3d7490c -- app/Services/GithubBlogImporter.php | head -80)",
+      "Bash(ls -a | grep -i env; echo \"---\"; git log --oneline -3 --since=\"2026-11-16 00:00\"; echo \"--- origin sync:\"; git fetch origin -q && git status -sb | head -2)",
+      "Bash(cat .env.deploy 2>/dev/null | sed -E 's/\\(TOKEN|SECRET|PASSWORD|KEY\\)=.*/\\\\1=<hidden>/' | head -50; echo \"===\"; cat .env.local 2>/dev/null | sed -E 's/\\(TOKEN|SECRET|PASSWORD|KEY\\)=.*/\\\\1=<hidden>/' | head -30)",
+      "Bash(php artisan route:list --except-vendor 2>/dev/null | grep -v \"admin/\" | head -40)",
+      "Bash(php artisan test --compact tests/Feature/GithubBlogImportTest.php 2>&1 | tail -25)",
+      "Bash(for f in .env .env.deploy; do v=$\\(grep '^GITHUB_TOKEN' \"$f\" | cut -d= -f2- | tr -d '\"'\\); echo \"$f: length=${#v} prefix=${v:0:4}\"; done)"
     ]
   }
 }

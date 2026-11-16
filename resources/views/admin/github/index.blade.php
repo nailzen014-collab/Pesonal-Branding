@@ -5,12 +5,16 @@
 
 @section('content')
     <x-ui.alert />
+    <x-ui.alert type="error" />
 
     @unless ($apiAvailable)
         <div class="card">
             <div class="flex flex-col items-center py-14 text-center">
                 <x-icon name="github" class="h-9 w-9 text-muted" />
                 <h2 class="mt-5 font-display text-lg font-semibold text-text">GitHub belum terhubung</h2>
+                @if ($apiError)
+                    <p class="mt-2 max-w-md text-sm text-primary">{{ $apiError }}</p>
+                @endif
                 <p class="mt-2 max-w-md text-sm text-muted">
                     Isi <code class="font-mono text-primary">GITHUB_TOKEN</code> dan
                     <code class="font-mono text-primary">GITHUB_USERNAME</code> pada file

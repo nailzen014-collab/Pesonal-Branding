@@ -43,7 +43,26 @@ class GithubBlogImporter
         // Slug yang sudah "dimiliki" di sesi ini; sumber pertama menang.
         $claimed = [];
 
-        foreach ($this->sources($fresh) as [$repo, $error]) {
+        $sources = $this->sources($fresh);
+
+        // Daftar repo kosong bisa berarti "akun memang tidak punya repo" atau
+        // "API GitHub menolak". Bedakan supaya admin tidak mengejar hantu.
+        if ($sources === [] && ($error = $this->github->lastError()) !== null) {
+            $summary['errors']++;
+            $summary['details'][] = [
+                'repo' => 'Daftar repository',
+                'files' => 0,
+                'created' => 0,
+                'updated' => 0,
+                'skipped' => 0,
+                'conflicts' => 0,
+                'error' => $error,
+                'conflict_slugs' => [],
+                'skipped_files' => [],
+            ];
+        }
+
+        foreach ($sources as [$repo, $error]) {
             $detail = [
                 'repo' => $repo['full_name'] ?? '',
                 'files' => 0,

@@ -18,9 +18,22 @@ use Throwable;
  */
 class GithubService
 {
+    /**
+     * Pesan kegagalan terakhir saat mengambil daftar repository.
+     *
+     * Dipakai agar halaman admin bisa membedakan "tidak ada repo" dengan
+     * "API GitHub menolak/gagal" — sebelumnya keduanya tampil sama.
+     */
+    private ?string $lastError = null;
+
     public function username(): string
     {
         return (string) config('services.github.username', 'nailzen014-collab');
+    }
+
+    public function lastError(): ?string
+    {
+        return $this->lastError;
     }
 
     /**
@@ -41,35 +54,65 @@ class GithubService
             Cache::forget($key);
         }
 
-        return Cache::remember($key, now()->addMinutes($minutes), function () use ($sort, $includeForks): array {
-            try {
-                $response = Http::withHeaders($this->headers())
-                    ->timeout(10)
-                    ->get($this->apiUrl());
+        $this->lastError = null;
 
-                if ($response->failed()) {
-                    Log::warning('GitHub API gagal', ['status' => $response->status()]);
+        if (($cached = Cache::get($key)) !== null) {
+            return $cached;
+        }
 
-                    return [];
-                }
+        try {
+            $response = Http::withHeaders($this->headers())
+                ->timeout(10)
+                ->get($this->apiUrl());
 
-                $repositories = collect($response->json() ?? [])
-                    ->when(! $includeForks, fn ($repos) => $repos->reject(
-                        fn (array $repo) => (bool) ($repo['fork'] ?? false)
-                    ))
-                    ->map(fn (array $repo) => $this->normalize($repo));
+            if ($response->failed()) {
+                $this->lastError = $this->describeFailure($response->status());
 
-                // Halaman admin menampilkan yang paling populer, daftar proyek
-                // publik mengikuti urutan pembaruan terakhir dari GitHub.
-                return ($sort === 'stars' ? $repositories->sortByDesc('stars') : $repositories)
-                    ->values()
-                    ->all();
-            } catch (Throwable $exception) {
-                Log::warning('GitHub API tidak bisa dihubungi: '.$exception->getMessage());
+                Log::warning('GitHub API gagal', [
+                    'status' => $response->status(),
+                    'body' => mb_substr($response->body(), 0, 200),
+                ]);
 
+                // Jangan cache kegagalan: sinkronisasi berikutnya harus
+                // mencoba lagi, bukan memakai hasil kosong selama 1 jam.
                 return [];
             }
-        });
+
+            $repositories = collect($response->json() ?? [])
+                ->when(! $includeForks, fn ($repos) => $repos->reject(
+                    fn (array $repo) => (bool) ($repo['fork'] ?? false)
+                ))
+                ->map(fn (array $repo) => $this->normalize($repo));
+
+            // Halaman admin menampilkan yang paling populer, daftar proyek
+            // publik mengikuti urutan pembaruan terakhir dari GitHub.
+            $repositories = ($sort === 'stars' ? $repositories->sortByDesc('stars') : $repositories)
+                ->values()
+                ->all();
+
+            Cache::put($key, $repositories, now()->addMinutes($minutes));
+
+            return $repositories;
+        } catch (Throwable $exception) {
+            $this->lastError = 'GitHub API tidak bisa dihubungi.';
+
+            Log::warning('GitHub API tidak bisa dihubungi: '.$exception->getMessage());
+
+            return [];
+        }
+    }
+
+    /**
+     * Pesan yang bisa langsung ditampilkan admin saat panggilan API gagal.
+     */
+    private function describeFailure(int $status): string
+    {
+        return match ($status) {
+            401 => 'Token GitHub tidak valid (HTTP 401). Perbarui GITHUB_TOKEN.',
+            403 => 'Kuota/akses GitHub ditolak (HTTP 403). Set GITHUB_TOKEN agar batas request jauh lebih besar.',
+            404 => 'Akun GitHub tidak ditemukan (HTTP 404). Cek GITHUB_USERNAME.',
+            default => 'GitHub API gagal (HTTP '.$status.').',
+        };
     }
 
     /**

@@ -34,6 +34,7 @@ class GithubSyncController extends Controller
             'repositories' => $repositories,
             'importedIds' => $importedIds,
             'apiAvailable' => $repositories !== [],
+            'apiError' => $this->github->lastError(),
         ]);
     }
 
@@ -95,16 +96,23 @@ class GithubSyncController extends Controller
         // di halaman admin, bukan hanya di log.
         $summary = $blog->sync(fresh: true);
 
-        return redirect()
+        $redirect = redirect()
             ->route('admin.github.index')
-            ->with('success', sprintf(
-                'Sinkronisasi selesai: %d artikel baru, %d diperbarui, %d dilewati, %d konflik.',
-                $summary['created'],
-                $summary['updated'],
-                $summary['skipped'],
-                $summary['conflicts'],
-            ))
             ->with('blog_sync', $summary)
             ->with('project_sync', $projects);
+
+        if ($summary['repositories'] === 0 && $summary['errors'] > 0) {
+            $reason = collect($summary['details'])->first()['error'] ?? 'Tidak ada repository yang bisa dibaca.';
+
+            return $redirect->with('error', 'Sinkronisasi gagal: '.$reason);
+        }
+
+        return $redirect->with('success', sprintf(
+            'Sinkronisasi selesai: %d artikel baru, %d diperbarui, %d dilewati, %d konflik.',
+            $summary['created'],
+            $summary['updated'],
+            $summary['skipped'],
+            $summary['conflicts'],
+        ));
     }
 }

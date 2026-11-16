@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Post;
+use App\Services\GithubService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -91,6 +92,52 @@ class GithubBlogImportTest extends TestCase
             ->assertSuccessful();
 
         $this->assertSame(0, Post::count());
+    }
+
+    public function test_kegagalan_api_github_dilaporkan_bukan_dianggap_tidak_ada_repo(): void
+    {
+        Http::fake([
+            'https://api.github.com/users/*/repos*' => Http::response(['message' => 'API rate limit exceeded'], 403),
+        ]);
+
+        $this->artisan('blog:import-github', ['--user' => 'blogger', '--fresh' => true])
+            ->expectsOutputToContain('HTTP 403')
+            ->assertSuccessful();
+
+        $this->assertSame(0, Post::count());
+    }
+
+    public function test_kegagalan_api_github_tidak_disimpan_di_cache(): void
+    {
+        config(['services.github.username' => 'blogger']);
+
+        Http::fake([
+            'https://api.github.com/users/blogger/repos*' => Http::sequence()
+                ->push(['message' => 'API rate limit exceeded'], 403)
+                ->push([[
+                    'id' => 42,
+                    'name' => 'catatan',
+                    'full_name' => 'blogger/catatan',
+                    'description' => 'Catatan',
+                    'language' => 'PHP',
+                    'html_url' => 'https://github.com/blogger/catatan',
+                    'stargazers_count' => 0,
+                    'forks_count' => 0,
+                    'topics' => [],
+                    'fork' => false,
+                    'private' => false,
+                    'default_branch' => 'main',
+                    'updated_at' => '2026-01-01T00:00:00Z',
+                ]]),
+        ]);
+
+        $github = app(GithubService::class);
+
+        $this->assertSame([], $github->repositories());
+        $this->assertNotNull($github->lastError());
+
+        $this->assertCount(1, $github->repositories());
+        $this->assertNull($github->lastError());
     }
 
     /**
