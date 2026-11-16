@@ -3,7 +3,8 @@ import forms from '@tailwindcss/forms';
 
 /**
  * Design system website personal branding.
- * Token warna mengikuti PRD bagian 11.1 (tema gelap, aksen merah).
+ * Token warna mengikuti PRD bagian 11.1 (tema gelap, maksimal tiga warna:
+ * merah, hitam, dan aksen rust #9A3412).
  *
  * Konsep: "design token" = nama warna yang dipakai konsisten di seluruh
  * website. Dengan begitu, mengganti tema cukup di file ini, tidak perlu
@@ -28,10 +29,10 @@ export default {
                     soft: '#FF4D5E',
                 },
                 gold: {
-                    DEFAULT: '#D4AF37',
-                    soft: '#F5D77A',
-                    dark: '#B8912A',
-                    deep: '#7A5F14',
+                    DEFAULT: '#9A3412',
+                    soft: '#F1C3AE',
+                    dark: '#7C2A0E',
+                    deep: '#5A1F0B',
                 },
                 ink: {
                     DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
@@ -83,7 +84,7 @@ export default {
                     'radial-gradient(45% 45% at 15% 10%, rgb(225 29 46 / 0.22), transparent 60%), radial-gradient(40% 40% at 85% 20%, rgb(122 12 22 / 0.35), transparent 60%), radial-gradient(50% 50% at 50% 90%, rgb(225 29 46 / 0.12), transparent 65%)',
                 'text-shine': 'var(--text-shine)',
                 'border-gradient':
-                    'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(212 175 55 / 0.35) 45%, rgb(225 29 46 / 0.15))',
+                    'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(154 52 18 / 0.45) 45%, rgb(225 29 46 / 0.15))',
             },
 
             spacing: {

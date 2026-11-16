@@ -65,7 +65,8 @@
       "Bash(cd /c/laragon/www/Personal-Branding && grep -rn \"sticky\" resources/views/ resources/js/ resources/css/ )",
       "Bash(cd /c/laragon/www/Personal-Branding && npm run build 2>&1 | grep -E \"built|error\" && grep -o '\\\\.scroll-stage[^{]*{[^}]*}' public/build/assets/*.css)",
       "Bash(cd /c/laragon/www/Personal-Branding && grep -o '.\\\\{0,40\\\\}\\\\.scroll-stage:has\\(.sticky\\)[^{]*{[^}]*}' public/build/assets/*.css | head -5; echo \"---\"; grep -o '@media \\(prefers-reduced-motion:reduce\\){.\\\\{0,300\\\\}' public/build/assets/*.css)",
-      "Bash(cd /c/laragon/www/Personal-Branding && php artisan test --compact tests/Feature/PublicPagesTest.php 2>&1 | tail -4)"
+      "Bash(cd /c/laragon/www/Personal-Branding && php artisan test --compact tests/Feature/PublicPagesTest.php 2>&1 | tail -4)",
+      "Bash(npm run:*)"
     ]
   }
 }
