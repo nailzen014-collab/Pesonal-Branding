@@ -105,7 +105,8 @@
 
 {{-- Tombol WhatsApp mengambang: kontak selalu terjangkau dari halaman mana pun --}}
 <a href="{{ $wa }}" target="_blank" rel="noopener noreferrer" aria-label="Hubungi via WhatsApp"
-    class="group fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-gold-soft shadow-glow-primary transition duration-500 ease-smooth hover:-translate-y-1 hover:bg-primary-dark">
-    <x-icon name="whatsapp" class="h-5 w-5" />
-    <span class="hidden text-sm font-semibold sm:inline">Chat WA</span>
+    class="group fixed right-6 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-gold-soft shadow-glow-primary transition duration-500 ease-smooth hover:-translate-y-1 hover:bg-primary-dark [bottom:calc(1.5rem+env(safe-area-inset-bottom))]">
+    <span class="wa-halo" aria-hidden="true"></span>
+    <x-icon name="whatsapp" class="relative h-5 w-5" />
+    <span class="relative hidden text-sm font-semibold sm:inline">Chat WA</span>
 </a>

@@ -79,7 +79,27 @@
       "Bash(cat .env.deploy 2>/dev/null | sed -E 's/\\(TOKEN|SECRET|PASSWORD|KEY\\)=.*/\\\\1=<hidden>/' | head -50; echo \"===\"; cat .env.local 2>/dev/null | sed -E 's/\\(TOKEN|SECRET|PASSWORD|KEY\\)=.*/\\\\1=<hidden>/' | head -30)",
       "Bash(php artisan route:list --except-vendor 2>/dev/null | grep -v \"admin/\" | head -40)",
       "Bash(php artisan test --compact tests/Feature/GithubBlogImportTest.php 2>&1 | tail -25)",
-      "Bash(for f in .env .env.deploy; do v=$\\(grep '^GITHUB_TOKEN' \"$f\" | cut -d= -f2- | tr -d '\"'\\); echo \"$f: length=${#v} prefix=${v:0:4}\"; done)"
+      "Bash(for f in .env .env.deploy; do v=$\\(grep '^GITHUB_TOKEN' \"$f\" | cut -d= -f2- | tr -d '\"'\\); echo \"$f: length=${#v} prefix=${v:0:4}\"; done)",
+      "Bash(ls -la && echo \"---\" && cat package.json && echo \"---\" && cat composer.json | head -40)",
+      "Bash(ls -la public/images/ 2>/dev/null; echo \"---\"; find public -maxdepth 2 -type f \\\\\\( -iname '*.jpg' -o -iname '*.png' -o -iname '*.webp' -o -iname '*.avif' -o -iname '*.svg' \\\\\\) -exec du -h {} \\\\; 2>/dev/null | sort -k2)",
+      "Bash(php:*)",
+      "Bash(cat postcss.config.js; echo \"---\"; node -e \"console.log\\(require\\('./node_modules/tailwindcss/package.json'\\).version\\)\" 2>/dev/null; node -e \"console.log\\('vite', require\\('./node_modules/vite/package.json'\\).version\\)\" 2>/dev/null; echo \"---\"; ls public/build 2>/dev/null | head)",
+      "Bash(ls -la .ai 2>/dev/null || echo \"no .ai dir\"; echo \"---\"; grep -rn \"data-tilt\\\\|reveal\\\\|scroll-stage\" resources/views/pages resources/views/components --include=*.blade.php -l)",
+      "Bash(npm run build 2>&1 | tail -30)",
+      "Bash(ls \"/c/Program Files/Google/Chrome/Application/chrome.exe\" 2>/dev/null; ls \"/c/Program Files \\(x86\\)/Microsoft/Edge/Application/msedge.exe\" 2>/dev/null; ls \"/c/Program Files/Microsoft/Edge/Application/msedge.exe\" 2>/dev/null; echo \"---\"; php artisan --version)",
+      "Bash(sleep 2; curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:8123/; curl -s http://127.0.0.1:8123/ | grep -o \"text-display-hero\\\\|avatar-ring\\\\|text-display-section\" | sort -u)",
+      "Bash(tail:*)",
+      "Bash(grep -n \"production.ERROR\\\\|local.ERROR\" storage/logs/laravel.log | tail -3; echo \"---\"; grep -n \"APP_KEY\\\\|APP_ENV\\\\|DB_\" .env | sed 's/=.*/=<hidden>/')",
+      "Bash(sed -n '23,28p' .env; echo \"---\"; php artisan key:generate --show)",
+      "Bash(ls -la database/*.sqlite 2>/dev/null || echo \"no sqlite file\")",
+      "Bash(APP_KEY='base64:ho6/rzGJLcn+RnNnGR/7bcHrOOJIxCVh8j6aHFlSS7o=' php artisan serve --host=127.0.0.1 --port=8123)",
+      "Bash(sleep 2; curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:8123/; curl -s http://127.0.0.1:8123/ | grep -o \"text-display-hero\\\\|avatar-ring\\\\|text-display-section\\\\|wa-halo\\\\|timeline-dot\" | sort | uniq -c)",
+      "Bash(mkdir -p /tmp/pb-shots && CHROME=\"/c/Program Files/Google/Chrome/Application/chrome.exe\" && \"$CHROME\" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=390,844 --virtual-time-budget=3500 --screenshot=/tmp/pb-shots/mobile.png http://127.0.0.1:8123/ >/dev/null 2>&1; \"$CHROME\" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1280,800 --virtual-time-budget=3500 --screenshot=/tmp/pb-shots/laptop.png http://127.0.0.1:8123/ >/dev/null 2>&1; \"$CHROME\" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1600,1000 --virtual-time-budget=3500 --screenshot=/tmp/pb-shots/desktop.png http://127.0.0.1:8123/ >/dev/null 2>&1; ls -la /tmp/pb-shots)",
+      "Bash(node -e \"for \\(const p of ['puppeteer','puppeteer-core','playwright','playwright-core']\\) { try { console.log\\(p, require.resolve\\(p\\)\\) } catch\\(e\\) {} }\"; echo \"---\"; ls \"$LOCALAPPDATA/ms-playwright\" 2>/dev/null | head; echo \"---\"; \"/c/Program Files/Google/Chrome/Application/chrome.exe\" --version)",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --remote-debugging-port=9223 --user-data-dir=/tmp/pb-chrome-profile --no-first-run --hide-scrollbars about:blank)",
+      "Bash(sleep 2; node /tmp/cdp-shot.mjs /tmp/pb-shots/mobile2.png 390 844 2 http://127.0.0.1:8123/ 0; node /tmp/cdp-shot.mjs /tmp/pb-shots/mobile-mid.png 390 844 2 http://127.0.0.1:8123/ 2200)",
+      "Bash(node /tmp/cdp-shot.mjs /tmp/pb-shots/m-stats.png 390 844 2 http://127.0.0.1:8123/ 1100; node /tmp/cdp-shot.mjs /tmp/pb-shots/m-projects.png 390 844 2 http://127.0.0.1:8123/ 4900; node /tmp/cdp-shot.mjs /tmp/pb-shots/d-projects.png 1600 1000 1 http://127.0.0.1:8123/ 2300)",
+      "Bash(node /tmp/cdp-shot.mjs /tmp/pb-shots/portofolio-desktop.png 1440 900 1 http://127.0.0.1:8123/portofolio 0; node /tmp/cdp-shot.mjs /tmp/pb-shots/tentang-mobile.png 390 844 2 http://127.0.0.1:8123/tentang 0; node /tmp/cdp-shot.mjs /tmp/pb-shots/kontak-mobile.png 390 844 2 http://127.0.0.1:8123/kontak 700)"
     ]
   }
 }

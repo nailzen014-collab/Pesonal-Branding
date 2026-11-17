@@ -32,7 +32,7 @@
                 </span>
             @endif
 
-            <h1 class="mt-5 font-display text-3xl font-bold leading-[1.1] text-text sm:text-5xl lg:text-6xl">{{ $title }}</h1>
+            <h1 class="mt-5 text-display-page font-bold text-text">{{ $title }}</h1>
 
             @if ($subtitle)
                 <p class="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{{ $subtitle }}</p>

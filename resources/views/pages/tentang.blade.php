@@ -125,7 +125,7 @@
                                     @foreach ($items as $item)
                                         <li class="relative">
                                             <span class="absolute -left-[2.35rem] flex h-5 w-5 items-center justify-center rounded-full border border-primary/40 bg-ink">
-                                                <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+                                                <span class="timeline-dot h-1.5 w-1.5 rounded-full bg-primary"></span>
                                             </span>
                                             <p class="font-mono text-2xs uppercase tracking-wider text-primary">{{ $item->period }}</p>
                                             <h4 class="mt-1 font-display text-base font-semibold text-text">{{ $item->title }}</h4>

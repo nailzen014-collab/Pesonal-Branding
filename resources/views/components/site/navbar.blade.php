@@ -28,14 +28,11 @@
         aria-label="Navigasi utama">
 
         <div class="flex h-full items-center justify-between gap-4 px-3 sm:px-5">
-            <a href="{{ route('home') }}" class="group flex items-center gap-2.5 flex-shrink-0">
-                <span class="relative inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-glow-soft transition duration-500 group-hover:scale-105">
+            <a href="{{ route('home') }}" class="group flex min-w-0 items-center gap-2.5">
+                <span class="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-glow-soft transition duration-500 group-hover:scale-105">
                     <x-icon name="code" class="h-5 w-5 text-gold-soft" />
                 </span>
-                <span class="font-display text-lg font-bold tracking-tight text-text hidden sm:block">
-                    {{ $name }}<span class="text-primary">.</span>
-                </span>
-                <span class="font-display text-lg font-bold tracking-tight text-text sm:hidden">
+                <span class="truncate font-display text-lg font-bold tracking-tight text-text">
                     {{ $name }}<span class="text-primary">.</span>
                 </span>
             </a>
@@ -84,8 +81,9 @@
                     @php $active = request()->routeIs($item['route']); @endphp
                     <li>
                         <a href="{{ route($item['route']) }}"
+                            style="animation-delay: {{ 30 + $loop->index * 45 }}ms"
                             @class([
-                                'block rounded-xl px-4 py-3 text-sm font-medium transition duration-300 active:scale-[0.99]',
+                                'animate-fade-up block rounded-xl px-4 py-3 text-sm font-medium transition duration-300 active:scale-[0.99]',
                                 'bg-primary/10 text-primary' => $active,
                                 'text-muted hover:bg-surface-2 hover:text-text' => ! $active,
                             ])>
@@ -94,13 +92,13 @@
                     </li>
                 @endforeach
 
-                <li class="pt-2">
+                <li class="animate-fade-up pt-2" style="animation-delay: 360ms">
                     <x-ui.button :href="$wa" icon="whatsapp" class="w-full" target="_blank" rel="noopener noreferrer">
                         Hubungi via WhatsApp
                     </x-ui.button>
                 </li>
 
-                <li class="pt-2 flex items-center gap-2">
+                <li class="flex animate-fade-up items-center gap-2 pt-2" style="animation-delay: 400ms">
                     <x-ui.theme-toggle class="!h-9 !w-9" />
                     <a href="{{ $github }}" target="_blank" rel="noopener noreferrer" class="icon-button group" aria-label="GitHub">
                         <x-icon name="github" class="transition-transform duration-300 group-hover:scale-110" />

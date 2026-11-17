@@ -22,15 +22,15 @@
         </span>
     @endif
 
-    <h2 class="text-3xl font-bold text-text sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1]">{{ $title }}</h2>
+    <h2 class="text-display-section font-bold text-text">{{ $title }}</h2>
 
     @if ($subtitle)
         <p class="mt-5 text-base leading-relaxed text-muted">{{ $subtitle }}</p>
     @endif
 
     <div @class([
-        'mt-7 h-1 rounded-full bg-gradient-to-r from-primary to-primary-dark',
+        'title-rule mt-7 h-1 rounded-full bg-gradient-to-r from-primary to-primary-dark',
         'w-16' => ! $center,
-        'mx-auto' => $center,
+        'mx-auto title-rule-center' => $center,
     ])></div>
 </div>

@@ -43,7 +43,7 @@
                     Tersedia untuk proyek & kolaborasi
                 </span>
 
-                <h1 class="mt-7 min-w-0 break-words text-shine font-display text-3xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl animate-fade-up"
+                <h1 class="mt-7 min-w-0 break-words text-shine text-display-hero font-display font-bold animate-fade-up"
                     style="animation-delay: 80ms">
                     {{ $siteName }}
                 </h1>
@@ -98,11 +98,12 @@
                         data-tilt>
                         <img src="{{ $photoUrl }}" alt="Foto profil {{ $siteName }}"
                             width="512" height="512" fetchpriority="high" decoding="async"
-                            class="aspect-square h-auto w-56 max-w-full rounded-[1.5rem] object-cover object-top sm:w-72 lg:w-80">
+                            class="aspect-square h-auto w-56 max-w-full rounded-[1.5rem] object-cover object-top sm:w-72 lg:w-80 xl:w-[22rem]">
 
                         <div class="pointer-events-none absolute inset-2 rounded-[1.5rem] bg-gradient-to-t from-ink/80 via-transparent to-transparent" aria-hidden="true"></div>
 
                         <span class="sheen-band" aria-hidden="true"></span>
+                        <span class="avatar-ring" aria-hidden="true"></span>
 
                         <div class="absolute bottom-4 left-4 right-4 flex flex-wrap items-center gap-2">
                             <span class="pill border-primary/30 bg-ink/70 text-text text-xs">
@@ -127,11 +128,11 @@
                 ['value' => $stats['repositories'], 'label' => 'Repository GitHub', 'icon' => 'github'],
                 ['value' => $stats['skills'], 'label' => 'Skill Terdaftar', 'icon' => 'sparkles'],
             ] as $stat)
-                <div class="group relative bg-surface/80 px-6 py-10 text-center transition duration-500 hover:bg-surface-2/80">
+                <div class="group relative bg-surface/80 px-4 py-8 text-center transition duration-500 hover:bg-surface-2/80 sm:px-6 sm:py-10">
                     <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-2/70 text-primary transition duration-500 group-hover:-translate-y-1 group-hover:border-primary/40 group-hover:shadow-glow-soft">
                         <x-icon :name="$stat['icon']" class="h-5 w-5" />
                     </span>
-                    <p class="mt-4 font-display text-3xl font-bold text-text sm:text-4xl"
+                    <p class="mt-4 font-display text-3xl font-bold tabular-nums text-text sm:text-4xl"
                         data-count-to="{{ $stat['value'] }}">{{ $stat['value'] }}</p>
                     <p class="mt-1 text-xs uppercase tracking-wider text-muted">{{ $stat['label'] }}</p>
                 </div>
@@ -268,7 +269,7 @@
                 @foreach ($experiences as $experience)
                     <li class="relative">
                         <span class="absolute -left-[2.6rem] flex h-6 w-6 items-center justify-center rounded-full border border-primary/40 bg-ink">
-                            <span class="h-2 w-2 rounded-full bg-primary"></span>
+                            <span class="timeline-dot h-2 w-2 rounded-full bg-primary"></span>
                         </span>
                         <p class="font-mono text-2xs uppercase tracking-wider text-primary">{{ $experience->period }}</p>
                         <h3 class="mt-1 font-display text-base font-semibold text-text">{{ $experience->title }}</h3>

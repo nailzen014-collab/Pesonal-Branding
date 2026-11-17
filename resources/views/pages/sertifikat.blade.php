@@ -24,7 +24,7 @@
         @else
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($certificates as $certificate)
-                    <article class="reveal card card-hover group/cert flex flex-col">
+                    <article class="reveal card card-hover-tilt group/cert flex flex-col" data-tilt>
                         @if ($certificate->image_url)
                             <img src="{{ $certificate->image_url }}" alt="Sertifikat {{ $certificate->title }}" loading="lazy"
                                 decoding="async" class="mb-6 aspect-video w-full rounded-xl object-cover">

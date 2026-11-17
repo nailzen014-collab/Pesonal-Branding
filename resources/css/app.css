@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Sudut gradien cincin foto hero; dianimasikan oleh `.avatar-ring`. */
+@property --ring-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+
 @layer base {
     /*
      * Design token warna sebagai CSS variable.
@@ -62,17 +69,31 @@
     html {
         scroll-behavior: smooth;
         scroll-padding-top: 6rem;
+        scrollbar-gutter: stable;
+        -webkit-tap-highlight-color: transparent;
     }
 
     body {
         @apply bg-ink font-sans text-text antialiased transition-colors duration-300;
+        font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+        font-optical-sizing: auto;
     }
 
+    /*
+     * Judul dipatahkan seimbang dan paragraf memakai pemenggalan "pretty"
+     * agar baris terakhir tidak menggantung satu kata di layar sempit.
+     * Keduanya diabaikan browser lama tanpa efek samping.
+     */
     h1,
     h2,
     h3,
     h4 {
         @apply font-display tracking-tight;
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
     }
 
     ::selection {
@@ -108,9 +129,9 @@
 }
 
 @layer components {
-    /* Wadah konten dengan lebar konsisten */
+    /* Wadah konten dengan lebar konsisten; desktop lebar memakai kolom ekstra */
     .container-page {
-        @apply mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8;
+        @apply mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8 2xl:max-w-[84rem];
     }
 
     /*
@@ -187,6 +208,22 @@
         opacity: 1;
     }
 
+    /*
+     * Perangkat sentuh tidak punya hover sungguhan: spotlight dan kilau
+     * hanya akan "menempel" setelah tap, sekaligus menambah kerja paint
+     * saat menggulir. Matikan sepenuhnya di sana.
+     */
+    @media (hover: none) {
+        .card::before,
+        .card::after {
+            display: none;
+        }
+
+        .card-hover:hover {
+            transform: none !important;
+        }
+    }
+
     .card-hover {
         @apply hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-card-lg;
     }
@@ -251,6 +288,88 @@
     /* Judul bagian */
     .eyebrow {
         @apply inline-flex items-center gap-2 text-2xs font-semibold uppercase tracking-[0.22em] text-primary;
+    }
+
+    /*
+     * Garis aksen di bawah judul bagian. Lebarnya tumbuh dari kiri saat
+     * kartu judul masuk viewport (induknya `.reveal`), jadi tidak perlu
+     * JavaScript tambahan. Transform murni sehingga tidak memicu layout.
+     */
+    .title-rule {
+        transform-origin: left center;
+        transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1) 120ms;
+    }
+
+    .title-rule-center {
+        transform-origin: center;
+    }
+
+    .reveal:not(.is-visible) .title-rule {
+        transform: scaleX(0);
+    }
+
+    /*
+     * Titik timeline yang berdenyut pelan setelah barisnya terlihat.
+     * Cincin memakai pseudo-element dengan transform + opacity saja.
+     */
+    .timeline-dot {
+        position: relative;
+    }
+
+    .timeline-dot::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 9999px;
+        border: 1px solid rgb(225 29 46 / 0.55);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .reveal.is-visible .timeline-dot::after {
+        animation: dot-ping 3s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
+
+    /*
+     * Cincin gradien yang berputar perlahan di bingkai foto hero.
+     * Hanya area garis 1px yang direpaint (lewat `--ring-angle`), jadi
+     * biayanya kecil dibanding menganimasikan gradient latar penuh.
+     * Browser tanpa @property tetap menampilkan gradien statis.
+     */
+    .avatar-ring {
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        border-radius: inherit;
+        pointer-events: none;
+        background: conic-gradient(
+            from var(--ring-angle),
+            rgb(241 195 174 / 0.7) 0deg,
+            rgb(225 29 46 / 0.75) 70deg,
+            transparent 150deg,
+            rgb(154 52 18 / 0.6) 240deg,
+            transparent 320deg,
+            rgb(241 195 174 / 0.7) 360deg
+        );
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: ring-spin 9s linear infinite;
+    }
+
+    /*
+     * Halo lembut di tombol WhatsApp mengambang. Cincin membesar lalu
+     * memudar; transform + opacity saja supaya tetap di compositor.
+     */
+    .wa-halo {
+        position: absolute;
+        inset: 0;
+        border-radius: 9999px;
+        border: 1.5px solid rgb(225 29 46 / 0.45);
+        pointer-events: none;
+        animation: halo-pulse 3.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
     }
 
     /* Link bergaris bawah animasi */
@@ -390,6 +509,29 @@
 }
 
 @layer utilities {
+    /*
+     * Skala judul fluid: ukuran mengikuti lebar viewport di antara batas
+     * minimum dan maksimum, sehingga transisi HP → laptop → desktop halus
+     * tanpa lompatan ukuran di breakpoint.
+     */
+    .text-display-hero {
+        font-size: clamp(2.25rem, 1.35rem + 4.4vw, 5rem);
+        line-height: 1.04;
+        letter-spacing: -0.035em;
+    }
+
+    .text-display-page {
+        font-size: clamp(2rem, 1.45rem + 2.2vw, 3.5rem);
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+    }
+
+    .text-display-section {
+        font-size: clamp(1.75rem, 1.4rem + 1.35vw, 2.75rem);
+        line-height: 1.12;
+        letter-spacing: -0.025em;
+    }
+
     /* Teks bergradien merah (untuk kata penekanan) */
     .text-gradient {
         @apply bg-gradient-to-r from-primary-soft via-primary to-primary-dark bg-clip-text text-transparent;
@@ -623,6 +765,38 @@
     }
 
     50% {
+        opacity: 0;
+    }
+}
+
+@keyframes ring-spin {
+    to {
+        --ring-angle: 360deg;
+    }
+}
+
+@keyframes dot-ping {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.8;
+    }
+
+    70%,
+    100% {
+        transform: scale(1.7);
+        opacity: 0;
+    }
+}
+
+@keyframes halo-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.55;
+    }
+
+    75%,
+    100% {
+        transform: scale(1.45);
         opacity: 0;
     }
 }

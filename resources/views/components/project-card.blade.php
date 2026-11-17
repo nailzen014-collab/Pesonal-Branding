@@ -8,7 +8,7 @@
     <a href="{{ route('portofolio.show', $project->slug) }}" class="card-media block" tabindex="-1" aria-hidden="true">
         @if ($project->thumbnail_url)
             <img src="{{ $project->thumbnail_url }}" alt="" loading="lazy" decoding="async"
-                class="h-full w-full object-cover transition duration-700 ease-smooth group-hover:scale-110">
+                class="h-full w-full object-cover transition duration-700 ease-smooth group-hover:scale-110 group-hover:brightness-110">
         @else
             {{-- Placeholder elegan saat proyek belum punya screenshot --}}
             <div class="flex h-full w-full items-center justify-center bg-dots">
@@ -51,7 +51,7 @@
         </div>
 
         {{-- mt-auto membuat tombol selalu menempel di bawah kartu --}}
-        <div class="mt-auto flex items-center gap-3 border-t border-line-soft pt-5">
+        <div class="mt-auto flex flex-wrap items-center gap-3 border-t border-line-soft pt-5">
             @if ($project->repo_url)
                 <x-ui.button :href="$project->repo_url" variant="secondary" icon="github" target="_blank" rel="noopener noreferrer">
                     Lihat Repo
