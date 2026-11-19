@@ -841,6 +841,113 @@ html.light .theme-icon-moon {
     animation: page-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
+.page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(ellipse at 50% 42%, rgb(225 29 46 / 0.12), transparent 42%),
+        rgb(var(--ink));
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 350ms ease, visibility 350ms ease;
+}
+
+.page-loader.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.page-loader__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    perspective: 700px;
+}
+
+.page-loader__mark {
+    position: relative;
+    display: grid;
+    width: 4.5rem;
+    height: 4.5rem;
+    place-items: center;
+    border: 1px solid rgb(225 29 46 / 0.28);
+    border-radius: 1.5rem;
+    background: rgb(var(--surface) / 0.8);
+    box-shadow: 0 0 40px rgb(225 29 46 / 0.16);
+    transform-style: preserve-3d;
+    animation: loader-3d 3s ease-in-out infinite;
+}
+
+.page-loader__mark::before {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgb(225 29 46 / 0.2);
+    border-radius: inherit;
+    background: linear-gradient(145deg, rgb(var(--surface-2)), rgb(var(--ink-soft)));
+    box-shadow: 0 12px 20px rgb(0 0 0 / 0.28);
+    content: '';
+    transform: translate3d(5px, 5px, -12px);
+}
+
+.page-loader__mark svg {
+    position: relative;
+    filter: drop-shadow(0 4px 5px rgb(225 29 46 / 0.45));
+    transform: translateZ(14px);
+}
+
+.page-loader__name {
+    color: rgb(var(--text));
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+.page-loader__bar {
+    width: 6rem;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: rgb(var(--line));
+}
+
+.page-loader__bar span {
+    display: block;
+    width: 40%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #b3121f, #ff4d5e);
+    animation: loader-progress 1.2s ease-in-out infinite;
+}
+
+@keyframes loader-3d {
+    0%,
+    100% {
+        transform: rotateX(-8deg) rotateY(-12deg);
+        box-shadow: 0 0 40px rgb(225 29 46 / 0.16);
+    }
+
+    50% {
+        transform: translateY(-5px) rotateX(10deg) rotateY(14deg);
+        box-shadow: 0 0 52px rgb(225 29 46 / 0.26);
+    }
+}
+
+@keyframes loader-progress {
+    from {
+        transform: translateX(-120%);
+    }
+
+    to {
+        transform: translateX(260%);
+    }
+}
+
 @keyframes dashboard-enter-left {
     from {
         opacity: 0;

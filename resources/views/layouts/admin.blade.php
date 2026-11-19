@@ -33,8 +33,18 @@
     @include('layouts.partial.theme-init')
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <noscript>
+        <style>
+            [data-page-loader] {
+                display: none !important;
+            }
+        </style>
+    </noscript>
 </head>
 <body class="min-h-full bg-ink font-sans text-text antialiased">
+<x-site.loader :site-name="$siteName" />
+
 <div x-data="{ sidebar: false }" class="admin-shell min-h-screen lg:flex">
 
     {{-- Sidebar (desktop) --}}

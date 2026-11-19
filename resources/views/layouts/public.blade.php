@@ -71,12 +71,18 @@
             .reveal:not(.is-visible) .skill-bar-fill {
                 transform: none !important;
             }
+
+            [data-page-loader] {
+                display: none !important;
+            }
         </style>
     </noscript>
 
     @stack('head')
 </head>
 <body class="min-h-screen bg-ink text-text">
+    <x-site.loader :site-name="$siteName" />
+
     <x-site.scroll-progress />
 
     <a href="#konten"
