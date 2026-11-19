@@ -877,8 +877,8 @@ html.light .theme-icon-moon {
     place-items: center;
     border: 1px solid rgb(225 29 46 / 0.28);
     border-radius: 1.5rem;
-    background: rgb(var(--surface) / 0.8);
-    box-shadow: 0 0 40px rgb(225 29 46 / 0.16);
+    background: linear-gradient(135deg, #e11d2e, #b3121f);
+    box-shadow: 0 0 40px rgb(225 29 46 / 0.3);
     transform-style: preserve-3d;
     animation: loader-3d 3s ease-in-out infinite;
 }
@@ -888,7 +888,7 @@ html.light .theme-icon-moon {
     inset: 0;
     border: 1px solid rgb(225 29 46 / 0.2);
     border-radius: inherit;
-    background: linear-gradient(145deg, rgb(var(--surface-2)), rgb(var(--ink-soft)));
+    background: linear-gradient(145deg, #b3121f, #7a0c16);
     box-shadow: 0 12px 20px rgb(0 0 0 / 0.28);
     content: '';
     transform: translate3d(5px, 5px, -12px);

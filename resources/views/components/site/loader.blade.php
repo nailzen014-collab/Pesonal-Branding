@@ -3,7 +3,7 @@
 <div data-page-loader class="page-loader" role="status" aria-label="Memuat {{ $siteName }}">
     <div class="page-loader__content">
         <div class="page-loader__mark" aria-hidden="true">
-            <x-icon name="sparkles" class="h-7 w-7 text-primary" />
+            <x-icon name="code" class="h-7 w-7 text-gold-soft" />
         </div>
 
         <p class="page-loader__name">{{ $siteName }}</p>
