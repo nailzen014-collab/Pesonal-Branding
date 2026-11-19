@@ -12,7 +12,10 @@
             ['label' => 'Skill', 'value' => $stats['skills'], 'icon' => 'sparkles', 'hint' => 'Terdaftar di halaman skills'],
             ['label' => 'Pesan Belum Dibaca', 'value' => $stats['unread_messages'], 'icon' => 'inbox', 'hint' => 'Total pesan masuk'],
         ] as $card)
-            <div class="card dashboard-gloss">
+            <div
+                class="card dashboard-gloss {{ $loop->odd ? 'dashboard-enter-left' : 'dashboard-enter-right' }}"
+                style="animation-delay: {{ $loop->index * 80 }}ms"
+            >
                 <div class="flex items-start justify-between">
                     <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
                         <x-icon :name="$card['icon']" class="h-5 w-5 text-primary" />
@@ -58,8 +61,11 @@
     @endphp
 
     {{-- Grafik skill --}}
-    <div class="mt-8 grid gap-6 xl:grid-cols-2">
-        <section class="card dashboard-gloss">
+    <div class="relative mt-8 grid gap-6 xl:grid-cols-2" x-data="{ activeSkill: null }">
+        <div class="dashboard-spike pointer-events-none absolute -left-3 top-28 hidden h-12 w-8 animate-drift bg-gradient-to-r from-primary/70 to-primary/10 opacity-70 sm:block" aria-hidden="true"></div>
+        <div class="dashboard-spike pointer-events-none absolute -right-3 bottom-20 hidden h-14 w-9 rotate-180 animate-float bg-gradient-to-r from-gold/60 to-primary/10 opacity-60 sm:block" aria-hidden="true"></div>
+
+        <section class="card dashboard-gloss dashboard-enter-left" style="animation-delay: 220ms">
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <h2 class="font-display text-lg font-semibold text-text">Level Skill per Kategori</h2>
@@ -69,9 +75,22 @@
             </div>
 
             <div class="mt-5 grid items-center gap-5 sm:grid-cols-[minmax(0,1fr)_auto]">
-                <svg viewBox="0 0 320 276" class="mx-auto w-full max-w-sm" role="img" aria-labelledby="skills-radar-title skills-radar-description">
+                <svg viewBox="0 0 320 276" class="mx-auto w-full max-w-sm cursor-crosshair" role="img" aria-labelledby="skills-radar-title skills-radar-description">
                     <title id="skills-radar-title">Rata-rata level skill per kategori</title>
                     <desc id="skills-radar-description">Grafik radar membandingkan rata-rata level Frontend, Backend, Database, dan Tools.</desc>
+
+                    <g class="fill-none stroke-line/70" stroke-width="1">
+                        <circle cx="160" cy="138" r="25"></circle>
+                        <circle cx="160" cy="138" r="50"></circle>
+                        <circle cx="160" cy="138" r="75"></circle>
+                        <circle cx="160" cy="138" r="100"></circle>
+                    </g>
+                    <g class="fill-current text-muted/70" font-family="JetBrains Mono, monospace" font-size="8">
+                        <text x="164" y="135">25</text>
+                        <text x="164" y="110">50</text>
+                        <text x="164" y="85">75</text>
+                        <text x="164" y="60">100</text>
+                    </g>
 
                     <g class="text-line" fill="none" stroke="currentColor" stroke-width="1">
                         <polygon points="160,113 187.5,138 160,163 132.5,138"></polygon>
@@ -84,9 +103,32 @@
                         <line x1="160" y1="138" x2="50" y2="138"></line>
                     </g>
 
-                    <polygon points="{{ $radarPoints }}" class="fill-primary/20 stroke-primary" stroke-width="2"></polygon>
-                    @foreach ($radarDataPoints as $point)
-                        <circle cx="{{ $point['x'] }}" cy="{{ $point['y'] }}" r="3.5" class="fill-primary stroke-surface" stroke-width="2"></circle>
+                    <polygon
+                        points="{{ $radarPoints }}"
+                        class="dashboard-radar-polygon fill-primary/20 stroke-primary transition-all"
+                        :class="{ 'fill-primary/35 stroke-primary': activeSkill !== null }"
+                        stroke-width="2"
+                    ></polygon>
+                    @foreach ($radarDataPoints as $index => $point)
+                        <g
+                            @mouseenter="activeSkill = {{ $index }}"
+                            @mouseleave="activeSkill = null"
+                            @click="activeSkill = activeSkill === {{ $index }} ? null : {{ $index }}"
+                            class="cursor-pointer"
+                        >
+                            <circle cx="{{ $point['x'] }}" cy="{{ $point['y'] }}" r="11" fill="transparent"></circle>
+                            <circle
+                                cx="{{ $point['x'] }}"
+                                cy="{{ $point['y'] }}"
+                                r="4"
+                                class="dashboard-radar-point fill-primary stroke-surface transition-all"
+                                :class="activeSkill === {{ $index }} ? 'scale-[1.8]' : ''"
+                                style="transform-origin: {{ $point['x'] }}px {{ $point['y'] }}px"
+                                stroke-width="2"
+                            >
+                                <title>{{ $skillChart[$index]['label'] }}: {{ round($skillChart[$index]['average_level']) }}%</title>
+                            </circle>
+                        </g>
                     @endforeach
 
                     <g class="fill-current text-muted" font-size="10" text-anchor="middle">
@@ -98,8 +140,14 @@
                 </svg>
 
                 <ul class="grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-1">
-                    @foreach ($skillChart as $skill)
-                        <li class="flex items-center justify-between gap-5 text-xs">
+                    @foreach ($skillChart as $index => $skill)
+                        <li
+                            @mouseenter="activeSkill = {{ $index }}"
+                            @mouseleave="activeSkill = null"
+                            @click="activeSkill = activeSkill === {{ $index }} ? null : {{ $index }}"
+                            class="flex cursor-pointer items-center justify-between gap-5 rounded-lg px-2 py-1 text-xs transition"
+                            :class="activeSkill === {{ $index }} ? 'bg-primary/10' : ''"
+                        >
                             <span class="text-muted">{{ $skill['label'] }}</span>
                             <span class="font-mono font-medium text-text">{{ round($skill['average_level']) }}%</span>
                         </li>
@@ -108,7 +156,7 @@
             </div>
         </section>
 
-        <section class="card dashboard-gloss">
+        <section class="card dashboard-gloss dashboard-enter-right" style="animation-delay: 300ms">
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <h2 class="font-display text-lg font-semibold text-text">Jumlah Skill per Kategori</h2>
@@ -118,14 +166,24 @@
             </div>
 
             <ul class="mt-7 space-y-5">
-                @foreach ($skillChart as $skill)
-                    <li>
+                @foreach ($skillChart as $index => $skill)
+                    <li
+                        @mouseenter="activeSkill = {{ $index }}"
+                        @mouseleave="activeSkill = null"
+                        @click="activeSkill = activeSkill === {{ $index }} ? null : {{ $index }}"
+                        class="-mx-2 cursor-pointer rounded-xl px-2 py-1 transition"
+                        :class="activeSkill === {{ $index }} ? 'bg-primary/5' : ''"
+                    >
                         <div class="mb-2 flex items-center justify-between gap-4 text-sm">
                             <span class="font-medium text-text">{{ $skill['label'] }}</span>
                             <span class="font-mono text-xs text-muted">{{ $skill['count'] }} skill</span>
                         </div>
                         <div class="h-2 overflow-hidden rounded-full bg-surface-2">
-                            <div class="h-full rounded-full bg-gradient-to-r from-primary to-gold" style="width: {{ ($skill['count'] / $maxSkillCount) * 100 }}%"></div>
+                            <div
+                                class="dashboard-bar-fill h-full rounded-full bg-gradient-to-r from-primary to-gold transition-all duration-300"
+                                :class="activeSkill === {{ $index }} ? 'brightness-125 saturate-150' : ''"
+                                style="width: {{ ($skill['count'] / $maxSkillCount) * 100 }}%"
+                            ></div>
                         </div>
                     </li>
                 @endforeach

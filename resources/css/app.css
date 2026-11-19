@@ -841,6 +841,98 @@ html.light .theme-icon-moon {
     animation: page-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
+@keyframes dashboard-enter-left {
+    from {
+        opacity: 0;
+        transform: translate3d(-48px, 14px, 0) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes dashboard-enter-right {
+    from {
+        opacity: 0;
+        transform: translate3d(48px, 14px, 0) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes dashboard-bloom {
+    0% {
+        opacity: 0;
+        transform: scaleX(0);
+        filter: blur(2px);
+    }
+    70% {
+        filter: blur(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes dashboard-radar-in {
+    from {
+        opacity: 0;
+        transform: scale(0.35);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes dashboard-bloop {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    65% {
+        opacity: 1;
+        transform: scale(1.35);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.dashboard-enter-left {
+    animation: dashboard-enter-left 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-enter-right {
+    animation: dashboard-enter-right 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-bar-fill {
+    transform-origin: left center;
+    animation: dashboard-bloom 1.05s cubic-bezier(0.22, 1, 0.36, 1) 280ms both;
+}
+
+.dashboard-radar-polygon {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: dashboard-radar-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
+}
+
+.dashboard-radar-point {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: dashboard-bloop 0.55s cubic-bezier(0.22, 1, 0.36, 1) 620ms both;
+}
+
+.dashboard-spike {
+    clip-path: polygon(0 50%, 100% 0, 78% 38%, 100% 50%, 78% 62%, 100% 100%);
+}
+
 /* Animasi navbar turun perlahan saat halaman dibuka */
 @keyframes nav-enter {
     from {
