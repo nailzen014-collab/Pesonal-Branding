@@ -12,7 +12,7 @@
             ['label' => 'Skill', 'value' => $stats['skills'], 'icon' => 'sparkles', 'hint' => 'Terdaftar di halaman skills'],
             ['label' => 'Pesan Belum Dibaca', 'value' => $stats['unread_messages'], 'icon' => 'inbox', 'hint' => 'Total pesan masuk'],
         ] as $card)
-            <div class="card">
+            <div class="card dashboard-gloss">
                 <div class="flex items-start justify-between">
                     <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
                         <x-icon :name="$card['icon']" class="h-5 w-5 text-primary" />
@@ -34,9 +34,108 @@
         <x-ui.button :href="route('admin.settings.edit')" variant="outline" icon="cog">Pengaturan</x-ui.button>
     </div>
 
+    @php
+        $radarAxes = [
+            ['x' => 160, 'y' => 38],
+            ['x' => 270, 'y' => 138],
+            ['x' => 160, 'y' => 238],
+            ['x' => 50, 'y' => 138],
+        ];
+        $radarDataPoints = [];
+
+        foreach ($skillChart as $index => $skill) {
+            $ratio = min(100, max(0, $skill['average_level'])) / 100;
+            $radarDataPoints[] = [
+                'x' => 160 + (($radarAxes[$index]['x'] - 160) * $ratio),
+                'y' => 138 + (($radarAxes[$index]['y'] - 138) * $ratio),
+            ];
+        }
+
+        $radarPoints = collect($radarDataPoints)
+            ->map(fn (array $point): string => number_format($point['x'], 2, '.', '').','.number_format($point['y'], 2, '.', ''))
+            ->implode(' ');
+        $maxSkillCount = max(1, $skillChart->max('count'));
+    @endphp
+
+    {{-- Grafik skill --}}
+    <div class="mt-8 grid gap-6 xl:grid-cols-2">
+        <section class="card dashboard-gloss">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <h2 class="font-display text-lg font-semibold text-text">Level Skill per Kategori</h2>
+                    <p class="mt-1 text-xs text-muted">Rata-rata level skill pada skala 0–100.</p>
+                </div>
+                <span class="rounded-full border border-line px-3 py-1 text-2xs text-muted">Radar</span>
+            </div>
+
+            <div class="mt-5 grid items-center gap-5 sm:grid-cols-[minmax(0,1fr)_auto]">
+                <svg viewBox="0 0 320 276" class="mx-auto w-full max-w-sm" role="img" aria-labelledby="skills-radar-title skills-radar-description">
+                    <title id="skills-radar-title">Rata-rata level skill per kategori</title>
+                    <desc id="skills-radar-description">Grafik radar membandingkan rata-rata level Frontend, Backend, Database, dan Tools.</desc>
+
+                    <g class="text-line" fill="none" stroke="currentColor" stroke-width="1">
+                        <polygon points="160,113 187.5,138 160,163 132.5,138"></polygon>
+                        <polygon points="160,88 215,138 160,188 105,138"></polygon>
+                        <polygon points="160,63 242.5,138 160,213 77.5,138"></polygon>
+                        <polygon points="160,38 270,138 160,238 50,138"></polygon>
+                        <line x1="160" y1="138" x2="160" y2="38"></line>
+                        <line x1="160" y1="138" x2="270" y2="138"></line>
+                        <line x1="160" y1="138" x2="160" y2="238"></line>
+                        <line x1="160" y1="138" x2="50" y2="138"></line>
+                    </g>
+
+                    <polygon points="{{ $radarPoints }}" class="fill-primary/20 stroke-primary" stroke-width="2"></polygon>
+                    @foreach ($radarDataPoints as $point)
+                        <circle cx="{{ $point['x'] }}" cy="{{ $point['y'] }}" r="3.5" class="fill-primary stroke-surface" stroke-width="2"></circle>
+                    @endforeach
+
+                    <g class="fill-current text-muted" font-size="10" text-anchor="middle">
+                        <text x="160" y="18">{{ $skillChart[0]['label'] }}</text>
+                        <text x="296" y="141">{{ $skillChart[1]['label'] }}</text>
+                        <text x="160" y="270">{{ $skillChart[2]['label'] }}</text>
+                        <text x="24" y="141">{{ $skillChart[3]['label'] }}</text>
+                    </g>
+                </svg>
+
+                <ul class="grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-1">
+                    @foreach ($skillChart as $skill)
+                        <li class="flex items-center justify-between gap-5 text-xs">
+                            <span class="text-muted">{{ $skill['label'] }}</span>
+                            <span class="font-mono font-medium text-text">{{ round($skill['average_level']) }}%</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </section>
+
+        <section class="card dashboard-gloss">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <h2 class="font-display text-lg font-semibold text-text">Jumlah Skill per Kategori</h2>
+                    <p class="mt-1 text-xs text-muted">Sebaran skill yang sudah terdaftar.</p>
+                </div>
+                <span class="rounded-full border border-line px-3 py-1 text-2xs text-muted">Bar</span>
+            </div>
+
+            <ul class="mt-7 space-y-5">
+                @foreach ($skillChart as $skill)
+                    <li>
+                        <div class="mb-2 flex items-center justify-between gap-4 text-sm">
+                            <span class="font-medium text-text">{{ $skill['label'] }}</span>
+                            <span class="font-mono text-xs text-muted">{{ $skill['count'] }} skill</span>
+                        </div>
+                        <div class="h-2 overflow-hidden rounded-full bg-surface-2">
+                            <div class="h-full rounded-full bg-gradient-to-r from-primary to-gold" style="width: {{ ($skill['count'] / $maxSkillCount) * 100 }}%"></div>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        </section>
+    </div>
+
     <div class="mt-8 grid gap-6 xl:grid-cols-3">
         {{-- Pesan terbaru --}}
-        <section class="card">
+        <section class="card dashboard-gloss">
             <div class="flex items-center justify-between">
                 <h2 class="font-display text-lg font-semibold text-text">Pesan Terbaru</h2>
                 <a href="{{ route('admin.messages.index') }}" class="text-xs text-primary hover:underline">Lihat semua</a>
@@ -75,7 +174,7 @@
         </section>
 
         {{-- Proyek terbaru --}}
-        <section class="card">
+        <section class="card dashboard-gloss">
             <div class="flex items-center justify-between">
                 <h2 class="font-display text-lg font-semibold text-text">Proyek Terbaru</h2>
                 <a href="{{ route('admin.projects.index') }}" class="text-xs text-primary hover:underline">Kelola</a>
@@ -111,7 +210,7 @@
         </section>
 
         {{-- Artikel terbaru --}}
-        <section class="card">
+        <section class="card dashboard-gloss">
             <div class="flex items-center justify-between">
                 <h2 class="font-display text-lg font-semibold text-text">Artikel Terbaru</h2>
                 <a href="{{ route('admin.posts.index') }}" class="text-xs text-primary hover:underline">Kelola</a>

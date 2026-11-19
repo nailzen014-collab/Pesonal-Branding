@@ -60,6 +60,18 @@ class AdminCrudTest extends TestCase
         }
     }
 
+    public function test_dashboard_menampilkan_rata_rata_level_dan_jumlah_skill_per_kategori(): void
+    {
+        Skill::factory()->create(['category' => 'frontend', 'level' => 80]);
+        Skill::factory()->create(['category' => 'frontend', 'level' => 60]);
+        Skill::factory()->create(['category' => 'backend', 'level' => 40]);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.dashboard'))
+            ->assertSeeText(['70%', '40%', '2 skill', '1 skill'])
+            ->assertSee('points="160.00,68.00 204.00,138.00 160.00,138.00 160.00,138.00"', false);
+    }
+
     public function test_admin_bisa_membuat_dan_menghapus_proyek(): void
     {
         $this->actingAs($this->admin)
