@@ -22,12 +22,33 @@
             return;
         }
 
+        const navigation = performance.getEntriesByType('navigation')[0];
+        const scope = document.documentElement.dataset.themeScope ?? 'public';
+        const storageKey = `page-loader-seen:${scope}`;
+        const shouldShow = navigation?.type === 'reload' || !sessionStorage.getItem(storageKey);
+
+        if (!shouldShow) {
+            loader.remove();
+            return;
+        }
+
+        sessionStorage.setItem(storageKey, '1');
+
+        const displayDuration = 3500;
+        let isHiding = false;
+
         const hideLoader = () => {
+            if (isHiding) {
+                return;
+            }
+
+            isHiding = true;
             loader.classList.add('is-hidden');
             window.setTimeout(() => loader.remove(), 400);
         };
 
-        window.addEventListener('load', () => window.setTimeout(hideLoader, 350), { once: true });
+        window.setTimeout(hideLoader, displayDuration);
+
         window.addEventListener('pageshow', (event) => {
             if (event.persisted) {
                 hideLoader();

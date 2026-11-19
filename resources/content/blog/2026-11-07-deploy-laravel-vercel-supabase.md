@@ -13,6 +13,62 @@ Situs ini berjalan di Vercel dengan Supabase sebagai database. Vercel menjalanka
 
 Artikel ini mencatat alur deploy yang dipakai repository ini: dari menyiapkan database Supabase, mengatur variabel lingkungan di Vercel, sampai menjalankan migrasi dan membuat akun admin.
 
+## Alur deploy dari awal sampai website siap
+
+Supaya urutannya mudah diikuti, pisahkan persiapan satu kali, deploy pertama, dan deploy rutin setelah situs sudah aktif.
+
+```text
+Siapkan Supabase dan environment
+    ↓
+Uji kode dan aset di lokal
+    ↓
+Push ke GitHub atau jalankan deploy manual
+    ↓
+Vercel membangun image dan merilis aplikasi
+    ↓
+Jalankan migrasi / sinkronisasi data yang diperlukan
+    ↓
+Uji halaman publik, login, dan dashboard
+```
+
+### A. Persiapan satu kali
+
+1. Buat project PostgreSQL di Supabase dan pilih koneksi database yang sesuai.
+2. Siapkan `Dockerfile.vercel` dan `vercel.json` di repository.
+3. Isi Environment Variables untuk Production di Vercel. Simpan `APP_KEY` dan kredensial database di sana, bukan di Git.
+4. Buat file `.env.deploy` lokal yang mengarah ke database Supabase supaya migrasi dan sinkronisasi bisa dijalankan dari komputer sendiri.
+
+Rincian database, Dockerfile, dan setiap variabel dijelaskan di bagian-bagian berikutnya.
+
+### B. Deploy pertama
+
+1. Jalankan pemeriksaan lokal: `php artisan test`, `npm ci`, dan `npm run build`. Pada konfigurasi repository ini, build Docker tidak menjalankan test suite, jadi test perlu dijalankan terpisah sebelum rilis.
+2. Push perubahan ke branch `main` yang terhubung ke Vercel, atau jalankan `npx vercel --prod`.
+3. Tunggu build dan deployment Vercel selesai. Build membuat aset Vite dan image Laravel; proses ini tidak menjalankan migrasi atau seeder database.
+4. Dari lokal, siapkan skema dan data awal:
+
+   ```bash
+   php artisan migrate --force --env=deploy
+   php artisan db:seed --class=AdminSeeder --force --env=deploy
+   php artisan blog:sync --env=deploy
+   ```
+
+   Jika daftar proyek diambil dari GitHub, jalankan juga:
+
+   ```bash
+   php artisan portfolio:import-github --publish --include-forks --env=deploy
+   ```
+
+5. Periksa `/up`, halaman utama, `/blog`, `/login`, lalu dashboard admin setelah login.
+
+### C. Deploy rutin setelah website aktif
+
+Untuk perubahan kode biasa, jalankan test dan build lokal, lalu push ke `main`. Vercel akan membangun dan merilis versi baru. Tidak perlu menjalankan ulang seeder admin pada setiap rilis.
+
+Kalau rilis mengubah skema database, jalankan `php artisan migrate --force --env=deploy` setelah memastikan migrasinya aman. Kalau isi file Markdown blog berubah, jalankan `php artisan blog:sync --env=deploy` agar tabel `posts` ikut diperbarui. Akhiri dengan smoke test halaman publik dan admin, lalu periksa log Vercel.
+
+> **Penting:** image yang sukses dibangun belum membuktikan aplikasi siap melayani pengguna. Build, perubahan database, dan pemeriksaan setelah rilis adalah langkah terpisah.
+
 ## Kenapa Vercel dan Supabase
 
 Singkatnya, keduanya membagi tugas sesuai kekuatannya:
@@ -178,16 +234,3 @@ Beberapa hal berikut paling sering bikin deploy pertama gagal:
 - **Thumbnail atau file unggahan hilang.** Filesystem container sementara, jadi file yang diunggah lewat panel admin akan hilang saat redeploy. Untuk produksi, arahkan disk publik ke object storage.
 - **`APP_KEY` berbeda tiap deploy.** Jangan pernah generate key saat build. Simpan satu nilai di Environment Variables Vercel.
 - **Timeout saat migrasi.** Pooler mode transaksi bisa memutus statement panjang. Jalankan migrasi lewat koneksi langsung port `5432`, bukan pooler.
-
-## Ringkasan alur
-
-Urutan yang paling aman untuk deploy pertama:
-
-1. Buat project Supabase, catat host, port, user, dan password.
-2. Tambahkan `Dockerfile.vercel` dan `vercel.json` ke repository.
-3. Isi Environment Variables di Vercel, termasuk `APP_KEY` dan kredensial Supabase.
-4. Push ke `main` atau jalankan `npx vercel --prod`.
-5. Jalankan `migrate`, seeder admin, dan `blog:sync` dari lokal via `.env.deploy`.
-6. Uji beranda, blog, login, dan panel admin.
-
-Setelah alur ini berjalan, setiap perubahan kode cukup lewat push ke `main`. Artikel blog tetap dikelola sebagai file Markdown lalu disinkronkan dengan `php artisan blog:sync --env=deploy`.

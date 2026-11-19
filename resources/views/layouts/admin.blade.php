@@ -94,9 +94,22 @@
     </aside>
 
     {{-- Sidebar (mobile) --}}
-    <div x-show="sidebar" x-cloak class="fixed inset-0 z-50 lg:hidden">
-        <div class="absolute inset-0 bg-black/70" @click="sidebar = false"></div>
-        <aside x-transition.duration.200ms
+    <div x-show="sidebar" x-cloak
+        x-transition:enter="transition-opacity ease-out duration-250"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-in duration-300"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        @click.self="sidebar = false"
+        class="fixed inset-0 z-50 bg-black/70 lg:hidden">
+        <aside
+            x-transition:enter="transition-transform ease-out duration-300"
+            x-transition:enter-start="-translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition-transform ease-in duration-250"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
             class="absolute inset-y-0 left-0 flex w-72 flex-col border-r border-line bg-surface">
             <div class="flex h-20 items-center justify-between px-6">
                 <span class="font-display text-lg font-bold text-text">{{ $siteName }}</span>
@@ -110,11 +123,11 @@
                     @php $active = request()->routeIs($item['route']); @endphp
                     <a href="{{ route($item['route']) }}" @click="sidebar = false"
                         @class([
-                            'flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition',
+                            'group flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition duration-300 active:translate-x-1 active:scale-[0.98]',
                             'bg-primary/10 text-primary' => $active,
                             'text-muted hover:bg-surface-2 hover:text-text' => ! $active,
                         ])>
-                        <x-icon :name="$item['icon']" class="h-5 w-5" />
+                        <x-icon :name="$item['icon']" class="h-5 w-5 transition-transform duration-300 group-active:scale-110" />
                         {{ $item['label'] }}
                     </a>
                 @endforeach
@@ -135,7 +148,7 @@
     {{-- Konten --}}
     <div class="flex min-w-0 flex-1 flex-col">
         <header class="sticky top-0 z-40 flex h-20 items-center gap-4 border-b border-line bg-ink/90 px-5 backdrop-blur sm:px-8">
-            <button type="button" class="icon-button lg:hidden" @click="sidebar = true" aria-label="Buka menu">
+            <button type="button" class="icon-button transition duration-200 active:scale-90 lg:hidden" @click="sidebar = true" aria-label="Buka menu">
                 <x-icon name="menu" class="h-5 w-5" />
             </button>
 
