@@ -1,9 +1,9 @@
 /**
  * Animasi scroll dua arah:
- * - `.reveal` di dalam `.scroll-stage` muncul dari bawah saat masuk viewport,
+ * - elemen `.reveal` muncul dari bawah saat masuk viewport,
  *   memudar saat lewat ke atas, dan muncul lagi bila digulir balik ke bawah;
- * - `.scroll-stage` diredupkan setelah lewat ke atas dan diberi kabut di tepi
- *   viewport, tanpa meredupkan section yang belum masuk layar.
+ * - lapisan tetap di tepi viewport memberi efek konten yang tenggelam dan
+ *   muncul perlahan saat melintasi batas layar.
  *
  * Semua elemen di-cache sekali saat didaftarkan. Setiap frame scroll hanya
  * membaca posisi elemen dalam satu fase lalu menulis kelasnya di fase kedua,
@@ -24,7 +24,6 @@ const bound = new WeakSet();
 
 /** Daftar elemen aktif; dicache agar tidak query DOM tiap frame. */
 const reveals = [];
-let stages = [];
 
 let schedulerRunning = false;
 
@@ -115,16 +114,6 @@ function updateAll() {
         };
     });
 
-    const stageStates = stages.map((stage) => {
-        const rect = stage.getBoundingClientRect();
-
-        return {
-            stage,
-            leavingTop: rect.bottom < viewport * 0.45,
-            leavingBottom: rect.top > viewport * 0.55,
-        };
-    });
-
     // Fase tulis: hanya ubah kelas saat statusnya benar-benar berubah.
     revealStates.forEach(({ element, entered, passed }) => {
         const isVisible = element.classList.contains('is-visible');
@@ -155,21 +144,6 @@ function updateAll() {
         }
     });
 
-    stageStates.forEach(({ stage, leavingTop, leavingBottom }) => {
-        const isOut = leavingTop;
-
-        if (stage.classList.contains('is-leaving-top') !== leavingTop) {
-            stage.classList.toggle('is-leaving-top', leavingTop);
-        }
-
-        if (stage.classList.contains('is-leaving-bottom') !== leavingBottom) {
-            stage.classList.toggle('is-leaving-bottom', leavingBottom);
-        }
-
-        if (stage.classList.contains('is-out') !== isOut) {
-            stage.classList.toggle('is-out', isOut);
-        }
-    });
 }
 
 function schedule() {
@@ -192,13 +166,6 @@ function onScroll() {
 function onResize() {
     forceUpdate = true;
     schedule();
-}
-
-/**
- * Refresh daftar `.scroll-stage` (murah, hanya saat konten baru dimuat).
- */
-function collectStages() {
-    stages = [...document.querySelectorAll('.scroll-stage')];
 }
 
 /**
@@ -257,8 +224,6 @@ export function observeReveals(scope = document) {
         reveals.push(element);
         primeReveal(element);
     });
-
-    collectStages();
 
     if (!document.documentElement.dataset.revealBound) {
         document.documentElement.dataset.revealBound = '1';

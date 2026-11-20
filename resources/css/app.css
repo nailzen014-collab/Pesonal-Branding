@@ -623,77 +623,47 @@
         visibility: hidden;
     }
 
-    /*
-     * Wadah bagian layar ("panggung"): anaknya muncul dari bawah saat
-     * masuk viewport, dan tenggelam ke balik kabut di tepi atas/bawah
-     * saat digulir keluar. `opacity` + mask murni komposit sehingga
-     * tidak menambah pekerjaan layout di setiap frame scroll.
-     */
-    /*
-     * `will-change` sengaja tidak dipakai permanen: setiap stage akan punya
-     * layer GPU sendiri terus-menerus, memakan memori saat scroll. Transisi
-     * opacity tetap berjalan halus tanpa promosi layer permanen.
-     */
-    .scroll-stage {
-        position: relative;
-        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .scroll-stage.is-out {
-        opacity: 0.25;
-    }
-
-    /*
-     * Section yang memuat elemen sticky (kartu profil, sidebar artikel)
-     * tidak boleh punya transform/mask/opacity sendiri: semuanya membuat
-     * containing block baru sehingga posisi sticky jadi salah dan kabut
-     * tepi section menutupi kartu. Section seperti ini tetap menganimasikan
-     * anak `.reveal`-nya seperti biasa.
-     */
-    .scroll-stage:has(.sticky) {
-        opacity: 1 !important;
-        transition: none;
-        mask-image: none !important;
-        -webkit-mask-image: none !important;
-    }
-
-    .scroll-stage:has(.sticky)::before,
-    .scroll-stage:has(.sticky)::after {
-        display: none;
-    }
-
-    /*
-     * Kabut tepi: bayangan gelap yang menutupi konten saat elemen keluar
-     * dari viewport, membuatnya seolah tenggelam ke balik layar. Kabut
-     * bergradasi penuh ke warna latar, jadi konten tidak "terpotong" tegas
-     * seperti mask — itulah yang sebelumnya terlihat menimpa konten.
-     */
-    .scroll-stage::before,
-    .scroll-stage::after {
-        content: '';
-        position: absolute;
-        left: 0;
+    body::before,
+    body::after {
+        position: fixed;
+        z-index: 30;
         right: 0;
-        height: 7rem;
+        left: 0;
+        height: clamp(4rem, 12vh, 9rem);
         pointer-events: none;
-        z-index: 2;
-        opacity: 0;
-        transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        content: '';
     }
 
-    .scroll-stage::before {
-        top: -1px;
-        background: linear-gradient(to bottom, rgb(var(--ink)), rgb(var(--ink) / 0));
+    body::before {
+        top: 0;
+        background: linear-gradient(
+            to bottom,
+            rgb(var(--ink)) 0%,
+            rgb(var(--ink) / 0.82) 24%,
+            rgb(var(--ink) / 0) 100%
+        );
     }
 
-    .scroll-stage::after {
-        bottom: -1px;
-        background: linear-gradient(to top, rgb(var(--ink)), rgb(var(--ink) / 0));
+    body::after {
+        bottom: 0;
+        background: linear-gradient(
+            to top,
+            rgb(var(--ink)) 0%,
+            rgb(var(--ink) / 0.82) 24%,
+            rgb(var(--ink) / 0) 100%
+        );
     }
 
-    .scroll-stage.is-leaving-top::before,
-    .scroll-stage.is-leaving-bottom::after {
-        opacity: 1;
+    html[data-theme-scope='admin'] body::before,
+    html[data-theme-scope='admin'] body::after {
+        left: 18rem;
+    }
+
+    @media (max-width: 1023px) {
+        html[data-theme-scope='admin'] body::before,
+        html[data-theme-scope='admin'] body::after {
+            left: 0;
+        }
     }
 
     /*
@@ -755,15 +725,9 @@
         }
 
         .reveal,
-        .scroll-in,
-        .scroll-stage {
+        .scroll-in {
             opacity: 1 !important;
             transform: none !important;
-        }
-
-        .scroll-stage {
-            mask-image: none;
-            -webkit-mask-image: none;
         }
     }
 }
@@ -858,17 +822,6 @@ html.light .theme-icon-moon {
 
     .scroll-in {
         --scroll-in-delay: 0ms !important;
-    }
-
-    .scroll-stage,
-    .scroll-stage.is-out {
-        opacity: 1 !important;
-        transition: none !important;
-    }
-
-    .scroll-stage::before,
-    .scroll-stage::after {
-        display: none !important;
     }
 
     .animate-float,
