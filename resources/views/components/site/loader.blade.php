@@ -34,7 +34,7 @@
 
         sessionStorage.setItem(storageKey, '1');
 
-        const displayDuration = 3500;
+        const displayDuration = 500;
         let isHiding = false;
 
         const hideLoader = () => {

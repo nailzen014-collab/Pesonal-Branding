@@ -28,7 +28,7 @@
         aria-label="Navigasi utama">
 
         <div class="flex h-full items-center justify-between gap-4 px-3 sm:px-5">
-            <a href="{{ route('home') }}" class="group flex min-w-0 items-center gap-2.5">
+            <a href="{{ route('home') }}" @click="open = false" class="group flex min-w-0 items-center gap-2.5">
                 <span class="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-glow-soft transition duration-500 group-hover:scale-105">
                     <x-icon name="code" class="h-5 w-5 text-gold-soft" />
                 </span>
@@ -81,10 +81,11 @@
                     @php $active = request()->routeIs($item['route']); @endphp
                     <li>
                         <a href="{{ route($item['route']) }}"
+                            @click="open = false"
                             style="animation-delay: {{ 30 + $loop->index * 45 }}ms"
                             @class([
                                 'animate-fade-up block rounded-xl px-4 py-3 text-sm font-medium transition duration-300 active:scale-[0.99]',
-                                'bg-primary/10 text-primary' => $active,
+                                'bg-primary/20 text-gold-soft' => $active,
                                 'text-muted hover:bg-surface-2 hover:text-text' => ! $active,
                             ])>
                             {{ $item['label'] }}

@@ -36,12 +36,11 @@
 
     <link rel="canonical" href="{{ $canonical }}">
 
-    {{-- Font: Space Grotesk (judul), Inter (isi), JetBrains Mono (kode).
-         Rentang weight memakai file variable font: satu unduhan per keluarga
-         dan bobot di antaranya tetap tajam di layar HiDPI. --}}
+    {{-- Font: Space Grotesk (judul) dan Inter (isi); font monospace memakai
+         font sistem agar tidak menambah satu unduhan font eksternal. --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400..500&family=Space+Grotesk:wght@500..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Space+Grotesk:wght@500..700&display=swap" rel="stylesheet">
 
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">

@@ -2,9 +2,7 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
 
 /**
- * Design system website personal branding.
- * Token warna mengikuti PRD bagian 11.1 (tema gelap, maksimal tiga warna:
- * merah, hitam, dan aksen rust #9A3412).
+ * Design system website personal branding dengan palet merah, hitam, dan krem.
  *
  * Konsep: "design token" = nama warna yang dipakai konsisten di seluruh
  * website. Dengan begitu, mengganti tema cukup di file ini, tidak perlu
@@ -29,10 +27,10 @@ export default {
                     soft: '#FF4D5E',
                 },
                 gold: {
-                    DEFAULT: '#9A3412',
-                    soft: '#F1C3AE',
-                    dark: '#7C2A0E',
-                    deep: '#5A1F0B',
+                    DEFAULT: '#FFF4E8',
+                    soft: '#FFF8F0',
+                    dark: '#EAD8C7',
+                    deep: '#CDB8A6',
                 },
                 ink: {
                     DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
@@ -56,7 +54,7 @@ export default {
             fontFamily: {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
                 display: ['"Space Grotesk"', 'Poppins', ...defaultTheme.fontFamily.sans],
-                mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
+                mono: defaultTheme.fontFamily.mono,
             },
 
             fontSize: {
@@ -77,14 +75,14 @@ export default {
 
             backgroundImage: {
                 'grid-fade':
-                    'linear-gradient(to bottom, rgb(8 8 10 / 0), rgb(8 8 10 / 1)), radial-gradient(circle at 50% 0%, rgb(225 29 46 / 0.16), transparent 55%)',
+                    'linear-gradient(to bottom, rgb(122 12 22 / 0), rgb(122 12 22 / 1)), radial-gradient(circle at 50% 0%, rgb(225 29 46 / 0.16), transparent 55%)',
                 'hero-glow':
                     'radial-gradient(55% 55% at 50% 0%, rgb(225 29 46 / 0.25), transparent 70%)',
                 'aurora':
                     'radial-gradient(45% 45% at 15% 10%, rgb(225 29 46 / 0.22), transparent 60%), radial-gradient(40% 40% at 85% 20%, rgb(122 12 22 / 0.35), transparent 60%), radial-gradient(50% 50% at 50% 90%, rgb(225 29 46 / 0.12), transparent 65%)',
                 'text-shine': 'var(--text-shine)',
                 'border-gradient':
-                    'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(154 52 18 / 0.45) 45%, rgb(225 29 46 / 0.15))',
+                    'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(255 248 240 / 0.22) 45%, rgb(225 29 46 / 0.15))',
             },
 
             spacing: {
