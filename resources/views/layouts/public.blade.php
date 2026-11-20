@@ -46,7 +46,6 @@
     <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
 
     @include('layouts.partial.theme-init')
-    @include('layouts.partial.page-transition')
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -92,7 +91,7 @@
 
     <x-site.navbar />
 
-    <main id="konten" class="page-enter pt-20">
+    <main id="konten" class="pt-20">
         @yield('content')
     </main>
 

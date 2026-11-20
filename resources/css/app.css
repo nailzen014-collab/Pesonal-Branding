@@ -735,6 +735,10 @@
         transform: translate3d(0, 0, 0);
     }
 
+    .scroll-in.is-passed {
+        transform: translate3d(0, -16px, 0);
+    }
+
     /* Hormati pengaturan aksesibilitas pengguna (NFR-05) */
     @media (prefers-reduced-motion: reduce) {
         html {
@@ -840,60 +844,6 @@ html.light .theme-icon-sun {
 
 html.light .theme-icon-moon {
     display: inline;
-}
-
-html::before {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    visibility: hidden;
-    pointer-events: none;
-    background: linear-gradient(110deg, #7a0c16 0%, #e11d2e 54%, #18080b 100%);
-    content: '';
-    transform: scaleX(0);
-    transform-origin: left center;
-}
-
-html.page-transition-pending::before,
-html.page-transition-covering::before {
-    visibility: visible;
-    transform: scaleX(1);
-}
-
-html.page-transition-covering::before {
-    transition: transform 420ms cubic-bezier(0.76, 0, 0.24, 1);
-}
-
-html.page-transition-entering::before {
-    visibility: visible;
-    transform-origin: right center;
-    animation: page-transition-open 580ms cubic-bezier(0.76, 0, 0.24, 1) both;
-}
-
-@keyframes page-transition-open {
-    from {
-        transform: scaleX(1);
-    }
-
-    to {
-        transform: scaleX(0);
-    }
-}
-
-@keyframes page-enter {
-    from {
-        opacity: 0;
-        transform: translateY(14px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.page-enter {
-    animation: page-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 @media (max-width: 1023px) {

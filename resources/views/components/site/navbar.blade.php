@@ -66,10 +66,10 @@
             </div>
 
             {{-- Tombol hamburger (mobile) --}}
-            <button type="button" @click="open = !open" class="icon-button !h-10 !w-10 md:hidden flex-shrink-0"
+            <button type="button" @click="open = !open" class="icon-button relative !h-10 !w-10 flex-shrink-0 md:hidden"
                 :aria-expanded="open" aria-controls="mobile-menu" aria-label="Buka menu navigasi">
-                <x-icon name="menu" x-show="!open" />
-                <x-icon name="close" x-show="open" x-cloak />
+                <x-icon name="menu" x-show="!open" x-transition.opacity.duration.150ms />
+                <x-icon name="close" x-show="open" x-cloak x-transition.opacity.duration.150ms class="absolute" />
             </button>
         </div>
 

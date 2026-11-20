@@ -34,6 +34,26 @@ let lastScrollY = -1;
 /** Paksa pembaruan meski posisi scroll belum berubah (resize / elemen baru). */
 let forceUpdate = true;
 let lightweightObserver = null;
+let scrollInObserver = null;
+
+function updateIntersectionReveal(entry) {
+    const element = entry.target;
+
+    if (entry.isIntersecting) {
+        element.classList.remove('is-passed');
+        element.classList.add('is-visible');
+
+        return;
+    }
+
+    element.classList.remove('is-visible');
+
+    if (entry.boundingClientRect.bottom <= 0) {
+        element.classList.add('is-passed');
+    } else {
+        element.classList.remove('is-passed');
+    }
+}
 
 /**
  * Hitung jeda masuk bergiliran (stagger) berdasarkan posisi elemen di
@@ -128,10 +148,10 @@ function updateAll() {
                 element.style.transitionDelay = '';
                 element.style.setProperty('--reveal-shift', '-16px');
             }
-        } else if (isVisible && !isPassed) {
-            // Masih di layar, tapi sudah mendekati tepi atas: memudar pelan.
-            element.classList.add('is-passed');
+        } else if (isVisible || isPassed) {
+            element.classList.remove('is-visible', 'is-passed');
             element.style.transitionDelay = '';
+            element.style.setProperty('--reveal-shift', `${SHIFT}px`);
         }
     });
 
@@ -209,16 +229,9 @@ export function observeReveals(scope = document) {
         }
 
         lightweightObserver ??= new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (!entry.isIntersecting) {
-                    return;
-                }
-
-                entry.target.classList.add('is-visible');
-                lightweightObserver.unobserve(entry.target);
-            });
+            entries.forEach(updateIntersectionReveal);
         }, {
-            threshold: 0.08,
+            threshold: 0,
             rootMargin: '0px 0px -6% 0px',
         });
 
@@ -306,19 +319,14 @@ export function initScrollAnimations() {
         return;
     }
 
-    const observer = new IntersectionObserver((entries) => {
+    scrollInObserver ??= new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-            if (!entry.isIntersecting) {
-                return;
-            }
-
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
+            updateIntersectionReveal(entry);
         });
     }, {
-        threshold: 0.08,
+        threshold: 0,
         rootMargin: '0px 0px -6% 0px',
     });
 
-    targets.forEach((element) => observer.observe(element));
+    targets.forEach((element) => scrollInObserver.observe(element));
 }

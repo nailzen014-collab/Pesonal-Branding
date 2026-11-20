@@ -61,10 +61,6 @@ export function initScrollUI() {
 
     document.querySelectorAll('[data-back-link]').forEach((link) => {
         link.addEventListener('click', (event) => {
-            if (event.defaultPrevented) {
-                return;
-            }
-
             // Tanpa riwayat sebelumnya (mis. dibuka dari tautan luar), link
             // tetap memakai href sebagai tujuan cadangan.
             if (window.history.length > 1) {

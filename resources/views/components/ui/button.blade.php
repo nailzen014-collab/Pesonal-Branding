@@ -8,7 +8,7 @@
     // Varian tombol mengikuti PRD 11.2:
     // primary = latar merah, secondary = outline merah, ghost = teks saja.
     $base = 'group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl px-5 py-2.5 text-sm font-semibold
-        transition duration-400 ease-smooth disabled:cursor-not-allowed disabled:opacity-50';
+        transition duration-400 ease-smooth active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50';
 
     $styles = match ($variant) {
         'primary' => 'bg-primary text-gold-soft shadow-glow-soft hover:-translate-y-0.5 hover:bg-primary-dark hover:shadow-glow-primary',
