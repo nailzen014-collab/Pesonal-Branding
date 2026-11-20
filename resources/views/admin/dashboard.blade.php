@@ -12,10 +12,7 @@
             ['label' => 'Skill', 'value' => $stats['skills'], 'icon' => 'sparkles', 'hint' => 'Terdaftar di halaman skills'],
             ['label' => 'Pesan Belum Dibaca', 'value' => $stats['unread_messages'], 'icon' => 'inbox', 'hint' => 'Total pesan masuk'],
         ] as $card)
-            <div
-                class="card dashboard-gloss {{ $loop->odd ? 'dashboard-enter-left' : 'dashboard-enter-right' }}"
-                style="animation-delay: {{ $loop->index * 80 }}ms"
-            >
+            <div class="card dashboard-gloss">
                 <div class="flex items-start justify-between">
                     <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
                         <x-icon :name="$card['icon']" class="h-5 w-5 text-primary" />
@@ -65,7 +62,7 @@
         <div class="dashboard-spike pointer-events-none absolute -left-3 top-28 hidden h-12 w-8 animate-drift bg-gradient-to-r from-primary/70 to-primary/10 opacity-70 sm:block" aria-hidden="true"></div>
         <div class="dashboard-spike pointer-events-none absolute -right-3 bottom-20 hidden h-14 w-9 rotate-180 animate-float bg-gradient-to-r from-gold/60 to-primary/10 opacity-60 sm:block" aria-hidden="true"></div>
 
-        <section class="card dashboard-gloss dashboard-enter-left" style="animation-delay: 220ms">
+        <section class="card dashboard-gloss">
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <h2 class="font-display text-lg font-semibold text-text">Level Skill per Kategori</h2>
@@ -156,7 +153,7 @@
             </div>
         </section>
 
-        <section class="card dashboard-gloss dashboard-enter-right" style="animation-delay: 300ms">
+        <section class="card dashboard-gloss">
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <h2 class="font-display text-lg font-semibold text-text">Jumlah Skill per Kategori</h2>

@@ -722,6 +722,19 @@
         --reveal-shift: -16px;
     }
 
+    .scroll-in {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+        transition:
+            opacity 650ms cubic-bezier(0.22, 1, 0.36, 1) var(--scroll-in-delay, 0ms),
+            transform 650ms cubic-bezier(0.22, 1, 0.36, 1) var(--scroll-in-delay, 0ms);
+    }
+
+    .scroll-in.is-visible {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
     /* Hormati pengaturan aksesibilitas pengguna (NFR-05) */
     @media (prefers-reduced-motion: reduce) {
         html {
@@ -738,11 +751,13 @@
         }
 
         .reveal,
+        .scroll-in,
         .scroll-stage {
             opacity: 1 !important;
             transform: none !important;
         }
 
+        ::view-transition-group(root),
         ::view-transition-old(root),
         ::view-transition-new(root) {
             animation: none !important;
@@ -833,36 +848,48 @@ html.light .theme-icon-moon {
     display: inline;
 }
 
-/* Animasi masuk halaman saat pertama kali dibuka */
+/* Transisi lintas halaman: tutup dari kiri, lalu buka halaman berikutnya. */
 @view-transition {
     navigation: auto;
 }
 
+::view-transition-group(root) {
+    background: rgb(var(--ink));
+    animation-duration: 1s;
+}
+
 ::view-transition-old(root) {
-    animation: page-transition-out 180ms ease both;
+    z-index: 2;
+    animation: page-curtain-close 420ms cubic-bezier(0.76, 0, 0.24, 1) both;
 }
 
 ::view-transition-new(root) {
-    animation: page-transition-in 180ms ease both;
+    z-index: 1;
+    animation: page-curtain-open 580ms cubic-bezier(0.76, 0, 0.24, 1) 420ms both;
 }
 
-@keyframes page-transition-out {
-    to {
-        opacity: 0;
-    }
-}
-
-@keyframes page-transition-in {
+@keyframes page-curtain-close {
     from {
-        opacity: 0;
+        clip-path: inset(0);
     }
 
     to {
-        opacity: 1;
+        clip-path: inset(0 0 0 100%);
+    }
+}
+
+@keyframes page-curtain-open {
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        clip-path: inset(0);
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(root),
     ::view-transition-old(root),
     ::view-transition-new(root) {
         animation: none;
@@ -883,6 +910,76 @@ html.light .theme-icon-moon {
 
 .page-enter {
     animation: page-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes page-slide-out {
+    to {
+        opacity: 0.45;
+        transform: translate3d(-8%, 0, 0);
+    }
+}
+
+@keyframes page-slide-in {
+    from {
+        opacity: 0.85;
+        transform: translate3d(8%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (max-width: 1023px) {
+    ::view-transition-old(root) {
+        animation: page-slide-out 420ms cubic-bezier(0.76, 0, 0.24, 1) both;
+    }
+
+    ::view-transition-new(root) {
+        animation: page-slide-in 580ms cubic-bezier(0.76, 0, 0.24, 1) 420ms both;
+    }
+
+    .reveal,
+    .scroll-in {
+        transition-duration: 420ms !important;
+    }
+
+    .reveal {
+        transition-delay: 0ms !important;
+    }
+
+    .scroll-in {
+        --scroll-in-delay: 0ms !important;
+    }
+
+    .scroll-stage,
+    .scroll-stage.is-out {
+        opacity: 1 !important;
+        transition: none !important;
+    }
+
+    .scroll-stage::before,
+    .scroll-stage::after {
+        display: none !important;
+    }
+
+    .animate-float,
+    .animate-drift,
+    .animate-marquee,
+    .animate-pulse-ring,
+    .avatar-ring,
+    .page-loader__mark,
+    .timeline-dot::after,
+    .dashboard-bar-fill,
+    .dashboard-radar-polygon,
+    .dashboard-radar-point {
+        animation: none !important;
+    }
+
+    .sheen-band {
+        display: none !important;
+    }
 }
 
 .page-loader {
@@ -992,36 +1089,10 @@ html.light .theme-icon-moon {
     }
 }
 
-@keyframes dashboard-enter-left {
-    from {
-        opacity: 0;
-        transform: translate3d(-48px, 14px, 0) scale(0.96);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-}
-
-@keyframes dashboard-enter-right {
-    from {
-        opacity: 0;
-        transform: translate3d(48px, 14px, 0) scale(0.96);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-}
-
 @keyframes dashboard-bloom {
     0% {
         opacity: 0;
         transform: scaleX(0);
-        filter: blur(2px);
-    }
-    70% {
-        filter: blur(0);
     }
     100% {
         opacity: 1;
@@ -1053,14 +1124,6 @@ html.light .theme-icon-moon {
         opacity: 1;
         transform: scale(1);
     }
-}
-
-.dashboard-enter-left {
-    animation: dashboard-enter-left 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.dashboard-enter-right {
-    animation: dashboard-enter-right 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .dashboard-bar-fill {
@@ -1100,65 +1163,3 @@ html.light .theme-icon-moon {
 .nav-enter {
     animation: nav-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
-
-/*
- * Animasi masuk panel admin.
- * Konten admin dirender ulang oleh server pada setiap navigasi, jadi fade
- * singkat pada baris tabel, kartu, dan daftar cukup memberi kesan halus
- * tanpa animasi keluar-masuk yang mengganggu pembacaan data.
- */
-@keyframes admin-in {
-    from {
-        opacity: 0;
-        transform: translate3d(0, 8px, 0);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
-.admin-shell tbody tr,
-.admin-shell main .card,
-.admin-shell main [data-admin-stagger] > * {
-    animation: admin-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-}
-
-/* Baris tabel muncul bergiliran, maksimal 15 baris per halaman. */
-.admin-shell tbody tr:nth-child(2) { animation-delay: 35ms; }
-.admin-shell tbody tr:nth-child(3) { animation-delay: 70ms; }
-.admin-shell tbody tr:nth-child(4) { animation-delay: 105ms; }
-.admin-shell tbody tr:nth-child(5) { animation-delay: 140ms; }
-.admin-shell tbody tr:nth-child(6) { animation-delay: 175ms; }
-.admin-shell tbody tr:nth-child(7) { animation-delay: 210ms; }
-.admin-shell tbody tr:nth-child(8) { animation-delay: 245ms; }
-.admin-shell tbody tr:nth-child(9) { animation-delay: 280ms; }
-.admin-shell tbody tr:nth-child(10) { animation-delay: 315ms; }
-.admin-shell tbody tr:nth-child(11) { animation-delay: 350ms; }
-.admin-shell tbody tr:nth-child(12) { animation-delay: 385ms; }
-.admin-shell tbody tr:nth-child(13) { animation-delay: 420ms; }
-.admin-shell tbody tr:nth-child(14) { animation-delay: 455ms; }
-.admin-shell tbody tr:nth-child(15) { animation-delay: 490ms; }
-
-/* Kartu dan isi daftar ber-stagger muncul satu per satu. */
-.admin-shell main .card:nth-child(2),
-.admin-shell main [data-admin-stagger] > :nth-child(2) { animation-delay: 45ms; }
-
-.admin-shell main .card:nth-child(3),
-.admin-shell main [data-admin-stagger] > :nth-child(3) { animation-delay: 90ms; }
-
-.admin-shell main .card:nth-child(4),
-.admin-shell main [data-admin-stagger] > :nth-child(4) { animation-delay: 135ms; }
-
-.admin-shell main .card:nth-child(5),
-.admin-shell main [data-admin-stagger] > :nth-child(5) { animation-delay: 180ms; }
-
-.admin-shell main .card:nth-child(6),
-.admin-shell main [data-admin-stagger] > :nth-child(6) { animation-delay: 225ms; }
-
-.admin-shell main .card:nth-child(7),
-.admin-shell main [data-admin-stagger] > :nth-child(7) { animation-delay: 270ms; }
-
-.admin-shell main .card:nth-child(8),
-.admin-shell main [data-admin-stagger] > :nth-child(8) { animation-delay: 315ms; }

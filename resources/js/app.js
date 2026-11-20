@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs';
-import { observeReveals } from './reveal';
+import { initScrollAnimations, observeReveals } from './reveal';
 import { initEffects, initTilt } from './effects';
 import { initTheme } from './theme';
 import { initTypewriters } from './typewriter';
@@ -95,6 +95,7 @@ function initLoadMore() {
 document.addEventListener('DOMContentLoaded', () => {
     initSmoothScroll();
     observeReveals();
+    initScrollAnimations();
     initLoadMore();
     initEffects();
     initTheme();

@@ -33,6 +33,7 @@ let lastScrollY = -1;
 
 /** Paksa pembaruan meski posisi scroll belum berubah (resize / elemen baru). */
 let forceUpdate = true;
+let lightweightObserver = null;
 
 /**
  * Hitung jeda masuk bergiliran (stagger) berdasarkan posisi elemen di
@@ -200,6 +201,40 @@ export function observeReveals(scope = document) {
         return elements.length;
     }
 
+    if (window.matchMedia('(max-width: 1023px)').matches) {
+        if (!('IntersectionObserver' in window)) {
+            elements.forEach((element) => element.classList.add('is-visible'));
+
+            return elements.length;
+        }
+
+        lightweightObserver ??= new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+
+                entry.target.classList.add('is-visible');
+                lightweightObserver.unobserve(entry.target);
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -6% 0px',
+        });
+
+        elements.forEach((element) => {
+            if (bound.has(element)) {
+                return;
+            }
+
+            bound.add(element);
+            element.style.setProperty('--reveal-shift', `${SHIFT}px`);
+            lightweightObserver.observe(element);
+        });
+
+        return elements.length;
+    }
+
     elements.forEach((element) => {
         if (bound.has(element)) {
             return;
@@ -222,4 +257,68 @@ export function observeReveals(scope = document) {
     schedule();
 
     return elements.length;
+}
+
+/**
+ * Reveal page content as it enters the viewport outside the public `.reveal`
+ * system, including the admin panel and utility sections.
+ */
+export function initScrollAnimations() {
+    const publicCandidates = [...document.querySelectorAll(
+        'main > *, main .scroll-stage > .container-page > *, main .scroll-stage.container-page > *, main .scroll-stage .card, footer'
+    )];
+    const publicTargets = publicCandidates.filter((element) => (
+        !element.closest('.admin-shell')
+        && !element.closest('.reveal')
+        && !element.querySelector('.reveal, [class*="animate-"]')
+        && (!element.querySelector('.card') || element.matches('.card'))
+    ));
+
+    const adminMain = document.querySelector('.admin-shell main');
+    const adminTargets = adminMain
+        ? [
+            ...[...adminMain.children].filter((element) => !element.querySelector('.card, table')),
+            ...adminMain.querySelectorAll('.card, tbody tr, [data-admin-stagger] > *'),
+        ]
+        : [];
+    const targets = [...new Set([...publicTargets, ...adminTargets])];
+
+    if (!targets.length) {
+        return;
+    }
+
+    const targetSet = new Set(targets);
+
+    targets.forEach((element) => {
+        element.classList.add('scroll-in');
+
+        const siblings = [...(element.parentElement?.children ?? [])]
+            .filter((sibling) => targetSet.has(sibling));
+        const delay = Math.min(Math.max(siblings.indexOf(element), 0), 4) * 70;
+
+        element.style.setProperty('--scroll-in-delay', `${delay}ms`);
+    });
+
+    if (!('IntersectionObserver' in window)
+        || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        targets.forEach((element) => element.classList.add('is-visible'));
+
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+                return;
+            }
+
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+        });
+    }, {
+        threshold: 0.08,
+        rootMargin: '0px 0px -6% 0px',
+    });
+
+    targets.forEach((element) => observer.observe(element));
 }
