@@ -869,30 +869,18 @@ html.light .theme-icon-moon {
 }
 
 @keyframes page-curtain-close {
-    from {
-        clip-path: inset(0);
-    }
-
     to {
-        clip-path: inset(0 0 0 100%);
+        transform: translate3d(-100%, 0, 0);
     }
 }
 
 @keyframes page-curtain-open {
     from {
-        clip-path: inset(0 100% 0 0);
+        transform: translate3d(100%, 0, 0);
     }
 
     to {
-        clip-path: inset(0);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    ::view-transition-group(root),
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-        animation: none;
+        transform: translate3d(0, 0, 0);
     }
 }
 
@@ -912,34 +900,7 @@ html.light .theme-icon-moon {
     animation: page-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-@keyframes page-slide-out {
-    to {
-        opacity: 0.45;
-        transform: translate3d(-8%, 0, 0);
-    }
-}
-
-@keyframes page-slide-in {
-    from {
-        opacity: 0.85;
-        transform: translate3d(8%, 0, 0);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
 @media (max-width: 1023px) {
-    ::view-transition-old(root) {
-        animation: page-slide-out 420ms cubic-bezier(0.76, 0, 0.24, 1) both;
-    }
-
-    ::view-transition-new(root) {
-        animation: page-slide-in 580ms cubic-bezier(0.76, 0, 0.24, 1) 420ms both;
-    }
-
     .reveal,
     .scroll-in {
         transition-duration: 420ms !important;
