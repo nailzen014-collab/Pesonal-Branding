@@ -25,7 +25,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
@@ -62,7 +62,7 @@
                 <a href="{{ route($item['route']) }}"
                     @class([
                         'flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition',
-                        'bg-primary/10 text-primary' => $active,
+                        'bg-primary text-gold-soft shadow-glow-soft' => $active,
                         'text-muted hover:bg-surface-2 hover:text-text' => ! $active,
                     ])>
                     <x-icon :name="$item['icon']" class="h-5 w-5" />
@@ -124,7 +124,7 @@
                     <a href="{{ route($item['route']) }}" @click="sidebar = false"
                         @class([
                             'group flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition duration-300 active:translate-x-1 active:scale-[0.98]',
-                            'bg-primary/10 text-primary' => $active,
+                            'bg-primary text-gold-soft shadow-glow-soft' => $active,
                             'text-muted hover:bg-surface-2 hover:text-text' => ! $active,
                         ])>
                         <x-icon :name="$item['icon']" class="h-5 w-5 transition-transform duration-300 group-active:scale-110" />

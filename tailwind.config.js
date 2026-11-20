@@ -75,11 +75,11 @@ export default {
 
             backgroundImage: {
                 'grid-fade':
-                    'linear-gradient(to bottom, rgb(122 12 22 / 0), rgb(122 12 22 / 1)), radial-gradient(circle at 50% 0%, rgb(225 29 46 / 0.16), transparent 55%)',
+                    'linear-gradient(to bottom, rgb(10 10 12 / 0), rgb(10 10 12 / 1)), radial-gradient(circle at 50% 0%, rgb(225 29 46 / 0.16), transparent 55%)',
                 'hero-glow':
-                    'radial-gradient(55% 55% at 50% 0%, rgb(225 29 46 / 0.25), transparent 70%)',
+                    'radial-gradient(55% 55% at 50% 0%, rgb(225 29 46 / 0.3), transparent 70%)',
                 'aurora':
-                    'radial-gradient(45% 45% at 15% 10%, rgb(225 29 46 / 0.22), transparent 60%), radial-gradient(40% 40% at 85% 20%, rgb(122 12 22 / 0.35), transparent 60%), radial-gradient(50% 50% at 50% 90%, rgb(225 29 46 / 0.12), transparent 65%)',
+                    'radial-gradient(45% 45% at 15% 10%, rgb(225 29 46 / 0.3), transparent 60%), radial-gradient(40% 40% at 85% 20%, rgb(122 12 22 / 0.35), transparent 60%), radial-gradient(50% 50% at 50% 90%, rgb(225 29 46 / 0.14), transparent 65%)',
                 'text-shine': 'var(--text-shine)',
                 'border-gradient':
                     'linear-gradient(135deg, rgb(225 29 46 / 0.55), rgb(255 248 240 / 0.22) 45%, rgb(225 29 46 / 0.15))',

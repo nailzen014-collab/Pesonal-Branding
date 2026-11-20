@@ -19,18 +19,18 @@
     :root {
         color-scheme: dark;
 
-        --ink: 18 18 20;
-        --ink-soft: 122 12 22;
-        --surface: 24 24 27;
-        --surface-2: 32 32 36;
-        --surface-3: 43 43 48;
-        --line: 72 26 34;
-        --line-soft: 55 20 28;
+        --ink: 10 10 12;
+        --ink-soft: 18 18 21;
+        --surface: 25 25 29;
+        --surface-2: 34 34 39;
+        --surface-3: 46 46 52;
+        --line: 62 40 44;
+        --line-soft: 43 31 35;
         --text: 255 247 238;
-        --muted: 229 193 194;
+        --muted: 184 174 175;
 
-        --grid: 87 28 38;
-        --dots: 229 193 194;
+        --grid: 48 41 45;
+        --dots: 184 174 175;
 
         --shadow-card: 0 1px 0 0 rgb(225 29 46 / 0.16) inset, 0 18px 40px -24px rgb(0 0 0 / 0.9);
         --shadow-card-lg: 0 1px 0 0 rgb(225 29 46 / 0.2) inset, 0 32px 60px -28px rgb(0 0 0 / 0.95);
@@ -144,13 +144,17 @@
     .card {
         @apply relative overflow-hidden rounded-2xl border border-line-soft bg-surface/80 p-6 shadow-card
         transition-[color,background-color,border-color,box-shadow,transform] duration-500 ease-smooth;
-        background-image: radial-gradient(120% 80% at 0% 0%, rgb(225 29 46 / 0.1), transparent 55%);
+        background-image: radial-gradient(120% 80% at 0% 0%, rgb(225 29 46 / 0.13), transparent 55%);
     }
 
     .dashboard-gloss {
         background-image:
             linear-gradient(145deg, rgb(255 255 255 / 0.055), transparent 45%),
-            radial-gradient(120% 80% at 0% 0%, rgb(225 29 46 / 0.12), transparent 55%);
+            radial-gradient(120% 80% at 0% 0%, rgb(225 29 46 / 0.16), transparent 55%);
+    }
+
+    .admin-shell {
+        background-image: radial-gradient(70rem 35rem at 100% 0%, rgb(225 29 46 / 0.08), transparent 70%);
     }
 
     /*

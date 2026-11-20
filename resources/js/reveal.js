@@ -2,7 +2,8 @@
  * Animasi scroll dua arah:
  * - `.reveal` di dalam `.scroll-stage` muncul dari bawah saat masuk viewport,
  *   memudar saat lewat ke atas, dan muncul lagi bila digulir balik ke bawah;
- * - `.scroll-stage` diredupkan + tepinya diberi kabut saat keluar viewport.
+ * - `.scroll-stage` diredupkan setelah lewat ke atas dan diberi kabut di tepi
+ *   viewport, tanpa meredupkan section yang belum masuk layar.
  *
  * Semua elemen di-cache sekali saat didaftarkan. Setiap frame scroll hanya
  * membaca posisi elemen dalam satu fase lalu menulis kelasnya di fase kedua,
@@ -134,7 +135,7 @@ function updateAll() {
     });
 
     stageStates.forEach(({ stage, leavingTop, leavingBottom }) => {
-        const isOut = leavingTop || leavingBottom;
+        const isOut = leavingTop;
 
         if (stage.classList.contains('is-leaving-top') !== leavingTop) {
             stage.classList.toggle('is-leaving-top', leavingTop);

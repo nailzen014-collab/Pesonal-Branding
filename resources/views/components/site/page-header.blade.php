@@ -6,7 +6,7 @@
 
 {{-- Header halaman dalam (dipakai semua halaman selain beranda). --}}
 <section class="relative overflow-hidden border-b border-line-soft bg-ink-soft pb-20 pt-32 sm:pb-24 sm:pt-40">
-    <div class="pointer-events-none absolute inset-0 bg-aurora opacity-70" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute inset-0 bg-aurora opacity-80" aria-hidden="true"></div>
     <div class="pointer-events-none absolute inset-0 bg-grid opacity-70" aria-hidden="true"></div>
 
     <div class="container-page relative">
