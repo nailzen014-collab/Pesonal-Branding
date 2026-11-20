@@ -46,6 +46,7 @@
     <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
 
     @include('layouts.partial.theme-init')
+    @include('layouts.partial.page-transition')
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

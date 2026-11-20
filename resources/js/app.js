@@ -6,6 +6,79 @@ import { initTypewriters } from './typewriter';
 import { initSmoothScroll } from './smooth-scroll';
 import { initScrollUI } from './scroll-ui';
 
+const PAGE_TRANSITION_STORAGE_KEY = 'page-transition:enter';
+const PAGE_TRANSITION_COVER_DURATION = 420;
+
+function initPageTransitions() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
+
+    let navigationPending = false;
+
+    document.addEventListener('click', (event) => {
+        if (event.defaultPrevented
+            || event.button !== 0
+            || event.metaKey
+            || event.ctrlKey
+            || event.shiftKey
+            || event.altKey
+            || !(event.target instanceof Element)) {
+            return;
+        }
+
+        const link = event.target.closest('a[href]');
+
+        if (!link
+            || link.hasAttribute('download')
+            || link.closest('[data-no-transition]')
+            || (link.target && link.target.toLowerCase() !== '_self')) {
+            return;
+        }
+
+        const destination = new URL(link.href, window.location.href);
+
+        if (destination.origin !== window.location.origin
+            || !['http:', 'https:'].includes(destination.protocol)
+            || destination.href === window.location.href
+            || (destination.pathname === window.location.pathname
+                && destination.search === window.location.search
+                && destination.hash !== '')) {
+            return;
+        }
+
+        event.preventDefault();
+
+        if (navigationPending) {
+            return;
+        }
+
+        navigationPending = true;
+
+        try {
+            sessionStorage.setItem(PAGE_TRANSITION_STORAGE_KEY, '1');
+        } catch (error) {
+            console.error('Gagal menyimpan status transisi halaman:', error);
+            window.location.assign(destination.href);
+
+            return;
+        }
+
+        document.documentElement.classList.add('page-transition-covering');
+        const shouldGoBack = link.hasAttribute('data-back-link') && window.history.length > 1;
+
+        window.setTimeout(() => {
+            if (shouldGoBack) {
+                window.history.back();
+
+                return;
+            }
+
+            window.location.assign(destination.href);
+        }, PAGE_TRANSITION_COVER_DURATION);
+    }, true);
+}
+
 /**
  * Tombol "muat lebih banyak" ala GitHub pada halaman /portofolio.
  *
@@ -93,6 +166,7 @@ function initLoadMore() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    initPageTransitions();
     initSmoothScroll();
     observeReveals();
     initScrollAnimations();

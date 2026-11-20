@@ -757,12 +757,6 @@
             transform: none !important;
         }
 
-        ::view-transition-group(root),
-        ::view-transition-old(root),
-        ::view-transition-new(root) {
-            animation: none !important;
-        }
-
         .scroll-stage {
             mask-image: none;
             -webkit-mask-image: none;
@@ -848,39 +842,41 @@ html.light .theme-icon-moon {
     display: inline;
 }
 
-/* Transisi lintas halaman: tutup dari kiri, lalu buka halaman berikutnya. */
-@view-transition {
-    navigation: auto;
+html::before {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    visibility: hidden;
+    pointer-events: none;
+    background: linear-gradient(110deg, #7a0c16 0%, #e11d2e 54%, #18080b 100%);
+    content: '';
+    transform: scaleX(0);
+    transform-origin: left center;
 }
 
-::view-transition-group(root) {
-    background: rgb(var(--ink));
-    animation-duration: 1s;
+html.page-transition-pending::before,
+html.page-transition-covering::before {
+    visibility: visible;
+    transform: scaleX(1);
 }
 
-::view-transition-old(root) {
-    z-index: 2;
-    animation: page-curtain-close 420ms cubic-bezier(0.76, 0, 0.24, 1) both;
+html.page-transition-covering::before {
+    transition: transform 420ms cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-::view-transition-new(root) {
-    z-index: 1;
-    animation: page-curtain-open 580ms cubic-bezier(0.76, 0, 0.24, 1) 420ms both;
+html.page-transition-entering::before {
+    visibility: visible;
+    transform-origin: right center;
+    animation: page-transition-open 580ms cubic-bezier(0.76, 0, 0.24, 1) both;
 }
 
-@keyframes page-curtain-close {
-    to {
-        transform: translate3d(-100%, 0, 0);
-    }
-}
-
-@keyframes page-curtain-open {
+@keyframes page-transition-open {
     from {
-        transform: translate3d(100%, 0, 0);
+        transform: scaleX(1);
     }
 
     to {
-        transform: translate3d(0, 0, 0);
+        transform: scaleX(0);
     }
 }
 
@@ -939,6 +935,12 @@ html.light .theme-icon-moon {
     }
 
     .sheen-band {
+        display: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html::before {
         display: none !important;
     }
 }
