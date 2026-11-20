@@ -19,8 +19,8 @@
     :root {
         color-scheme: dark;
 
-        --ink: 122 12 22;
-        --ink-soft: 18 18 20;
+        --ink: 18 18 20;
+        --ink-soft: 122 12 22;
         --surface: 24 24 27;
         --surface-2: 32 32 36;
         --surface-3: 43 43 48;
