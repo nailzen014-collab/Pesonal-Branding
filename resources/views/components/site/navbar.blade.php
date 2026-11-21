@@ -28,7 +28,7 @@
         aria-label="Navigasi utama">
 
         <div class="flex h-full items-center justify-between gap-4 px-3 sm:px-5">
-            <a href="{{ route('home') }}" @click="open = false" class="group flex min-w-0 items-center gap-2.5">
+            <a href="{{ route('home') }}" data-site-logo @click="open = false" class="group flex min-w-0 items-center gap-2.5">
                 <span class="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-glow-soft transition duration-500 group-hover:scale-105">
                     <x-application-logo class="h-7 w-7" />
                 </span>

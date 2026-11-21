@@ -9,7 +9,7 @@
         </button>
 
         <p class="page-loader__name">{{ $siteName }}</p>
-        <p class="page-loader__hint">Ketuk logo untuk masuk</p>
+        <p class="page-loader__hint">Klik atau ketuk logo untuk masuk</p>
     </div>
 </div>
 
@@ -35,21 +35,27 @@
 
         let isHiding = false;
 
-        const hideLoader = () => {
+        const hideLoader = (animate = true) => {
             if (isHiding) {
                 return;
             }
 
             isHiding = true;
-            loader.classList.add('is-hidden');
-            window.setTimeout(() => loader.remove(), 400);
+            if (!animate) {
+                loader.remove();
+                return;
+            }
+
+            loader.classList.add('is-entering');
+            loader.querySelector('[data-page-loader-enter]')?.classList.add('is-activating');
+            window.setTimeout(() => loader.remove(), 900);
         };
 
         loader.querySelector('[data-page-loader-enter]')?.addEventListener('click', hideLoader);
 
         window.addEventListener('pageshow', (event) => {
             if (event.persisted) {
-                hideLoader();
+                hideLoader(false);
             }
         });
     })();

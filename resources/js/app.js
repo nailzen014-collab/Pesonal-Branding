@@ -92,6 +92,74 @@ function initLoadMore() {
     });
 }
 
+function initAdminMotion() {
+    const adminShell = document.querySelector('.admin-shell');
+
+    if (!adminShell) {
+        return;
+    }
+
+    adminShell.addEventListener('pointerdown', (event) => {
+        if (!(event.target instanceof Element)) {
+            return;
+        }
+
+        const target = event.target.closest('button, a, [role="button"]');
+
+        if (!target || target.getAttribute('aria-disabled') === 'true'
+            || (target instanceof HTMLButtonElement && target.disabled)) {
+            return;
+        }
+
+        const bounds = target.getBoundingClientRect();
+        const diameter = Math.max(bounds.width, bounds.height) * 2;
+        const ripple = document.createElement('span');
+
+        ripple.className = 'admin-click-ripple';
+        ripple.setAttribute('aria-hidden', 'true');
+        ripple.style.left = `${event.clientX - bounds.left}px`;
+        ripple.style.top = `${event.clientY - bounds.top}px`;
+        ripple.style.width = `${diameter}px`;
+        ripple.style.height = `${diameter}px`;
+
+        target.classList.add('admin-press-target');
+        target.append(ripple);
+        ripple.addEventListener('animationend', () => {
+            ripple.remove();
+
+            if (!target.querySelector('.admin-click-ripple')) {
+                target.classList.remove('admin-press-target');
+            }
+        }, { once: true });
+    }, { passive: true });
+}
+
+function initPublicLogoMotion() {
+    if (document.documentElement.dataset.themeScope !== 'public') {
+        return;
+    }
+
+    document.querySelectorAll('[data-site-logo]').forEach((logo) => {
+        logo.addEventListener('click', (event) => {
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+                || logo.target === '_blank') {
+                return;
+            }
+
+            event.preventDefault();
+            logo.classList.add('site-logo-transition');
+
+            if (new URL(logo.href).pathname === window.location.pathname) {
+                window.setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 360);
+
+                return;
+            }
+
+            window.setTimeout(() => window.location.assign(logo.href), 360);
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initSmoothScroll();
     observeReveals();
@@ -101,6 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initTypewriters();
     initScrollUI();
+    initAdminMotion();
+    initPublicLogoMotion();
 
     // Penanda untuk safety net di layouts/public.blade.php: bila bundel ini
     // gagal dieksekusi, script inline memaksa konten `.reveal` tampil

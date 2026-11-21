@@ -51,7 +51,7 @@
     <aside class="hidden w-72 shrink-0 flex-col border-r border-line bg-surface lg:flex">
         <div class="flex h-20 items-center px-6">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
-                <x-icon name="code" class="h-5 w-5 text-primary" />
+                <x-application-logo class="h-8 w-8" />
                 <span class="font-display text-lg font-bold text-text">{{ $siteName }}</span>
             </a>
         </div>
