@@ -30,7 +30,7 @@
         <div class="flex h-full items-center justify-between gap-4 px-3 sm:px-5">
             <a href="{{ route('home') }}" @click="open = false" class="group flex min-w-0 items-center gap-2.5">
                 <span class="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-glow-soft transition duration-500 group-hover:scale-105">
-                    <x-icon name="code" class="h-5 w-5 text-gold-soft" />
+                    <x-application-logo class="h-7 w-7" />
                 </span>
                 <span class="truncate font-display text-lg font-bold tracking-tight text-text">
                     {{ $name }}<span class="text-primary">.</span>
